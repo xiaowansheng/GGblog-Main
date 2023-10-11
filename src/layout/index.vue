@@ -1,12 +1,24 @@
 <template>
-  <Header></Header>
-  <Mainer></Mainer>
-  <Footer></Footer>
+  <div id="iframe">
+    <!-- 选项菜单 -->
+    <Menu></Menu> 
+    <Mainer></Mainer>
+    <Footer></Footer>
+  </div>
 </template>
 <script lang="ts" setup>
-import Header from './header/index.vue'
 import Mainer from './mainer/index.vue'
 import Footer from './footer/index.vue'
+import Menu from './menu/index.vue'
+import { useConfigStoreHook } from '@/store/modules/config';
+// 获取配置信息
+useConfigStoreHook().setConfigInfo()
 </script>
+
 <style lang="scss" scoped>
+#iframe {
+  max-width: 1920px;
+  min-width: 320px;
+  margin: 0 auto;
+}
 </style>
