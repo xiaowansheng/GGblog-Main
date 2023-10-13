@@ -16,23 +16,26 @@
 </template>
 
 <script lang="ts" setup>
-import Header from '@/layouts/default/header/index.vue'
-import { computed, onMounted, reactive, ref } from 'vue'
+import Header from '@/layout/header/index.vue'
+import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
 import { getQueryString } from '@/utils/stringUtils'
-// import { service } from '@/utils/axios'
 import BriefArticleBlock from './briefArticleBlock/index.vue'
 // import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 
 import {useConfigStoreHook} from "@/store/modules/config"
+import { getArticlePage } from '@/api/article';
+import {getCategory} from "@/api/category"
+import { getTag } from "@/api/tag"
+import {t} from "@/plugins/i18s"
 const covers = useConfigStoreHook().covers
 const params = reactive<any>({
   page: 1,
   limit: 10,
-  total: 0,
   categoryId: null,
   tagId: null
 })
+const total=ref(0)
 const articles: Array<any> = reactive([])
 const loading = ref(false)
 const getData = () => {
@@ -40,34 +43,31 @@ const getData = () => {
     return
   }
   loading.value = true
-  const { total, ...other } = params
-  // service
-  //   .get('/article/info/page', {
-  //     params: other
-  //   })
-  //   .then((data: any) => {
-  //     params.total = data.total
-  //     data.list.forEach((e: any) => {
-  //       articles.push(e)
-  //     })
-  //     loading.value = false
-  //   })
-  //   .catch(() => {
-  //     loading.value = false
-  //   })
+  getArticlePage(params)
+    .then((data: any) => {
+      total.value = data.total
+      data.list.forEach((e: any) => {
+        articles.push(e)
+      })
+      loading.value = false
+    })
+    .catch(() => {
+      loading.value = false
+    })
 }
 const name = ref('Unknown')
+
 const getCategoryName = (id: string) => {
-  // service.get('/category/detail/' + id).then((data: any) => {
-  //   name.value = t('menu.category') + ' — ' + data.name
-  // })
+  getCategory(id).then((data: any) => {
+    name.value = t('menu.category') + ' — ' + data.name
+  })
 }
 const getTagName = (id: string) => {
-  // service.get('/tag/detail/' + id).then((data: any) => {
-  //   name.value = t('menu.tag') + ' — ' + data.name
-  // })
+  getTag(id).then((data: any) => {
+    name.value = t('menu.tag') + ' — ' + data.name
+  })
 }
-onMounted(() => {
+onBeforeMount(() => {
   let id = getQueryString('')
   if (id) {
     if (window.location.href.indexOf('category') > 0) {

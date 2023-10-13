@@ -26,19 +26,20 @@
 </template>
 
 <script lang="ts" setup>
-import Header from '@/layouts/default/header/index.vue'
+import Header from '@/layout/header/index.vue'
 // import { service } from 'utils/axios'
 import { computed, onMounted, ref } from 'vue'
 // import { useStore } from 'vuex'
 import {useConfigStoreHook} from "@/store/modules/config"
-const covers = useConfigStoreHook().covers
+const covers = computed(() => useConfigStoreHook().covers)
+import {getAllTag} from "@/api/tag"
 // import { useI18n } from 'vue-i18n'
 // const { t } = useI18n()
 const tags: any = ref([])
 const getData = () => {
-  // service.get('/tag/all').then((data: any) => {
-  //   tags.value = data
-  // })
+  getAllTag().then((data: any) => {
+    tags.value = data
+  })
 }
 onMounted(() => {
   getData()

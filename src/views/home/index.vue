@@ -24,7 +24,7 @@
               <!-- <Share /> -->
               <!-- TODO 待做 -->
               <div v-if="false">
-                <Talk/>
+                <Talk />
               </div>
               <!-- <div class="share">
               </div>
@@ -57,82 +57,71 @@ import Information from './information.vue'
 import BriefArticle from './briefArticle/index.vue'
 // import Share from "./share.vue";
 import Talk from './talk.vue'
-import { computed, onMounted, reactive, ref } from 'vue'
-// import { getArticles } from 'api/article'
-// import { service } from 'utils/axios'
-import { onBeforeRouteLeave } from 'vue-router'
-// import { useStore } from 'vuex'
-
-// import { useI18n } from 'vue-i18n'
-// const { t } = useI18n()
-// const store = useStore()
-import {useConfigStoreHook} from "@/store/modules/config"
-import {useWebsiteStoreHook} from "@/store/modules/website"
+import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { getArticlePage } from '@/api/article'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { useWebsiteStoreHook } from '@/store/modules/website'
 const modules = useConfigStoreHook().module
 const website = useWebsiteStoreHook()
 const params = reactive({
   page: 1,
-  limit: 10,
-  total: 0
+  limit: 10
 })
+const total = ref(0)
 const list = reactive<any>([])
 const loading = ref(false)
-// const getList = () => {
-//   if (loading.value) {
-//     return
-//   }
-//   loading.value = true
-//   let { total, ...other } = params
-//   service
-//     .get('/article/info/page', {
-//       params: other
-//     })
-//     .then((data: any) => {
-//       let { total } = data
-//       params.total = total
-//       data.list.forEach((e: any) => {
-//         list.push(e)
-//       })
-//       params.page++
-
-//       loading.value = false
-//       // console.log(list);
-//     })
-//     .catch(() => {
-//       loading.value = false
-//     })
-// }
-onMounted(() => {
-  // getList()
-  window.onscroll = function () {
-    const scrollH = document.documentElement.scrollHeight // 文档的完整高度
-    const scrollT = document.documentElement.scrollTop || document.body.scrollTop // 当前滚动条的垂直偏移
-    const screenH = window.screen.height // 屏幕可视高度
-    if (scrollH - scrollT - screenH < 10) {
-      // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
-      // 执行请求
-      if (params.total > list.length) {
-        // getList()
-      }
-    }
+const getData = () => {
+  if (loading.value) {
+    return
   }
-  // window.addEventListener("scroll", (event) => {
-  //   console.log("scroll", event);
-  //   let element: HTMLElement | null = document.getElementById("information");
-  //   let aside: HTMLElement | null = document.getElementById("home-content");
-  //   let offsetTop = aside?.offsetTop;
-  //   let winHeight =
-  //     window.pageYOffset ||
-  //     document.documentElement.scrollTop ||
-  //     document.body.scrollTop;
-  //   console.log("scroll", element, offsetTop, winHeight);
-  //   if (offsetTop && winHeight > offsetTop) {
-  //     console.log(1)
-  //     element?.classList.add("float");
-  //   }else{
-  //     element?.classList.remove('float')
+  loading.value = true
+  getArticlePage(params)
+    .then((data: any) => {
+      total.value = data.total
+      data.list.forEach((e: any) => {
+        console.log(e)
+
+        list.push(e)
+      })
+      params.page++
+      loading.value = false
+    })
+    .catch(() => {
+      loading.value = false
+    })
+}
+onBeforeMount(() => {
+  getData()
+})
+onMounted(() => {
+  // TODO 分页，而不是滑动刷新
+  // window.onscroll = function () {
+  //   const scrollH = document.documentElement.scrollHeight // 文档的完整高度
+  //   const scrollT = document.documentElement.scrollTop || document.body.scrollTop // 当前滚动条的垂直偏移
+  //   const screenH = window.screen.height // 屏幕可视高度
+  //   if (scrollH - scrollT - screenH < 10) {
+  //     // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
+  //     // 执行请求
+  //     if (total.value > list.length) {
+  //       getData()
+  //     }
   //   }
-  // });
+  // }
+  window.addEventListener('scroll', (event) => {
+    // console.log("scroll", event);
+    let element: HTMLElement | null = document.getElementById('information')
+    let aside: HTMLElement | null = document.getElementById('home-content')
+    let offsetTop = aside?.offsetTop
+    let winHeight =
+      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    // console.log("scroll", element, offsetTop, winHeight);
+    if (offsetTop && winHeight > offsetTop) {
+      // console.log(1)
+      element?.classList.add('float')
+    } else {
+      element?.classList.remove('float')
+    }
+  })
 })
 </script>
 

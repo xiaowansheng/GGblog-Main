@@ -28,20 +28,20 @@
 </template>
 
 <script lang="ts" setup>
-import Header from '@/layouts/default/header/index.vue'
-// import { service } from 'utils/axios'
-import { computed, onMounted, ref } from 'vue'
-// import { useStore } from 'vuex'
-// const store = useStore()
-import {useConfigStoreHook} from "@/store/modules/config"
-const covers = useConfigStoreHook().covers
+import Header from '@/layout/header/index.vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { getAllCategory } from '@/api/category'
+const covers = computed(() => {
+  return useConfigStoreHook().covers
+})
 const categorys: any = ref([])
 const getData = () => {
-  // service.get('/category/all').then((data: any) => {
-  //   categorys.value = data
-  // })
+  getAllCategory().then((data: any) => {
+    categorys.value = data
+  })
 }
-onMounted(() => {
+onBeforeMount(() => {
   getData()
 })
 </script>

@@ -13,7 +13,7 @@
         src='https://img1.baidu.com/it/u=4032766505,1918739454&fm=253&fmt=auto&app=120&f=JPEG?w=640&h=844'
       /> -->
       <router-link :to="'/article/detail/' + article.id">
-        <el-tag class="top" v-if="article.top">{{ t('home.top') }}</el-tag>
+        <el-tag class="top" v-if="article.top">{{ $t('home.top') }}</el-tag>
         <el-image class="image" fit="cover" :src="article.cover">
           <template #error>
             <div class="image-slot"><span>Image Loading Error</span></div>
@@ -63,18 +63,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, ref, toRefs } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 
 // import Vditor from 'vditor'
-import { useI18n } from 'vue-i18n'
+import { t } from '@/plugins/i18s'
 const props = defineProps({
   article: {
-    default: {},
     type:Object,
     required:true
   }
 })
-const { t } = useI18n()
 const { article } = toRefs(props)
 const str = ref<string>(article.value.content)
 // console.log(article);

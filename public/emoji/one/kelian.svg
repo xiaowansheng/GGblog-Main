@@ -1,0 +1,54 @@
+<svg width="240.000000" height="240.000015" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<filter id="filter_1_244_dd" x="138.000000" y="153.761673" width="60.000000" height="63.000000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="-3"/>
+			<feGaussianBlur stdDeviation="0"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0.91765 0 0 0 0 0.71373 0 0 0 0 0.07451 0 0 0 1 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<filter id="filter_1_245_dd" x="42.000000" y="153.761673" width="60.000000" height="63.000000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="-3"/>
+			<feGaussianBlur stdDeviation="0"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0.91765 0 0 0 0 0.71373 0 0 0 0 0.07451 0 0 0 1 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<clipPath id="clip3_11">
+			<rect id="可怜" width="240.000000" height="240.000000" fill="white"/>
+		</clipPath>
+	</defs>
+	<rect id="可怜" width="240.000000" height="240.000000"  />
+	<rect id="可怜" width="240.000000" height="240.000000"  />
+	<g clip-path="url(#clip3_11)">
+		<circle id="椭圆形备份 14" cx="120.000000" cy="120.000000" r="100.000000" fill="#FFBF0B"/>
+		<path id="矩形备份 21" d="M132.927 58.2603C134.925 60.3576 138.731 63.9694 143.603 66.7816C148.511 69.6157 153.89 71.2848 156.894 72.0755C158.237 72.4293 159.584 71.642 160.009 70.3191C160.494 68.8109 159.606 67.1896 158.103 66.6918C155.38 65.7909 151.021 64.1361 146.597 61.5821C142.36 59.1364 139.085 56.4546 137.097 54.6505C135.896 53.5617 133.986 53.5925 132.913 54.8061C132.028 55.8057 132.006 57.294 132.927 58.2603Z" fill-rule="evenodd" fill="#1A1B54"/>
+		<path id="矩形备份 53" d="M107.958 58.2603C105.96 60.3576 102.153 63.9694 97.2822 66.7816C92.3735 69.6156 86.9951 71.2848 83.9912 72.0755C82.6475 72.4292 81.3008 71.642 80.8755 70.3191C80.3911 68.8109 81.2783 67.1896 82.7822 66.6918C85.5044 65.7909 89.8643 64.1361 94.2881 61.5821C98.5244 59.1364 101.799 56.4546 103.788 54.6505C104.988 53.5617 106.898 53.5925 107.972 54.8061C108.856 55.8057 108.879 57.294 107.958 58.2603Z" fill-rule="evenodd" fill="#1A1B54"/>
+		<circle id="椭圆形备份 15" r="28.000000" transform="matrix(1 0 0 1 162 93)" fill="#FFFCFD"/>
+		<circle id="椭圆形备份 27" r="28.000000" transform="matrix(1 0 0 1 78 93)" fill="#FFFCFD"/>
+		<circle id="椭圆形备份 28" r="22.000000" transform="matrix(1 0 0 1 162 93)" fill="#1A1B54"/>
+		<circle id="椭圆形备份 29" r="22.000000" transform="matrix(1 0 0 1 78 93)" fill="#1A1B54"/>
+		<g filter="url(#filter_1_244_dd)">
+			<circle id="椭圆形备份 40" r="30.000000" transform="matrix(1 0 0 1 168 186.762)" fill="#FFD041"/>
+		</g>
+		<g filter="url(#filter_1_245_dd)">
+			<circle id="椭圆形备份 41" r="30.000000" transform="matrix(1 0 0 1 72 186.762)" fill="#FFD041"/>
+		</g>
+		<circle id="椭圆形备份 47" r="8.500000" transform="matrix(1 0 0 1 84.5 85.5)" fill="#FFFDFE"/>
+		<circle id="椭圆形备份 49" r="8.500000" transform="matrix(1 0 0 1 169.5 85.5)" fill="#FFFDFE"/>
+		<circle id="椭圆形备份 48" r="6.000000" transform="matrix(1 0 0 1 70 103)" fill="#FFFDFE"/>
+		<circle id="椭圆形备份 50" r="6.000000" transform="matrix(1 0 0 1 155 103)" fill="#FFFDFE"/>
+		<path id="路径 41备份 19" d="M101 150C101 150 108.187 141.399 120 141.399C131.813 141.399 140 149.899 140 149.899" stroke="#1A1B54" stroke-width="6.000000" stroke-linecap="round"/>
+		<path id="路径" d="M154 128C150.687 128 148 126.314 148 123C148 119.686 150.687 118 154 118C154 118 152.033 118 155.05 118C155.662 118 156.015 117.738 156.286 117.438C156.582 117.111 156.771 116.735 156.889 116.482C158.403 113.243 161.689 111 165.5 111C169.253 111 172.498 113.176 174.041 116.335C174.299 116.865 174.535 117.202 174.927 117.52C175.319 117.837 176.102 118 176.818 118C179.212 118 192 118 192 118C195.313 118 198 119.686 198 123C198 126.314 195.313 128 192 128L154 128Z" fill-rule="evenodd" fill="#0A84FF"/>
+		<path id="路径备份 2" d="M47 128C43.6863 128 41 126.314 41 123C41 119.686 43.6863 118 47 118C47 118 59.0332 118 62.0498 118C62.6621 118 63.0151 117.738 63.2856 117.438C63.5815 117.111 63.7705 116.735 63.8892 116.482C65.4028 113.243 68.6895 111 72.5 111C76.2529 111 79.4976 113.176 81.041 116.335C81.2993 116.865 81.5352 117.202 81.9272 117.52C82.3193 117.837 83.1016 118 83.8184 118C86.2119 118 85 118 85 118C88.3135 118 91 119.686 91 123C91 126.314 88.3135 128 85 128L47 128Z" fill-rule="evenodd" fill="#0A84FF"/>
+	</g>
+</svg>

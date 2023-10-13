@@ -1,0 +1,66 @@
+<svg width="240.000000" height="240.000000" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<filter id="filter_1_784_dd" x="24.000000" y="158.000000" width="44.000000" height="47.000000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="-3"/>
+			<feGaussianBlur stdDeviation="0"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0.91765 0 0 0 0 0.71373 0 0 0 0 0.07451 0 0 0 1 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<filter id="filter_1_785_dd" x="172.000000" y="158.000000" width="44.000000" height="47.000000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+			<feOffset dx="0" dy="-3"/>
+			<feGaussianBlur stdDeviation="0"/>
+			<feComposite in2="hardAlpha" operator="out" k2="-1" k3="1"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0.91765 0 0 0 0 0.71373 0 0 0 0 0.07451 0 0 0 1 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+		<clipPath id="clip3_35">
+			<rect id="吃瓜" width="240.000000" height="240.000000" fill="white"/>
+		</clipPath>
+	</defs>
+	<rect id="吃瓜" width="240.000000" height="240.000000" />
+	<rect id="吃瓜" width="240.000000" height="240.000000"  />
+	<g clip-path="url(#clip3_35)">
+		<circle id="椭圆形备份 109" cx="120.000000" cy="120.000000" r="100.000000" fill="#FFBF0B"/>
+		<path id="路径 41备份 4" d="M120 139C120 139 122.759 143 127 143C131.241 143 134 139.037 134 139.037" stroke="#1A1B54" stroke-width="6.000000" stroke-linecap="round"/>
+		<circle id="椭圆形备份 115" r="4.000000" transform="matrix(1 0 0 1 142 131)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 127" r="4.000000" transform="matrix(1 0 0 1 181 135)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 128" r="2.500000" transform="matrix(1 0 0 1 196.5 134.5)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 126" r="6.500000" transform="matrix(1 0 0 1 170.5 145.5)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 123" r="6.000000" transform="matrix(1 0 0 1 88 135)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 124" r="3.500000" transform="matrix(1 0 0 1 71.5 131.5)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 125" r="2.500000" transform="matrix(1 0 0 1 56.5 145.5)" fill="#FD6E6E"/>
+		<circle id="椭圆形备份 122" r="2.500000" transform="matrix(1 0 0 1 126.5 118.5)" fill="#FD6E6E"/>
+		<path id="路径 41备份 5" d="M106 139C106 139 108.759 143 113 143C117.241 143 120 139.037 120 139.037" stroke="#1A1B54" stroke-width="6.000000" stroke-linecap="round"/>
+		<circle id="椭圆形备份 110" r="28.000000" transform="matrix(1 0 0 1 80 97)" fill="#FFFCFD"/>
+		<circle id="椭圆形备份 111" r="28.000000" transform="matrix(1 0 0 1 161 97)" fill="#FFFCFD"/>
+		<circle id="椭圆形备份 112" r="12.000000" transform="matrix(1 0 0 1 96 97)" fill="#1A1B54"/>
+		<circle id="椭圆形备份 113" r="12.000000" transform="matrix(1 0 0 1 177 97)" fill="#1A1B54"/>
+		<path id="矩形备份 85" d="M63.7539 58.7001C65.7878 56.0411 70.5801 50.7466 77.5935 48.9669C84.2595 47.2754 91.2363 49.9415 94.8154 51.6887C96.1763 52.3532 96.5339 54.0491 95.6709 55.2936C94.9082 56.3933 93.4443 56.7635 92.2075 56.2521C89.2805 55.0417 83.8716 53.2122 79.4241 53.9963C74.9604 54.7834 70.1753 59.0201 67.6538 61.5522C66.6558 62.5543 65.0049 62.6108 64.0049 61.6107C63.2126 60.8186 63.0735 59.5899 63.7539 58.7001Z" fill-rule="evenodd" fill="#1A1B54"/>
+		<path id="矩形备份 86" d="M176.707 59.6651C174.576 56.6624 169.923 51.1107 163.42 48.9885C156.939 46.8734 149.728 49.8174 146.107 51.6917C144.788 52.3741 144.457 54.0369 145.303 55.257C146.082 56.3798 147.592 56.7339 148.841 56.1799C151.786 54.8735 157.193 52.9465 161.59 54.0181C166.006 55.0944 170.194 59.6447 172.36 62.353C173.245 63.4588 174.846 63.7701 176.024 62.9849C177.143 62.2391 177.485 60.7617 176.707 59.6651Z" fill-rule="evenodd" fill="#1A1B54"/>
+		<path id="形状结合" d="M144.697 139.749C139.111 146.947 130.404 151.574 120.623 151.574C110.507 151.574 101.54 146.625 95.9858 139.001C74.4678 160.728 46.2046 189.218 46.0012 189.17C86.8704 230.277 153.131 230.277 194 189.169C193.759 189.104 171.709 166.95 144.697 139.749Z" clip-rule="evenodd" fill-rule="evenodd" fill="#00AF64" fill-opacity="1.000000"/>
+		<path id="形状结合" d="M145.372 139.646C139.765 146.785 130.99 151.381 121.125 151.381C110.967 151.381 101.963 146.507 96.386 139.001C78.1335 157.066 56.1682 178.764 56.001 178.725C91.5825 213.816 149.337 213.75 185 178.578C184.8 178.526 167.361 161.353 145.372 139.646Z" clip-rule="evenodd" fill-rule="evenodd" fill="#FFFFFF" fill-opacity="1.000000"/>
+		<path id="形状结合" d="M145.365 138.45C139.791 145.994 130.785 150.894 120.623 150.894C110.652 150.894 101.794 146.177 96.199 138.873C79.3572 155.56 60.1506 174.549 60.001 174.515C93.0657 207.264 147.176 206.965 180.386 174.072C180.306 174.051 177.333 171.011 172.361 165.927C166.006 159.428 156.385 149.59 145.365 138.45Z" clip-rule="evenodd" fill-rule="evenodd" fill="#FD6E6E" fill-opacity="1.000000"/>
+		<g filter="url(#filter_1_784_dd)">
+			<circle id="椭圆形备份 114" r="22.000000" transform="matrix(1 0 0 1 46 183)" fill="#FFD041"/>
+		</g>
+		<g filter="url(#filter_1_785_dd)">
+			<circle id="椭圆形备份 116" r="22.000000" transform="matrix(1 0 0 1 194 183)" fill="#FFD041"/>
+		</g>
+		<ellipse id="椭圆形" rx="1.500000" ry="4.000000" transform="matrix(0.939693 0.34202 -0.34202 0.939693 102.5 165)" fill="#1A1B54"/>
+		<ellipse id="椭圆形" rx="1.500000" ry="4.000000" transform="matrix(-0.939692 0.342021 0.342021 0.939692 138.5 165)" fill="#1A1B54"/>
+		<ellipse id="椭圆形备份 115" rx="1.500000" ry="4.000000" transform="matrix(1 0 0 1 120.5 169)" fill="#1A1B54"/>
+		<ellipse id="椭圆形" rx="1.500000" ry="4.000000" transform="matrix(0.939693 0.34202 -0.34202 0.939693 102.5 184)" fill="#1A1B54"/>
+		<ellipse id="椭圆形" rx="1.500000" ry="4.000008" transform="matrix(-0.939692 0.342021 0.342021 0.939692 152.5 181)" fill="#1A1B54"/>
+		<ellipse id="椭圆形备份 115" rx="1.500000" ry="4.000000" transform="matrix(1 0 0 1 127.5 188)" fill="#1A1B54"/>
+	</g>
+</svg>

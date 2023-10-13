@@ -11,7 +11,7 @@ import type { Result } from './type'
 // TODO 获取不到环境变量
 // const baseURL = import.meta.env.VITE_BASE_API
 const baseURL = "http://localhost:8080"
-console.log("url",import.meta.env, import.meta.env.VITE_APP_BASE_API)
+// console.log("url",import.meta.env, import.meta.env.VITE_APP_BASE_API)
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
@@ -145,6 +145,8 @@ class CommonHttp {
         // }
         // 自定义数据处理
         const { code, message, data } = response.data;
+        console.log('api:[',response.config.url,"],data:", response.data)
+        
         if (code && code == 200) {
           return data;
         } else if (code && message) {

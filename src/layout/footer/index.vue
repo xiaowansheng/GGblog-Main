@@ -14,13 +14,13 @@
 import { computed, ref, watch } from "vue";
 // import { useStore } from "vuex";
 // const store = useStore();
-import {useWebsiteStoreHook} from "@/store/modules/website"
+import {useConfigStoreHook} from "@/store/modules/config"
 import {useAuthorStoreHook} from "@/store/modules/author"
-const website = useWebsiteStoreHook()
+const website = useConfigStoreHook().website
 const author = useAuthorStoreHook()
 const dateStr=ref("")
 watch(website,(value)=>{
-  if(value.createTime){
+  if(website.createTime){
   let timeStr=value.createTime
   let str=timeStr.replace(/-/g,"/")
   let date:Date=new Date(str)
