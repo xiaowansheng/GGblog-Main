@@ -48,12 +48,12 @@
         <el-menu-item index="/album">
           <span class="iconfont icon-tupian"></span>{{ $t('menu.album') }}
         </el-menu-item>
-        <el-menu-item index="/">
+        <!-- <el-menu-item index="/">
           <span class="iconfont icon-icon_xinyong_xianxing_jijin-139"></span
           >{{ $t('menu.learningPath') }}
-        </el-menu-item>
+        </el-menu-item> -->
       </el-sub-menu>
-      <el-menu-item index="/blogroll">
+      <el-menu-item index="/friend">
         <span class="iconfont icon-lianjie"></span>
         {{ $t('menu.blogroll') }}
       </el-menu-item>

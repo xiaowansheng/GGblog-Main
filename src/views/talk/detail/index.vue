@@ -2,7 +2,7 @@
   <div class="talk-detail">
     <Header :cover="covers.Talk">
       <template #title>
-        {{ t("menu.talk") }}
+        {{ $t('menu.talk') }}
       </template>
     </Header>
     <div class="content">
@@ -16,8 +16,7 @@
             <div class="date">{{ talk.createTime }}</div>
           </div>
         </div>
-        <div class="text" v-html="talk.content">
-        </div>
+        <div class="text" v-html="talk.content"></div>
         <div class="imgs" :class="getClassName(talk.images)" v-if="talk.images">
           <div class="img" v-for="(img, index) in talk.images" :key="index">
             <el-image
@@ -28,19 +27,14 @@
               :initial-index="index"
             >
               <template #error>
-                <div class="image-slot" style="font-size: 1.6rem">
-                  Image Loading Error
-                </div>
+                <div class="image-slot" style="font-size: 1.6rem">Image Loading Error</div>
               </template>
             </el-image>
             <!-- <el-image-viewer @close="closeImgViewer" :url-list="imageList" v-if="showImageViewer"/> -->
           </div>
         </div>
 
-        <div
-          v-if="privacy.Browser || privacy.Device || privacy.Address"
-          class="bottom"
-        >
+        <div v-if="privacy.Browser || privacy.Device || privacy.Address" class="bottom">
           <div v-if="privacy.Address" class="address">
             <el-tag
               ><span>{{ talk.ipSource }}</span></el-tag
@@ -52,61 +46,58 @@
           </div>
         </div>
       </div>
-      <div class="coment">
+      <!-- <div class="coment">
         <Comment :topicType="TopicType.talk" :topicId="topicId" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Header from "@/layouts/default/header/index.vue";
+import Header from '@/layout/header/index.vue'
 
-import { TopicType } from "enums/topic";
-import { useStore } from "vuex";
-import { useI18n } from "vue-i18n";
-import { service } from "utils/axios";
-import { computed, onMounted, reactive, ref } from "vue-demi";
+import { TopicType } from '@/enums/topic'
+import { computed, onMounted, reactive, ref } from 'vue'
 
-import Comment from "comps/comment/index.vue";
-import { getQueryString } from "utils/stringUtils";
-const store = useStore();
-
+// import Comment from "comps/comment/index.vue";
+import { getQueryString } from '@/utils/stringUtils'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { getTalk } from '@/api/talk'
 const covers = computed(() => {
-  return store.state.config.covers;
-});
+  return useConfigStoreHook().covers
+})
 
 const privacy = computed(() => {
-  return store.state.config.privacy;
-});
+  return useConfigStoreHook().privacy
+})
 const authorInfo = computed(() => {
-  return store.state.author.information;
-});
-const topicId: any = ref(null);
-const { t } = useI18n();
-const talk: any = ref({});
+  return useConfigStoreHook().author
+})
+const topicId: any = ref(null)
+// const { t } = useI18n();
+const talk: any = ref({})
 const getClassName = (images: any) => {
   if (!images || images.length == 0) {
-    return "";
+    return ''
   }
-  let length = images.length;
+  let length = images.length
   if (length == 1) {
-    return "image-one";
+    return 'image-one'
   } else {
     if (length == 2) {
-      return "images-two";
+      return 'images-two'
     } else {
       if (length == 4) {
-        return "images-four";
+        return 'images-four'
       } else {
-        return "images-three";
+        return 'images-three'
       }
     }
   }
-};
+}
 const getData = (id: any) => {
-  service.get("/talk/detail/" + id).then((data: any) => {
-    topicId.value = data.id;
+  getTalk(id).then((data: any) => {
+    topicId.value = data.id
     // let imgs = [];
     // for (let i = 0; i < 6; i++) {
     //   //   imgs.push(
@@ -119,22 +110,34 @@ const getData = (id: any) => {
     //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/234256qhzWe.jpg"
     //   );
     // }
-    data.images = JSON.parse(data.images);
+    data.images = JSON.parse(data.images)
     if (data.content) {
-      data.content = data.content.replace(/\n/g, "<br>");
+      data.content = data.content.replace(/\n/g, '<br>')
     }
-    talk.value = data;
-  });
-};
+    talk.value = data
+  })
+}
 onMounted(() => {
-  let id = getQueryString("error~");
-  if (id != "") {
-    getData(id);
+  let id = getQueryString('error~')
+  if (id != '') {
+    getData(id)
   }
-});
+})
 </script>
 
-<style lang="less" scoped>
+<style lang="scss">
+.talk-detail {
+  .content {
+    .text {
+      img {
+        height: 2.5rem;
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss" scoped>
 .talk-detail {
   .content {
     box-sizing: border-box;

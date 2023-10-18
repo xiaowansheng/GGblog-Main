@@ -13,11 +13,18 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "add": "^2.0.6",
     "axios": "^1.5.0",
+    "cherry-markdown": "^0.8.26",
+    "echarts": "4.6.0",
     "element-plus": "^2.3.14",
+    "fast-glob": "^3.3.1",
+    "mermaid": "9.4.3",
     "pinia": "^2.1.6",
     "qs": "^6.11.2",
     "sass": "^1.67.0",
+    "vditor": "^3.9.6",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.3.4",
     "vue-i18n": "^9.4.1",
     "vue-router": "^4.2.4"

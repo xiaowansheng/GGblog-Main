@@ -8,11 +8,11 @@
         <div class="other">
           <p class="date">
             <span class="iconfont icon-riqi"></span
-            ><span>{{ t('article.createTime') }} {{ article.createTime }}</span>
+            ><span>{{ $t('article.createTime') }} {{ article.createTime }}</span>
           </p>
           <p class="date">
             <span class="iconfont icon-riqi"></span
-            ><span>{{ t('article.updateTime') }} {{ article.updateTime }}</span>
+            ><span>{{ $t('article.updateTime') }} {{ article.updateTime }}</span>
           </p>
           <!-- <p>
             <span class="iconfont icon-fenlei"></span
@@ -27,9 +27,9 @@
             </span>
           </p> -->
           <p>
-            {{ t('article.numberOfWords') }} {{ wordNumber }}
+            {{ $t('article.numberOfWords') }} {{ wordNumber }}
             <span class="divided">|</span>
-            {{ `${t('article.commentCount')} ${commentCount}` }}
+            {{ `${$t('article.commentCount')} ${commentCount}` }}
             <!-- TODO 待做 -->
             <!--<span class="divided">|</span> {{ "浏览量：2023" }} -->
           </p>
@@ -47,7 +47,7 @@
         <el-drawer id="catalogDialog" v-model="showCatalog" direction="ltr">
           <template #header>
             <h4 class="title">
-              {{ t('article.directory') }}
+              {{ $t('article.directory') }}
             </h4>
           </template>
           <template #default>
@@ -72,7 +72,7 @@
       <el-aside class="aside">
         <div class="catalog">
           <div class="title">
-            {{ t('article.directory') }}
+            {{ $t('article.directory') }}
           </div>
           <el-tree :data="catalog" :props="defaultProps" @node-click="onCatalogClick">
             <template #default="{ node, data }">
@@ -91,12 +91,12 @@
         <div ref="mdRef" id="markdown" class="md markdown-body" v-html="html"></div>
         <div class="article-tag">
           <div class="category">
-            {{ t('article.category') }}
+            {{ $t('article.category') }}
             <router-link
               v-show="article.categoryDto"
               :to="`/article/category/query/${article.categoryDto.id}`"
             >
-              {{ article.categoryDto == null ? t('article.unknown') : article.categoryDto.name }}
+              {{ article.categoryDto == null ? $t('article.unknown') : article.categoryDto.name }}
             </router-link>
           </div>
           <div class="tags">
@@ -134,21 +134,21 @@
         </div> -->
         <div class="copyright">
           <p>
-            <span class="label">{{ t('article.author') }} </span>{{ author.Nickname }}
+            <span class="label">{{ $t('article.author') }} </span>{{ author.nickname }}
           </p>
           <p>
-            <span class="label">{{ t('article.link') }}</span
+            <span class="label">{{ $t('article.link') }}</span
             ><a :href="href" target="_blank"> {{ href }}</a>
           </p>
           <p>
-            <span class="label">{{ t('article.copyright') }}</span>
-            {{ t('article.use') }}
+            <span class="label">{{ $t('article.copyright') }}</span>
+            {{ $t('article.use') }}
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
               CC BY-NC-SA 4.0 </a
-            >{{ t('article.protocol') }}{{ t('article.transit') }}
+            >{{ $t('article.protocol') }}{{ $t('article.transit') }}
           </p>
         </div>
-        <Comment :topicType="TopicType.article" :topicId="topicId" />
+        <!-- <Comment :topicType="TopicType.article" :topicId="topicId" /> -->
       </el-main>
     </el-container>
   </div>
@@ -156,26 +156,28 @@
 
 <script lang="ts" setup>
 // import 'github-markdown-css'
-import Header from '@/layouts/default/header/index.vue'
-import Comment from 'comps/comment/index.vue'
+import Header from '@/layout/header/index.vue'
+// import Comment from 'comps/comment/index.vue'
 
-import { useI18n } from 'vue-i18n'
-import { TopicType } from 'enums/topic'
-import { service } from 'utils/axios'
-import { getQueryString } from 'utils/stringUtils'
-import { onMounted, reactive, ref, nextTick, computed } from 'vue-demi'
+import { TopicType } from '@/enums/topic'
+// import { service } from 'utils/axios'
+import {getArticle} from "@/api/article"
+import { getQueryString } from '@/utils/stringUtils'
+import { onMounted, reactive, ref, nextTick, computed } from 'vue'
 // import Vditor from "vditor/src/method";
 // import "vditor/src/assets/scss";
 
-import Vditor from 'vditor'
-import { useStore } from 'vuex'
-import { onBeforeRouteLeave } from 'vue-router'
+// import Vditor from 'vditor'
+// import { useStore } from 'vuex'
+// import { onBeforeRouteLeave } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { mdConvertToHtml } from '@/utils/markdown'
+import { useConfigStoreHook } from '@/store/modules/config'
 const topicId: any = ref(null)
-const { t } = useI18n()
-const store = useStore()
+// const { t } = useI18n()
+// const store = useStore()
 const author = computed(() => {
-  return store.state.author.information
+  return useConfigStoreHook().author
 })
 const defaultProps = {
   children: 'children',
@@ -200,18 +202,18 @@ const onCatalogClick = (data: Title) => {
   showCatalog.value = false
 }
 const commentCount = ref(0)
-const getCommentCount = () => {
-  service
-    .get('/comment/info/count', {
-      params: {
-        topicType: TopicType.article,
-        topicId: topicId.value
-      }
-    })
-    .then((data: any) => {
-      commentCount.value = data
-    })
-}
+// const getCommentCount = () => {
+//   service
+//     .get('/comment/info/count', {
+//       params: {
+//         topicType: TopicType.article,
+//         topicId: topicId.value
+//       }
+//     })
+//     .then((data: any) => {
+//       commentCount.value = data
+//     })
+// }
 const article: any = ref({
   title: '',
   categoryDto: {},
@@ -302,74 +304,72 @@ const buildTree = (arr: Array<Title>, rootDeep: number, maxDeep: number) => {
 }
 
 const loading = ref(true)
+// const articleMd=ref("")
 onMounted(() => {
-  // let id = getQueryString('')
-  // if (id) {
-  //   topicId.value = id
-  //   service
-  //     .get('/article/detail/' + id)
-  //     .then((data: any) => {
-  //       article.value = data
-  //       //TODO 统计字数不精确
-  //       wordNumber.value = data.content.length
-  //       cover.value = data.cover
-  //       window.document.title = data.title
-  //       topicId.value = data.id
-  //       let markdownDiv = document.getElementById('markdown')
-  //       Vditor.preview(markdownDiv, data.content, {
-  //         anchor: 1,
-  //         hljs: {
-  //           enable: true,
-  //           lineNumber: true,
-  //           style: 'vs'
-  //         },
-  //         markdown: {
-  //           autoSpace: true,
-  //           fixTermTypo: true,
-  //           paragraphBeginningSpace: true,
-  //           listStyle: true,
-  //           mark: true
-  //         },
-  //         // theme:{
-  //         //   current:'Dark'
-  //         // },
-  //         speech: {
-  //           enable: true
-  //         },
-  //         renderers: {
-  //           renderHeading: (node:any, entering:any) => {
-  //             const id = Lute.GetHeadingID(node)
-  //             if (entering) {
-  //               return [
-  //                 `<h${node.__internal_object__.HeadingLevel} id="${id}" class="vditor__heading"><span class="prefix"></span><span>`,
-  //                 Lute.WalkContinue
-  //               ]
-  //             } else {
-  //               return [
-  //                 `</span><a id="vditorAnchor-${id}" class="vditor-anchor" href="#${id}"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a></h${node.__internal_object__.HeadingLevel}>`,
-  //                 Lute.WalkContinue
-  //               ]
-  //             }
-  //           }
-  //         },
-  //         after() {
-  //           // console.log(1)
-  //           getTitle()
-  //         }
-  //       })
-  //       // let mathjax3 = require("markdown-it-mathjax3");
-  //       // //添加数学表达式插件
-  //       // md.use(mathjax3);
-  //       loading.value = false
-  //     })
-  //     .catch(() => {
-  //       loading.value = false
-  //     })
-  //   getCommentCount()
-  // } else {
-  //   loading.value = false
-  //   ElMessage.error('Error~')
-  // }
+  let id = getQueryString('')
+  if (id) {
+    topicId.value = id
+    getArticle(id)
+      .then((data: any) => {
+        article.value = data
+        //TODO 统计字数不精确
+        wordNumber.value = data.content.length
+        cover.value = data.cover
+        window.document.title = data.title
+        topicId.value = data.id
+        html.value=mdConvertToHtml(data.content)
+        // let markdownDiv = document.getElementById('markdown')
+        // Vditor.preview(markdownDiv, data.content, {
+        //   anchor: 1,
+        //   hljs: {
+        //     enable: true,
+        //     lineNumber: true,
+        //     style: 'vs'
+        //   },
+        //   markdown: {
+        //     autoSpace: true,
+        //     fixTermTypo: true,
+        //     paragraphBeginningSpace: true,
+        //     listStyle: true,
+        //     mark: true
+        //   },
+        //   // theme:{
+        //   //   current:'Dark'
+        //   // },
+        //   speech: {
+        //     enable: true
+        //   },
+        //   renderers: {
+        //     renderHeading: (node:any, entering:any) => {
+        //       const id = Lute.GetHeadingID(node)
+        //       if (entering) {
+        //         return [
+        //           `<h${node.__internal_object__.HeadingLevel} id="${id}" class="vditor__heading"><span class="prefix"></span><span>`,
+        //           Lute.WalkContinue
+        //         ]
+        //       } else {
+        //         return [
+        //           `</span><a id="vditorAnchor-${id}" class="vditor-anchor" href="#${id}"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a></h${node.__internal_object__.HeadingLevel}>`,
+        //           Lute.WalkContinue
+        //         ]
+        //       }
+        //     }
+        //   },
+        //   after() {
+        //     // console.log(1)
+        //     getTitle()
+        //   }
+        // });
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
+    // getCommentCount()
+  } else {
+    loading.value = false
+    ElMessage.error('Error~')
+  }
 })
 // onBeforeRouteLeave((to, from, next) => {
 //   // if (from.path == "/home") {

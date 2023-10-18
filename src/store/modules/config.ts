@@ -57,7 +57,7 @@ export const useConfigStore = defineStore('config', {
       createTime: '',
       recordNumber: '',
       bulletin: '',
-      pageView:0
+      pageView: 0
     },
     menus: {},
     covers: {
@@ -125,7 +125,7 @@ export const useConfigStore = defineStore('config', {
       Object.assign(this.website, data)
     },
     setPageView(number: number) {
-      this.website.pageView=number
+      this.website.pageView = number
     },
     setAuthor(data: any) {
       Object.assign(this.author, data)
@@ -134,7 +134,7 @@ export const useConfigStore = defineStore('config', {
       this.contact = data.reduce((obj, item) => {
         obj[item.name] = {
           value: item.value,
-          show: item.show
+          show: item.show==1?true:false
         }
         return obj
       }, {})
@@ -154,8 +154,11 @@ export const useConfigStore = defineStore('config', {
     setAvatar(data: any) {
       Object.assign(this.avatar, data)
     },
-    setPrivacy(data: any) {
-      Object.assign(this.reward, data)
+    setPrivacy(data: any[]) {
+      this.privacy = data.reduce((obj, item) => {
+        obj[item.name] = item.show == 1 ? true : false
+        return obj
+      }, {})
     },
     setReward(data: any) {
       Object.assign(this.reward, data)

@@ -15,3 +15,9 @@ export function getArticleArchive(params?:any) {
   return http.get('/article/user/archive',params)
 }
 
+
+// 查询文章具体信息
+export function getArticle(id:string|number) {
+  return http.get('/article/detail/'+id)
+}
+

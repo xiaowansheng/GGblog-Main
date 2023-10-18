@@ -17,14 +17,6 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/home/index.vue')
       },
       {
-        path: '/about',
-        name: 'about',
-        // route level code-splitting
-        // this generates a separate chunk (About.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/AboutView.vue')
-      },
-      {
         name: 'Article',
         path: '/article',
         redirect: '/',
@@ -94,6 +86,42 @@ export const routes: RouteRecordRaw[] = [
         meta: {
           keepAlive: true
         },
+        children: []
+      },
+      {
+        name: 'TalkDetail',
+        path: '/talk/:id',
+        component: () => import('@/views/talk/detail/index.vue'),
+        meta: {
+          keepAlive: false
+        },
+        children: []
+      },
+      {
+        name: 'Album',
+        path: '/album',
+        component: () => import('@/views/album/index.vue'),
+        meta: {
+          keepAlive: true
+        },
+        children: []
+      },
+      {
+        name: 'AlbumDetail',
+        path: '/album/detail/:id',
+        component: () => import('@/views/album/detail/index.vue'),
+        children: []
+      },
+      {
+        name: 'friend',
+        path: '/friend',
+        component: () => import('@/views/friend/index.vue'),
+        children: []
+      },
+      {
+        name: 'About',
+        path: '/about',
+        component: () => import('@/views/about/index.vue'),
         children: []
       }
     ]
