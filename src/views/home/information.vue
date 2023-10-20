@@ -49,18 +49,23 @@ import Bulletin from './bulletin.vue'
 import Record from './record.vue'
 import { getSimpleStatistic } from '@/api/article'
 import { useConfigStoreHook } from '@/store/modules/config'
-const author = useConfigStoreHook().author
-// const modules = useConfigStoreHook().module
-const numberInfo = ref({
-  article: 0,
-  category: 0,
-  tag: 0,
-  talk: 0
+const author = computed(() => {
+  return useConfigStoreHook().author
 })
+const numberInfo = computed(() => {
+  return useConfigStoreHook().statistic
+})
+// const modules = useConfigStoreHook().module
+// const numberInfo = ref({
+//   article: 0,
+//   category: 0,
+//   tag: 0,
+//   talk: 0
+// })
 onBeforeMount(() => {
-  getSimpleStatistic().then((data: any) => {
-    numberInfo.value=data
-  })
+  // getSimpleStatistic().then((data: any) => {
+  //   numberInfo.value=data
+  // })
 })
 </script>
 

@@ -1,9 +1,14 @@
 <template>
   <div class="nav mobile">
-    <!-- <div class="top-nav" id="topNav-mobile" :class="style">
+    <div class="top-nav" id="topNav-mobile" :class="style">
       <div id="top-btn">
-        <span @click="leftDrawer = true"><span class="iconfont icon-caidan3"></span></span>
-        <span v-if="modules.Search && false">搜索<span class="iconfont icon-sousuo"></span></span>
+        <svg-icon
+          name="menu"
+          iconStyle="width:3.5rem;height:3.5rem"
+          @click="leftDrawer = true"
+        ></svg-icon>
+        <!-- <spa><span class="iconfont icon-caidan3"></span></span> -->
+        <!-- <span v-if="modules.Search && false">搜索<span class="iconfont icon-sousuo"></span></span> -->
       </div>
       <div class="logo" @click="toPage('/')">
         <el-image
@@ -24,37 +29,30 @@
     >
       <div class="info">
         <div class="avatar">
-          <el-avatar :size="100" :src="author.information.Avatar" />
+          <el-avatar :size="100" :src="author.avatar" />
         </div>
         <div class="nickname">
-          <span>{{ author.information.Nickname }}</span>
+          <span>{{ author.nickname }}</span>
         </div>
         <div class="information">
           <router-link to="/article/archive" @click="leftDrawer = false">
             <label>{{ $t('menu.blog') }}</label>
             <br />
-            <span>{{ articleState.ArticleCount }}</span>
+            <span>{{ numberInfo.article }}</span>
           </router-link>
           <router-link to="/article/category" @click="leftDrawer = false">
             <label>{{ $t('menu.category') }}</label>
             <br />
-            <span>{{ articleState.CategoryCount }}</span>
+            <span>{{ numberInfo.category }}</span>
           </router-link>
           <router-link to="/article/tag" @click="leftDrawer = false">
             <label>{{ $t('menu.tag') }}</label>
             <br />
-            <span>{{ articleState.TagCount }}</span>
+            <span>{{ numberInfo.tag }}</span>
           </router-link>
         </div>
       </div>
-      <el-menu
-        class="el-menu"
-        @open="handleOpen"
-        @close="handleClose"
-        :router="true"
-        id="sideNav"
-        @select="leftDrawer = false"
-      >
+      <el-menu class="el-menu" :router="true" id="sideNav" @select="leftDrawer = false">
         <el-menu-item index="/">
           <span class="iconfont icon-home1"></span>{{ $t('menu.homepage') }}
         </el-menu-item>
@@ -63,52 +61,43 @@
             <span class="iconfont icon-bianjiwenzhang_huaban"></span>
             {{ $t('menu.blog') }}
           </template>
-          <el-menu-item v-if="menuConfig.Archive" index="/article/archive">
+          <el-menu-item index="/article/archive">
             <span class="iconfont icon-guidang"></span>
             {{ $t('menu.archive') }}
           </el-menu-item>
-          <el-menu-item v-if="menuConfig.Category" index="/article/category">
+          <el-menu-item index="/article/category">
             <span class="iconfont icon-fenlei"></span>{{ $t('menu.category') }}
           </el-menu-item>
-          <el-menu-item v-if="menuConfig.Tag" index="/article/tag">
+          <el-menu-item index="/article/tag">
             <span class="iconfont icon-biaoqian"></span>{{ $t('menu.tag') }}
           </el-menu-item>
         </el-sub-menu>
-        <el-menu-item v-if="menuConfig.Talk" index="/talk">
+        <el-menu-item index="/talk">
           <span class="iconfont icon-41shuoshuo"></span>{{ $t('menu.talk') }}
         </el-menu-item>
         <el-sub-menu index="2">
           <template #title>
             <span class="iconfont icon-yule1"></span>{{ t('menu.pastime') }}
           </template>
-          <el-menu-item v-if="menuConfig.Album" index="/album">
+          <el-menu-item index="/album">
             <span class="iconfont icon-tupian"></span>{{ t('menu.album') }}
           </el-menu-item>
-          <el-menu-item v-if="menuConfig.Path" index="/">
-            <span class="iconfont icon-icon_xinyong_xianxing_jijin-139"></span
-            >{{ $t('menu.learningPath') }}
-          </el-menu-item>
         </el-sub-menu>
-        <el-menu-item v-if="menuConfig.Blogroll" index="/blogroll">
+        <el-menu-item index="/friend">
           <span class="iconfont icon-lianjie"></span>
           {{ $t('menu.blogroll') }}
         </el-menu-item>
-        <el-menu-item v-if="menuConfig.Guestbook && false" index="/guestbook">
+        <el-menu-item index="/guestbook">
           <span class="iconfont icon-liuyan"></span>{{ $t('menu.guestbook') }}
         </el-menu-item>
-        <el-menu-item v-if="menuConfig.About" index="/about">
+        <el-menu-item index="/about">
           <span class="iconfont icon-guanyu"></span>{{ $t('menu.about') }}
         </el-menu-item>
-        <el-menu-item
-          v-if="menuConfig.Login"
-          v-show="!store.state.user.token"
-          index=""
-          @click="login"
-        >
+        <el-menu-item v-if="user.username" index="" @click="login">
           <span class="iconfont icon-denglu"></span>{{ $t('menu.login') }}
         </el-menu-item>
 
-        <el-sub-menu index="" v-if="menuConfig.Login" v-show="store.state.user.token">
+        <el-sub-menu index="" v-if="user.username">
           <template #title>
             <span class="iconfont icon-gerenzhongxin"></span>
             {{ $t('menu.center') }}
@@ -124,7 +113,7 @@
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
-      <div class="set">
+      <!-- <div class="set">
         <div class="title">
           <span>{{ $t('menu.set.language') }}</span>
         </div>
@@ -142,10 +131,10 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
 
       <template #footer>
-        <div v-if="modules.Record">
+        <div>
           <div id="runTime">
             <label> {{ $t('record.runtime') }}： </label>
             <br />
@@ -153,21 +142,21 @@
           </div>
           <div id="pageView">
             <label>
-              {{ $t('record.pageView') }}： <span>{{ visitorCount }}</span></label
+              {{ $t('record.pageView') }}： <span>{{ website.pageView }}</span></label
             >
           </div>
         </div>
       </template>
-    </el-drawer> -->
+    </el-drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, watch, ref } from 'vue'
 // import { useI18n } from 'vue-i18n'
 // import { getDefaultLang } from "@/locales/langUtils";
 
-// import { convertIntervalTime } from "@/utils/timeUtils";
+import { convertIntervalTime } from '@/utils/timeUtils'
 import { useRouter } from 'vue-router'
 // import {
 //   Document,
@@ -180,14 +169,30 @@ import { useRouter } from 'vue-router'
 // import { useStore } from "vuex";
 // const store = useStore();
 import { useConfigStoreHook } from '@/store/modules/config'
-import { useAuthorStoreHook } from '@/store/modules/author'
-import { useWebsiteStoreHook } from '@/store/modules/website'
-const menuConfig = useConfigStoreHook().menus
-const author = useAuthorStoreHook()
-const modules = useConfigStoreHook().module
-// const articleState = computed(() => {
-//   return store.state.website.articleState;
-// });
+import { useUserStoreHook } from '@/store/modules/user'
+import { useModuleStoreHook } from '@/store/modules/module'
+import { t } from '@/plugins/i18s'
+const user = computed(() => {
+  return useUserStoreHook()
+})
+const components = computed(() => {
+  return useModuleStoreHook()
+})
+const menuConfig = computed(() => {
+  return useConfigStoreHook().menus
+})
+const author = computed(() => {
+  return useConfigStoreHook().author
+})
+const modules = computed(() => {
+  return useConfigStoreHook().module
+})
+const website = computed(() => {
+  return useConfigStoreHook().website
+})
+const numberInfo = computed(() => {
+  return useConfigStoreHook().statistic
+})
 const router = useRouter()
 // const { locale } = useI18n();
 const leftDrawer = ref(false)
@@ -201,35 +206,32 @@ const handleScroll = function () {}
 // };
 const colorStyle = ref('white')
 const topNavShow = ref(true)
-const website = useWebsiteStoreHook()
 let timer = null
 const timestamp = ref(0)
-// const createTime = computed(() => {
-//   let str = convertIntervalTime(timestamp.value);
-//   return str
-//     .replace("天", t("record.days"))
-//     .replace("小时", t("record.hours"))
-//     .replace("分钟", t("record.minutes"))
-//     .replace("秒", t("record.seconds"));
-// });
-// const timeWatch = watch(store.state.website, (value: any) => {
-//   if (value.CreateTime) {
-//     let dateStr = store.state.website.CreateTime;
-//     dateStr = dateStr.replace(/-/g, "/");
-//     let start = new Date(dateStr);
-//     timestamp.value = new Date().getTime() - start.getTime();
-//     timer = setInterval(() => {
-//       timestamp.value = timestamp.value + 1000;
-//     }, 1000);
-//     timeWatch();
-//   }
-// });
-// const visitorCount: any = ref(0);
-//     toPage(path: string) {
-//         router.push(path);
-//         leftDrawer.value = false;
-//       }
-//       setLanguage(language: any) {
+const createTime = computed(() => {
+  let str = convertIntervalTime(timestamp.value)
+  return str
+    .replace('天', t('record.days'))
+    .replace('小时', t('record.hours'))
+    .replace('分钟', t('record.minutes'))
+    .replace('秒', t('record.seconds'))
+})
+const timeWatch = watch(website.value, () => {
+  formatTime(website.value)
+  timeWatch()
+})
+const formatTime = (value:any) => {
+  if (value.createTime) {
+    let dateStr = value.createTime
+    dateStr = dateStr.replace(/-/g, '/')
+    let start = new Date(dateStr)
+    timestamp.value = new Date().getTime() - start.getTime()
+    timer = setInterval(() => {
+      timestamp.value = timestamp.value + 1000
+    }, 1000)
+  }
+}
+// setLanguage(language: any) {
 //         locale.value = language;
 // }
 
@@ -239,29 +241,25 @@ let scrollData: any = []
 
 // 一个响应速度的参数，值越大响应越慢
 const responseSpeed = 3
-const temp = ref(false)
 const style = computed(() => {
   return topNavShow.value ? colorStyle.value : 'hidden ' + colorStyle.value
 })
-//      const login= () => {
-//         store.state.dialog.Login = true;
-//         return false;
-//       }
-//   const    changePassword=() => {
-//         store.state.dialog.ChangePassword = true;
-//       }
-//    const   logout=() => {
-//         store.dispatch("user/logout");
-//         // console.log("token", store.state.user.token);
-// }
-const getCount = () => {
-  // service.get("/website/visitor/count").then((data: any) => {
-  //   if (data) {
-  //     visitorCount.value = data;
-  //   }
-  // });
+const login = () => {
+  components.value.login = true
+}
+const changePassword = () => {
+  components.value.changePassword = true
+}
+const logout = () => {
+  user.value.logOut()
+  // console.log("token", store.state.user.token);
+}
+const toPage = (path: string) => {
+  router.push(path)
+  leftDrawer.value = false
 }
 onBeforeMount(() => {
+  formatTime(website.value)
   // this.setLanguage(getDefaultLang());
   // this.getCount();
   window.addEventListener(
@@ -326,8 +324,8 @@ onMounted(() => {
 }
 .el-menu {
   border: 0;
-  .iconfont {
-    margin-right: 1rem;
+  svg {
+    // margin-right: 1rem;
   }
 }
 
@@ -355,22 +353,17 @@ onMounted(() => {
   transition-property: all;
   transition-timing-function: linear;
   #top-btn {
-    .iconfont:not(.language .iconfont) {
-      font-size: 2.5rem;
-      margin-right: 1.1rem;
+    display: flex;
+    align-items: center;
+    padding-left: 1.5rem;
+    .logo {
+      // margin-right: 2rem;
+      // line-height: 2.5rem;
+      // font-size: 2.5rem;
+      overflow: hidden;
+      line-height: 3.78rem;
+      padding: 0rem 1rem;
     }
-  }
-
-  .logo {
-    // margin-right: 2rem;
-    // line-height: 2.5rem;
-    // font-size: 2.5rem;
-    overflow: hidden;
-  }
-  #top-btn,
-  .logo {
-    line-height: 3.78rem;
-    padding: 0rem 1rem;
   }
 }
 

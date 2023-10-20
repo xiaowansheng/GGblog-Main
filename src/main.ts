@@ -1,7 +1,10 @@
 import 'element-plus/dist/index.css'
 import 'cherry-markdown/dist/cherry-markdown.css'
-import './assets/main.css'
 
+// import "vditor/dist/index.css";
+import '@/assets/main.scss'
+
+import '@/assets/css/markdown.scss'
 import { createApp } from 'vue'
 import { setupStore } from '@/store/index'
 import { useElementPlus } from '@/plugins/element-plus/index'

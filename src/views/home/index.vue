@@ -60,9 +60,12 @@ import Talk from './talk.vue'
 import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
 import { getArticlePage } from '@/api/article'
 import { useConfigStoreHook } from '@/store/modules/config'
-import { useWebsiteStoreHook } from '@/store/modules/website'
-const modules = useConfigStoreHook().module
-const website = useWebsiteStoreHook()
+const modules = computed(() => {
+  return useConfigStoreHook().module
+})
+const website = computed(() => {
+  return useConfigStoreHook().website
+})
 const params = reactive({
   page: 1,
   limit: 10

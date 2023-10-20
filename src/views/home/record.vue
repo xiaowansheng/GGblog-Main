@@ -32,14 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch
-} from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { convertIntervalTime } from '@/utils/timeUtils'
 // import { useStore } from 'vuex'
 import { useConfigStoreHook } from '@/store/modules/config'
@@ -48,8 +41,10 @@ import { useConfigStoreHook } from '@/store/modules/config'
 // import { useI18n } from 'vue-i18n'
 // import { service } from 'utils/axios'
 // const { t } = useI18n()
-import {t} from "@/plugins/i18s/index"
-const website = useConfigStoreHook().website
+import { t } from '@/plugins/i18s/index'
+const website = computed(() => {
+  return useConfigStoreHook().website
+})
 // watch((website), () => {
 //   timestamp.value=(new Date().getTime()-new Date(website.createTime).getTime())
 // })
@@ -64,8 +59,8 @@ const createTime = computed(() => {
     .replace('秒', t('record.seconds'))
 })
 const formatTime = (value: any) => {
-  if (value && value.createTime) {
-    let dateStr = website.createTime
+  if (value.createTime) {
+    let dateStr = value.createTime
     dateStr = dateStr.replace(/-/g, '/')
     let start = new Date(dateStr)
     timestamp.value = new Date().getTime() - start.getTime()
@@ -77,10 +72,10 @@ const formatTime = (value: any) => {
     return false
   }
 }
-watch(website, (value: any) => {
-  formatTime(value)
+const websiteWatch = watch(website.value, () => {
+  formatTime(website.value)
+  websiteWatch()
 })
-const visitorCount = ref<number>(0)
 
 const getCount = () => {
   // service.get('/website/visitor/count').then((data: any) => {
@@ -90,7 +85,7 @@ const getCount = () => {
   // })
 }
 onBeforeMount(() => {
-  formatTime(website)
+  formatTime(website.value)
   getCount()
 })
 onBeforeUnmount(() => {

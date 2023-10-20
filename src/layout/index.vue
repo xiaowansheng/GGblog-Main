@@ -13,6 +13,7 @@ import Menu from './menu/index.vue'
 import { useConfigStoreHook } from '@/store/modules/config';
 // 获取配置信息
 useConfigStoreHook().setConfigInfo()
+useConfigStoreHook().setStatistic()
 </script>
 
 <style lang="scss" scoped>

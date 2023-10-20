@@ -1,0 +1,48 @@
+.markdown-body {
+  font-size: 1.6rem;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  /* padding: 15px; */
+  /* TODO 无效 */
+}
+/* TODO 代码白天黑夜转换 */
+.md .hljs {
+  /* background-color:rgb(0, 0, 0); */
+  /*  color: white; */
+}
+.dark .md {
+  background-color: black;
+  color: rgb(199, 198, 198);
+}
+.dark .md .hljs {
+  background-color: rgb(182, 191, 196);
+}
+// .vditor-linenumber__rows > span::before {
+//   color: black !important;
+// }
+.md  img {
+    max-width: 100%;
+  }
+@media (max-width: 768px) {
+  .markdown-body {
+    padding: 5px;
+  }
+  .hljs::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .hljs {
+    /* max-height: 35rem; */
+  }
+}
+@media (min-width: 768px) {
+  .hljs::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+  }
+}
+@media (prefers-color-scheme: light) {
+}

@@ -27,9 +27,11 @@
             </span>
           </p> -->
           <p>
-            {{ $t('article.numberOfWords') }} {{ wordNumber }}
+            {{ $t('article.numberOfWords') }}: {{ wordNumber }}
             <span class="divided">|</span>
-            {{ `${$t('article.commentCount')} ${commentCount}` }}
+            {{ `${$t('article.commentCount')} : ${commentCount}` }}
+            <span class="divided">|</span>
+            {{ `${$t('article.pageView')} : ${article.pageView}` }}
             <!-- TODO 待做 -->
             <!--<span class="divided">|</span> {{ "浏览量：2023" }} -->
           </p>
@@ -88,7 +90,8 @@
       </el-aside>
       <!-- <div id="temp"></div> -->
       <el-main class="content">
-        <div ref="mdRef" id="markdown" class="md markdown-body" v-html="html"></div>
+        <div ref="mdRef" id="markdown" class="md markdown-body cherry-markdown" v-html="html"></div>
+        <!-- <div ref="mdRef" id="markdown" class="md markdown-body"></div> -->
         <div class="article-tag">
           <div class="category">
             {{ $t('article.category') }}
@@ -160,8 +163,7 @@ import Header from '@/layout/header/index.vue'
 // import Comment from 'comps/comment/index.vue'
 
 import { TopicType } from '@/enums/topic'
-// import { service } from 'utils/axios'
-import {getArticle} from "@/api/article"
+import { getArticle } from '@/api/article'
 import { getQueryString } from '@/utils/stringUtils'
 import { onMounted, reactive, ref, nextTick, computed } from 'vue'
 // import Vditor from "vditor/src/method";
@@ -214,7 +216,7 @@ const commentCount = ref(0)
 //       commentCount.value = data
 //     })
 // }
-const article: any = ref({
+const article = ref<any>({
   title: '',
   categoryDto: {},
   tagsDto: []
@@ -223,7 +225,7 @@ const cover = ref('')
 const href = window.location.href
 const wordNumber = ref(0)
 let html = ref('')
-const mdRef = ref()
+const mdRef = ref<HTMLDivElement>()
 const catalog: any = ref<Array<Title>>([])
 const showCatalog = ref(false)
 interface Title {
@@ -233,12 +235,13 @@ interface Title {
   children: Array<Title>
 }
 const getTitle = () => {
-  let nodes = mdRef.value.children
+  // let nodes = mdRef.value.children
+  let nodes = mdRef.value!.children
   let arr: Array<Title> = []
   // console.log("nodes", nodes);
   let templateH = /[hH][1-3]/
   for (let i = 0; i < nodes.length; i++) {
-    let node: HTMLElement = nodes.item(i)
+    let node: HTMLElement = nodes.item(i) as HTMLElement
     let nodeName = node.nodeName
     if (nodeName.match(templateH)) {
       // console.log(nodeName,'000',)
@@ -304,70 +307,73 @@ const buildTree = (arr: Array<Title>, rootDeep: number, maxDeep: number) => {
 }
 
 const loading = ref(true)
+const getData = (id: string | number) => {
+  getArticle(id)
+    .then((data: any) => {
+      article.value = data
+      //TODO 统计字数不精确
+      wordNumber.value = data.content.length
+      cover.value = data.cover
+      window.document.title = data.title
+      topicId.value = data.id
+      html.value = mdConvertToHtml(data.content)
+      nextTick(() => {
+        getTitle()
+      })
+      // let markdownDiv = document.getElementById('markdown')
+      // Vditor.preview( mdRef.value,data.content, {
+      //   anchor: 1,
+      //   hljs: {
+      //     enable: true,
+      //     lineNumber: true,
+      //     style: 'vs'
+      //   },
+      //   markdown: {
+      //     autoSpace: true,
+      //     fixTermTypo: true,
+      //     paragraphBeginningSpace: true,
+      //     listStyle: true,
+      //     mark: true
+      //   },
+      //   // theme:{
+      //   //   current:'Dark'
+      //   // },
+      //   speech: {
+      //     enable: true
+      //   },
+      //   renderers: {
+      //     renderHeading: (node:any, entering:any) => {
+      //       const id = Lute.GetHeadingID(node)
+      //       if (entering) {
+      //         return [
+      //           `<h${node.__internal_object__.HeadingLevel} id="${id}" class="vditor__heading"><span class="prefix"></span><span>`,
+      //           Lute.WalkContinue
+      //         ]
+      //       } else {
+      //         return [
+      //           `</span><a id="vditorAnchor-${id}" class="vditor-anchor" href="#${id}"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a></h${node.__internal_object__.HeadingLevel}>`,
+      //           Lute.WalkContinue
+      //         ]
+      //       }
+      //     }
+      //   },
+      //   after() {
+      //     getTitle()
+      //   }
+      // });
+      loading.value = false
+    })
+    .catch(() => {
+      loading.value = false
+    })
+}
 // const articleMd=ref("")
 onMounted(() => {
   let id = getQueryString('')
   if (id) {
     topicId.value = id
-    getArticle(id)
-      .then((data: any) => {
-        article.value = data
-        //TODO 统计字数不精确
-        wordNumber.value = data.content.length
-        cover.value = data.cover
-        window.document.title = data.title
-        topicId.value = data.id
-        html.value=mdConvertToHtml(data.content)
-        // let markdownDiv = document.getElementById('markdown')
-        // Vditor.preview(markdownDiv, data.content, {
-        //   anchor: 1,
-        //   hljs: {
-        //     enable: true,
-        //     lineNumber: true,
-        //     style: 'vs'
-        //   },
-        //   markdown: {
-        //     autoSpace: true,
-        //     fixTermTypo: true,
-        //     paragraphBeginningSpace: true,
-        //     listStyle: true,
-        //     mark: true
-        //   },
-        //   // theme:{
-        //   //   current:'Dark'
-        //   // },
-        //   speech: {
-        //     enable: true
-        //   },
-        //   renderers: {
-        //     renderHeading: (node:any, entering:any) => {
-        //       const id = Lute.GetHeadingID(node)
-        //       if (entering) {
-        //         return [
-        //           `<h${node.__internal_object__.HeadingLevel} id="${id}" class="vditor__heading"><span class="prefix"></span><span>`,
-        //           Lute.WalkContinue
-        //         ]
-        //       } else {
-        //         return [
-        //           `</span><a id="vditorAnchor-${id}" class="vditor-anchor" href="#${id}"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a></h${node.__internal_object__.HeadingLevel}>`,
-        //           Lute.WalkContinue
-        //         ]
-        //       }
-        //     }
-        //   },
-        //   after() {
-        //     // console.log(1)
-        //     getTitle()
-        //   }
-        // });
-        loading.value = false
-      })
-      .catch(() => {
-        loading.value = false
-      })
-    // getCommentCount()
+    getData(id)
   } else {
-    loading.value = false
     ElMessage.error('Error~')
   }
 })
@@ -616,6 +622,13 @@ onMounted(() => {
 }
 </style>
 <style lang="scss">
+.article-tag {
+  .tags {
+    .el-tag {
+      font-size: 1.4rem;
+    }
+  }
+}
 @media screen and (max-width: 768px) {
   .catalog-mobile {
     #catalogDialog {

@@ -89,7 +89,7 @@ const setConfig=(id?: string, mdStr?: string)=>{
          * @param {'image'|'audio'|'video'|'autolink'|'link'} srcType 来源类型
          * @returns
          */
-        urlProcessor: (url, srcType) => {
+        urlProcessor: (url:string, srcType:string) => {
           console.log(`url-processor`, url, srcType)
           return url
         },
@@ -218,9 +218,9 @@ CherryEngine.usePlugin(CherryMermaidPlugin, {
 
 // 引入Cherry引擎核心构建
 // 引擎配置项与Cherry通用，以下文档内容仅介绍Cherry核心包
-const cherryEngineInstance = new CherryEngine()
+const cherryEngineInstance = new CherryEngine(setConfig())
 export function mdConvertToHtml(mdStr: string): string {
-  const htmlContent = cherryEngineInstance.makeHtml(mdStr)
+  const htmlContent = cherryEngineInstance!.makeHtml(mdStr)
   return htmlContent
 }
 

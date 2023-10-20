@@ -31,11 +31,12 @@ import { computed, onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 // import { useStore } from 'vuex'
 import { useConfigStoreHook } from '@/store/modules/config'
-import { useWebsiteStoreHook } from '@/store/modules/website'
 const cover = computed(() => {
   return `background-image: url('${useConfigStoreHook().covers.Home}')`
 })
-const website = useWebsiteStoreHook()
+const website = computed(()=>{
+  return useConfigStoreHook().website
+})
 const sentence = ref({
   hitokoto: '',
   from: ''

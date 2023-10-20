@@ -35,9 +35,6 @@ dependencies:
   sass:
     specifier: ^1.67.0
     version: 1.67.0
-  vditor:
-    specifier: ^3.9.6
-    version: 3.9.6
   vite-plugin-svg-icons:
     specifier: ^2.0.1
     version: 2.0.1(vite@4.4.9)
@@ -50,6 +47,9 @@ dependencies:
   vue-router:
     specifier: ^4.2.4
     version: 4.2.4(vue@3.3.4)
+  vue3-danmaku:
+    specifier: ^1.6.0
+    version: 1.6.0(vue@3.3.4)
 
 devDependencies:
   '@rushstack/eslint-patch':
@@ -2309,10 +2309,6 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-
-  /diff-match-patch@1.0.5:
-    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
-    dev: false
 
   /diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
@@ -5230,12 +5226,6 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /vditor@3.9.6:
-    resolution: {integrity: sha512-97sPNHnBpfEFnk5WARCpmdKxgUiPtp0/fPLAUmzZ+axFFf7kExWHRNIUO7OTQzEUMJP/rcXESQTlYGhgKYrsOQ==}
-    dependencies:
-      diff-match-patch: 1.0.5
-    dev: false
-
   /vite-node@0.32.4(@types/node@18.17.17)(sass@1.67.0):
     resolution: {integrity: sha512-L2gIw+dCxO0LK14QnUMoqSYpa9XRGnTTTDjW2h19Mr+GR0EFj4vx52W41gFXfMLqpA00eK4ZjOVYo1Xk//LFEw==}
     engines: {node: '>=v14.18.0'}
@@ -5454,6 +5444,14 @@ packages:
       semver: 7.5.4
       typescript: 5.0.4
     dev: true
+
+  /vue3-danmaku@1.6.0(vue@3.3.4):
+    resolution: {integrity: sha512-XjwVKIelupDD3PWn6k22l5qS8y+SCdFUYq4sSpcPInqk7CyzXWSAfz2BL6WWx9HU9CRWS3x2oDMkepLkJoWvNQ==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.3.4
+    dev: false
 
   /vue@3.3.4:
     resolution: {integrity: sha512-VTyEYn3yvIeY1Py0WaYGZsXnz3y5UnGi62GjVEqvEGPl6nxbOrCXbVOTQWBEJUqAyTUk2uJ5JLVnYJ6ZzGbrSw==}

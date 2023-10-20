@@ -119,6 +119,12 @@ export const routes: RouteRecordRaw[] = [
         children: []
       },
       {
+        name: 'Guestbook',
+        path: '/guestbook',
+        component: () => import('@/views/guestbook/index.vue'),
+        children: []
+      },
+      {
         name: 'About',
         path: '/about',
         component: () => import('@/views/about/index.vue'),

@@ -48,10 +48,11 @@ export default {
       seconds:"s"
     },
     article: {
-      createTime: "CreateTime: ",
-      updateTime: "UpdateTime: ",
-      numberOfWords: "Number of words:",
-      commentCount: "Comment count:",
+      createTime: "CreateTime",
+      updateTime: "UpdateTime",
+      numberOfWords: "Number of words",
+      commentCount: "Comment count",
+      pageView: "PageView",
       directory: "Directory",
       category: "Category:",
       unknown: "Unknown",

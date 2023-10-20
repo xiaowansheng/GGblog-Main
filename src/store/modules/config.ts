@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { store } from '@/store'
 import { getConfig } from '@/api/config'
 
+import { getSimpleStatistic } from '@/api/article'
 export const useConfigStore = defineStore('config', {
   state: () => ({
     author: {
@@ -104,11 +105,18 @@ export const useConfigStore = defineStore('config', {
     },
     avatar: {
       User: '',
-      Visitor: ''
+      Visitor: '',
+      Anonymous: ''
     },
     reward: {
       Alipay: '',
       Wechat: ''
+    },
+    statistic: {
+      article: 0,
+      category: 0,
+      tag: 0,
+      talk: 0
     }
   }),
   getters: {},
@@ -134,7 +142,7 @@ export const useConfigStore = defineStore('config', {
       this.contact = data.reduce((obj, item) => {
         obj[item.name] = {
           value: item.value,
-          show: item.show==1?true:false
+          show: item.show == 1 ? true : false
         }
         return obj
       }, {})
@@ -151,8 +159,11 @@ export const useConfigStore = defineStore('config', {
         return obj
       }, {})
     },
-    setAvatar(data: any) {
-      Object.assign(this.avatar, data)
+    setAvatar(data: any[]) {
+      this.avatar = data.reduce((obj, item) => {
+        obj[item.name] = item.url
+        return obj
+      }, {})
     },
     setPrivacy(data: any[]) {
       this.privacy = data.reduce((obj, item) => {
@@ -162,6 +173,11 @@ export const useConfigStore = defineStore('config', {
     },
     setReward(data: any) {
       Object.assign(this.reward, data)
+    },
+    setStatistic() {
+      getSimpleStatistic().then((data: any) => {
+        this.statistic = data
+      })
     },
     setConfigInfo() {
       getConfig().then((data: any) => {
@@ -179,6 +195,7 @@ export const useConfigStore = defineStore('config', {
         this.setReward(data.reward)
       })
     }
+    
   }
 })
 
