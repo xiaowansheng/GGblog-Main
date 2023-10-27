@@ -1,4 +1,10 @@
-import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CustomParamsSerializer } from 'axios'
+import type {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  CustomParamsSerializer
+} from 'axios'
 import Axios from 'axios'
 import { stringify } from 'qs'
 // import { getToken, formatToken } from "@/utils/auth";
@@ -10,7 +16,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Result } from './type'
 // TODO 获取不到环境变量
 // const baseURL = import.meta.env.VITE_BASE_API
-const baseURL = "http://localhost:8080"
+const baseURL = 'http://localhost:8080'
 // console.log("url",import.meta.env, import.meta.env.VITE_APP_BASE_API)
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
@@ -32,12 +38,12 @@ const defaultConfig: AxiosRequestConfig = {
 
 class CommonHttp {
   constructor() {
-    // this.httpInterceptorsRequest();
-    this.httpInterceptorsResponse();
+    this.httpInterceptorsRequest()
+    this.httpInterceptorsResponse()
   }
 
   /** token过期后，暂存待执行的请求 */
-  private static requests = []
+  private static requests: any[] = []
 
   /** 防止重复刷新token */
   private static isRefreshing = false
@@ -49,89 +55,85 @@ class CommonHttp {
   private static axiosInstance: AxiosInstance = Axios.create(defaultConfig)
 
   /** 重连原始请求 */
-  // private static retryOriginalRequest(config: PureHttpRequestConfig) {
-  //   return new Promise(resolve => {
-  //     PureHttp.requests.push((token: string) => {
-  //       config.headers["Authorization"] = formatToken(token);
-  //       resolve(config);
-  //     });
-  //   });
-  // }
+  private static retryOriginalRequest(config: AxiosRequestConfig): Promise<any> {
+    return new Promise((resolve) => {
+      CommonHttp.requests.push((token: string) => {
+        config.headers!['Authorization'] = token
+        resolve(config)
+      })
+    })
+  }
 
   /** 请求拦截 */
-  // private httpInterceptorsRequest(): void {
-  //   CommonHttp.axiosInstance.interceptors.request.use(
-  //     async (config: AxiosRequestConfig): Promise<any> => {
-  //       // 开启进度条动画
-  //       // NProgress.start();
-  //       // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
-  //       // if (typeof config.beforeRequestCallback === "function") {
-  //       //   config.beforeRequestCallback(config);
-  //       //   return config;
-  //       // }
-  //       // if (PureHttp.initConfig.beforeRequestCallback) {
-  //       //   PureHttp.initConfig.beforeRequestCallback(config);
-  //       //   return config;
-  //       // }
-  //       /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
-  //       const whiteList = [
-  //         "/user/auth/refresh/token",
-  //         "/user/auth/login",
-  //       ];
-  //       // 字串匹配
-  //       // return whiteList.some(v => config.url.indexOf(v) > -1)
-  //       // 改为完全匹配
-  //       return whiteList.some(v => v == config.url)
-  //         ? config
-  //         : new Promise(resolve => {
-  //             const data = getToken();
-  //             if (data) {
-  //               const now = new Date().getTime();
-  //               const expired = parseInt(data.expires) - now <= 0;
-  //               if (expired) {
-  //                 if (!PureHttp.isRefreshing) {
-  //                   PureHttp.isRefreshing = true;
-  //                   console.log("token过期，暂存待执行的请求，刷新token");
+  private httpInterceptorsRequest(): void {
+    CommonHttp.axiosInstance.interceptors.request.use(
+      async (config: AxiosRequestConfig): Promise<any> => {
+        // 开启进度条动画
+        // NProgress.start();
+        // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
+        // if (typeof config.beforeRequestCallback === "function") {
+        //   config.beforeRequestCallback(config);
+        //   return config;
+        // }
+        // if (PureHttp.initConfig.beforeRequestCallback) {
+        //   PureHttp.initConfig.beforeRequestCallback(config);
+        //   return config;
+        // }
+        /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
+        const whiteList = ['/user/auth/refresh/token', '/user/auth/login']
+        // 字串匹配
+        // return whiteList.some(v => config.url.indexOf(v) > -1)
+        // 改为完全匹配
+        return whiteList.some((v) => v == config.url)
+          ? config
+          : new Promise((resolve) => {
+              const data = useUserStoreHook().getToken()
+              // console.log('tokendata:', data)
+              if (data) {
+                const now = new Date().getTime()
+                const expired = parseInt(data.expires) - now <= 0
+                if (expired) {
+                  if (!CommonHttp.isRefreshing) {
+                    CommonHttp.isRefreshing = true
+                    console.log('token过期，暂存待执行的请求，刷新token')
 
-  //                   // token过期刷新
-  //                   useUserStoreHook()
-  //                     .handRefreshToken({ refreshToken: data.refreshToken })
-  //                     .then(res => {
-  //                       console.log("获取了新token");
+                    // token过期刷新
+                    useUserStoreHook()
+                      .handRefreshToken({ refreshToken: data.refreshToken })
+                      .then((res) => {
+                        console.log('获取了新token')
 
-  //                       const token = res.accessToken;
-  //                       config.headers["Authorization"] = formatToken(token);
-  //                       PureHttp.requests.forEach(cb => cb(token));
-  //                       PureHttp.requests = [];
-  //                     })
-  //                     .finally(() => {
-  //                       PureHttp.isRefreshing = false;
-  //                     });
-  //                 }
-  //                 resolve(PureHttp.retryOriginalRequest(config));
-  //               } else {
-  //                 config.headers["Authorization"] = formatToken(
-  //                   data.accessToken
-  //                 );
-  //                 resolve(config);
-  //               }
-  //             } else {
-  //               resolve(config);
-  //             }
-  //           });
-  //     },
-  //     error => {
-  //       return Promise.reject(error);
-  //     }
-  //   );
-  // }
+                        const token = res.accessToken
+                        config.headers!['Authorization'] = token
+                        CommonHttp.requests.forEach((cb) => cb(token))
+                        CommonHttp.requests = []
+                      })
+                      .finally(() => {
+                        CommonHttp.isRefreshing = false
+                      })
+                  }
+                  resolve(CommonHttp.retryOriginalRequest(config))
+                } else {
+                  config.headers!['Authorization'] = data.accessToken
+                  resolve(config)
+                }
+              } else {
+                resolve(config)
+              }
+            })
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
+  }
 
   /** 响应拦截 */
   private httpInterceptorsResponse(): void {
-    const instance = CommonHttp.axiosInstance;
+    const instance = CommonHttp.axiosInstance
     instance.interceptors.response.use(
       (response: AxiosResponse) => {
-        const $config = response.config;
+        const $config = response.config
         // 关闭进度条动画
         // NProgress.done();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
@@ -144,42 +146,53 @@ class CommonHttp {
         //   return response.data;
         // }
         // 自定义数据处理
-        const { code, message, data } = response.data;
-        console.log('api:[',response.config.url,"],data:", response.data)
-        
+        const { code, message, data } = response.data
+        console.log('api:[', response.config.url, '],data:', response.data)
+
         if (code && code == 200) {
-          return data;
+          return data
         } else if (code && message) {
-          ElMessage.error(message);
+          ElMessage.error(message)
           if (code == 40011) {
-            console.log(1);
-            ElMessageBox.confirm("登录凭证过期，是否跳转到登录页重新登录？", "Warning", {
-              confirmButtonText: "跳转",
-              cancelButtonText: "取消",
-              type: "warning"
+            console.log(1)
+            ElMessageBox.confirm('登录凭证过期，是否跳转到登录页重新登录？', 'Warning', {
+              confirmButtonText: '跳转',
+              cancelButtonText: '取消',
+              type: 'warning'
             }).then(() => {
               // 重新登录
               // useUserStoreHook().loginAgain();
-            });
-            return;
+            })
+            return
           }
-          throw new Error("Error");
+          throw new Error('Error')
         } else {
-          return response.data;
+          return response.data
         }
       },
       (error: AxiosError) => {
-        const $error = error;
+        const $error = error
         // $error.isCancelRequest = Axios.isCancel($error);
         // 关闭进度条动画
         // NProgress.done();
         // 所有的响应异常 区分来源为取消请求/非取消请求
-        return Promise.reject($error);
+        return Promise.reject($error)
       }
-    );
+    )
   }
 
   /** 通用请求工具函数 */
+  public request<R>(
+    method: string,
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<Result<R> | R> {
+    return CommonHttp.axiosInstance.request({
+      method,
+      url,
+      ...config
+    })
+  }
 
   /** 单独抽离的post工具函数 */
   public post<D, R>(url: string, data?: D, config?: AxiosRequestConfig): Promise<Result<R> | R> {

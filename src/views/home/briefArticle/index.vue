@@ -67,6 +67,7 @@ import { computed, ref, toRefs } from 'vue'
 
 // import Vditor from 'vditor'
 import { t } from '@/plugins/i18s'
+import { mdConvertToHtml } from '@/utils/markdown';
 const props = defineProps({
   article: {
     type:Object,
@@ -76,6 +77,10 @@ const props = defineProps({
 const { article } = toRefs(props)
 const str = ref<string>(article.value.content)
 // console.log(article);
+str.value=mdConvertToHtml(str.value)
+let parser = new DOMParser();
+let domElement:Document = parser.parseFromString(str.value, 'text/html');
+str.value=domElement.body.innerText
 //去除md标签
 // Vditor.md2html(article.value.content)
 //   .then((mdStr) => {

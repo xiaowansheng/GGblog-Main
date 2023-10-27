@@ -70,24 +70,14 @@
 <span v-show="locale == 'en'" class="iconfont icon-fuhao-yingwen"></span>
       </span>
       </el-menu-item> -->
-       <el-menu-item
-        v-if="menuConfig.Login && modules.Login"
-        index=""
-      >
-        <!-- @click="login" -->
+      <el-menu-item v-if="modules.Login && !user.username" index="" @click="login">
         <span class="iconfont icon-denglu"></span>{{ $t('menu.login') }}
-      </el-menu-item> 
+      </el-menu-item>
 
-       <el-sub-menu
-        index=""
-        v-if="menuConfig.Login && modules.Login"
-      >
+      <el-sub-menu index="" v-if="modules.Login && user.username">
         <template #title>
-          <el-avatar
-            :size="35"
-            :src="''"
-          />
-              <!-- user.information.avatar
+          <el-avatar :size="35" :src="user.avatar??avatar.User" />
+          <!-- user.information.avatar
                 ? user.information.avatar
                 : store.state.config.avatar.userDefault -->
         </template>
@@ -95,14 +85,13 @@
           <span class="iconfont icon-gerenxinxi-"></span>{{ $t('menu.information') }}
         </el-menu-item>
         <el-menu-item index="">
-           <!-- @click="changePassword" -->
-          <span class="iconfont icon-mima"></span>{{ $t("menu.changePassword") }}
+          <!-- @click="changePassword" -->
+          <span class="iconfont icon-mima"></span>{{ $t('menu.changePassword') }}
         </el-menu-item>
-        <el-menu-item index="">
-           <!-- @click="logout" -->
-          <span class="iconfont icon-zhuxiao1"></span>{{ $t("menu.logout") }}
+        <el-menu-item index="" @click="logout">
+          <span class="iconfont icon-zhuxiao1"></span>{{ $t('menu.logout') }}
         </el-menu-item>
-      </el-sub-menu> 
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -110,18 +99,23 @@
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 // import { getDefaultLang } from "@/locales/langUtils";
-// import { useStore } from "vuex";
-// import { service } from "@/utils/axios";
-// const store = useStore();
 import { useConfigStoreHook } from '@/store/modules/config'
-// import {useConfigStoreHook} from "@/store/modules/author"
-const menuConfig: any = useConfigStoreHook().menus
-// const user = computed(() => {
-//   return store.state.user;
-// });
-const modules: any = useConfigStoreHook().module
+import { useUserStoreHook } from '@/store/modules/user'
+import { useModuleStoreHook } from '@/store/modules/module'
+// const menuConfig = useConfigStoreHook().menus
+const modules = computed(() => {
+  return useConfigStoreHook().module
+})
+const avatar = computed(() => {
+  return useConfigStoreHook().avatar
+})
+const user = computed(() => {
+  return useUserStoreHook()
+})
+const dialog = computed(() => {
+  return useModuleStoreHook()
+})
 // const { locale } = useI18n();
 const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
@@ -145,18 +139,17 @@ let scrollData: any = []
 // 一个响应速度的参数，值越大响应越慢
 let responseSpeed = 5
 const colorStyle = ref('white')
-//       const login= () => {
-//         store.state.dialog.Login = true;
-//         return false;
-// }
+const login = () => {
+  dialog.value.login = true
+}
 //     changePassword:()=>{
 //   store.state.dialog.ChangePassword=true
 // }
 
-// logout: () => {
-//   store.dispatch("user/logout");
-//   // console.log("token", store.state.user.token);
-// }
+const logout= () => {
+  user.value.logOut()
+  // console.log("token", store.state.user.token);
+}
 onBeforeMount(() => {
   //TODO 待做
   //  setLanguage(getDefaultLang());

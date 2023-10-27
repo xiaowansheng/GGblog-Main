@@ -153,7 +153,6 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, onMounted, watch, ref } from 'vue'
-// import { useI18n } from 'vue-i18n'
 // import { getDefaultLang } from "@/locales/langUtils";
 
 import { convertIntervalTime } from '@/utils/timeUtils'
@@ -164,10 +163,7 @@ import { useRouter } from 'vue-router'
 //   Location,
 //   Setting,
 // } from "@element-plus/icons-vue";
-// import { service } from "@/utils/axios";
 
-// import { useStore } from "vuex";
-// const store = useStore();
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
