@@ -137,6 +137,7 @@ export default {
     },
     signup: {
       title: "User SignUp",
+      nickname: "Nickname",
       email: "Email",
       code: "Code",
       password: "password",
@@ -146,6 +147,7 @@ export default {
       inputEmail:"Please enter the login email ~",
       checkEmail:"Email is not legal !",
       inputCode:"Please enter the verification code ~",
+      inputNickname: "please input nickname~",
       inputPassword:"Please enter a new password ~",
       reInput:"Please enter your password again ~",
       different:"Two different passwords !",

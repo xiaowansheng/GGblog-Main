@@ -1,7 +1,7 @@
 <template>
   <div id="change-password">
     <el-dialog
-      v-model="modules.changePassword"
+      v-model="dialog.changePassword"
       :close-on-click-modal="false"
       :title="$t('change.title')"
     >
@@ -44,12 +44,14 @@
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
-import { ElMessage, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import { t } from '@/plugins/i18s'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
+import { changePassword } from '@/api/user'
 // import { ElMessage } from "element-plus";
-const modules = useModuleStoreHook()
+const dialog = useModuleStoreHook()
 const user = reactive({
   oldPassword: '',
   // verificationCode: "",
@@ -106,12 +108,11 @@ const disable = ref(false)
 const submit = () => {
   disable.value = true
   const { password2, ...other } = user
-  service
-    .put('/user/auth/pass', other)
+  changePassword(other)
     .then(() => {
       ElMessage.success(t('form.put'))
       userFormRef.value.resetFields()
-      dialog.ChangePassword = false
+      dialog.changePassword = false
       disable.value = false
     })
     .catch(() => {

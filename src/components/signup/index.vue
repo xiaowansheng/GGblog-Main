@@ -1,10 +1,6 @@
 <template>
-  <div id="forget-password">
-    <el-dialog
-      v-model="dialog.resetPassword"
-      :close-on-click-modal="false"
-      :title="$t('forget.title')"
-    >
+  <div id="signup">
+    <el-dialog v-model="dialog.signup" :close-on-click-modal="false" :title="$t('signup.title')">
       <div class="form">
         <el-form
           label-position="left"
@@ -16,61 +12,82 @@
         >
           <el-form-item prop="email">
             <template #label>
-              <span class="email">{{ $t('forget.email') }}</span>
+              <span class="email">{{ $t('signup.email') }}</span>
             </template>
             <el-input v-model="user.email" />
           </el-form-item>
           <el-form-item prop="verificationCode">
             <template #label>
-              <span class="email">{{ $t('forget.code') }}</span>
+              <span class="email">{{ $t('signup.code') }}</span>
             </template>
             <!-- <el-input v-model="user.username" /> -->
             <el-input v-model="user.verificationCode" placeholder="">
               <template #append>
                 <el-button :disabled="time > 0" @click="sendVerificationCode"
                   ><span
-                    ><span v-show="time <= 0">{{ $t('forget.send') }}</span>
+                    ><span v-show="time <= 0">{{ $t('signup.send') }}</span>
                     <span v-show="time > 0">{{ time }}</span></span
                   ></el-button
                 >
               </template>
             </el-input>
           </el-form-item>
+          <el-form-item prop="nickname">
+            <template #label>
+              <span class="nickname">{{ $t('signup.nickname') }}</span>
+            </template>
+            <el-input type="nickname" v-model="user.nickname" />
+          </el-form-item>
           <el-form-item prop="password">
             <template #label>
-              <span class="password">{{ $t('forget.newPassword') }}</span>
+              <span class="password">{{ $t('signup.password') }}</span>
             </template>
             <el-input type="password" v-model="user.password" />
           </el-form-item>
           <el-form-item prop="password2">
             <template #label>
-              <span class="password">{{ $t('forget.newPassword') }}</span>
+              <span class="password">{{ $t('signup.password') }}</span>
             </template>
             <el-input type="password" v-model="user.rePassword" />
           </el-form-item>
         </el-form>
         <div class="btn">
-          <el-button v-loading="disable" :disabled="disable" type="primary" @click="resetPassword">
-            <span>{{ $t('forget.reset') }}</span>
+          <el-button v-loading="disable" :disabled="disable" type="primary" @click="signup">
+            <span>{{ $t('signup.signup') }}</span>
           </el-button>
         </div>
+        <div class="other">
+          <el-button link type="primary" @click="returnLogin">
+            <span>{{ $t('signup.return') }}</span>
+          </el-button>
+          <!-- <el-button link type="primary" @click="dialogVisible = false">
+            <span>{{ "忘记密码" }}</span>
+          </el-button> -->
+        </div>
+        <!-- <template #footer>
+        <span class="dialog-footer">
+          <el-button >Cancel</el-button>
+
+        </span>
+      </template> -->
       </div>
     </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import type { FormRules } from 'element-plus'
-
-import { useConfigStoreHook } from '@/store/modules/config'
+import { ElMessage, FormRules } from 'element-plus'
+import { t } from '@/plugins/i18s'
+import { getVerificationCode, signup as signupUser } from '@/api/user'
+// import { useI18n } from "vue-i18n";
 import { useModuleStoreHook } from '@/store/modules/module'
-import { t } from "@/plugins/i18s"
-import {resetPassword as resetUserPassword,getVerificationCode} from "@/api/user"
+// import { ElMessage } from "element-plus";
+// const store = useStore();
 const dialog = useModuleStoreHook()
 const user = reactive({
   email: '',
   verificationCode: '',
+  nickname: '',
   password: '',
   rePassword: ''
 })
@@ -85,10 +102,10 @@ const rules = reactive<FormRules>({
         }
         let reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
         if (value == '') {
-          callback(new Error(t('forget.inputEmail')))
+          callback(new Error(t('signup.inputEmail')))
         }
         if (!reg.test(value)) {
-          callback(new Error(t('forget.checkEmail')))
+          callback(new Error(t('signup.checkEmail')))
         } else {
           callback()
         }
@@ -102,7 +119,21 @@ const rules = reactive<FormRules>({
       validator: (rule: any, value: any, callback: any) => {
         // console.log("校验");
         if (value == '') {
-          callback(new Error(t('forget.inputCode')))
+          callback(new Error(t('signup.inputCode')))
+        } else {
+          callback()
+        }
+      },
+      required: false,
+      trigger: 'blur'
+    }
+  ],
+  nickname: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        // console.log("校验");
+        if (value == '') {
+          callback(new Error(t('signup.inputNickname')))
         } else {
           callback()
         }
@@ -116,8 +147,8 @@ const rules = reactive<FormRules>({
     {
       validator: (rule: any, value: any, callback: any) => {
         // console.log("校验");
-        if (value == '') {
-          callback(new Error(t('forget.inputPassword')))
+        if (user.password == '') {
+          callback(new Error(t('signup.inputPassword')))
         } else {
           callback()
         }
@@ -131,9 +162,9 @@ const rules = reactive<FormRules>({
       validator: (rule: any, value: any, callback: any) => {
         // console.log("校验");
         if (value == '') {
-          callback(new Error(t('forget.reInput')))
+          callback(new Error(t('signup.inputPassword')))
         } else if (user.rePassword != user.password) {
-          callback(new Error(t('forget.different')))
+          callback(new Error(t('signup.different')))
         } else {
           callback()
         }
@@ -147,11 +178,12 @@ const disable = ref(false)
 const submit = () => {
   disable.value = true
   const { rePassword, ...other } = user
-  resetUserPassword(other)
+  signupUser(other)
     .then(() => {
-      ElMessage.success(t('form.reset'))
+      ElMessage.success(t('form.signup'))
       userFormRef.value.resetFields()
-      dialog.resetPassword = false
+      dialog.signup = false
+      dialog.login = true
       disable.value = false
     })
     .catch(() => {
@@ -159,8 +191,13 @@ const submit = () => {
     })
 }
 let interval: any
+const wait = ref(false)
 const time = ref(0)
-const resetPassword = () => {
+const returnLogin = () => {
+  dialog.signup = false
+  dialog.login = true
+}
+const signup = () => {
   userFormRef.value
     .validate()
     .then(() => {
@@ -174,12 +211,10 @@ const sendVerificationCode = () => {
   userFormRef.value
     .validateField(['email'])
     .then(() => {
-      getVerificationCode(
-          {
-            email: user.email
-          }
-        )
-        .then(() => {
+      if (!wait.value) {
+        getVerificationCode({
+          email: user.email
+        }).then(() => {
           ElMessage.success('验证码发送成功！')
           time.value = 60
           interval = setInterval(() => {
@@ -189,6 +224,7 @@ const sendVerificationCode = () => {
             time.value = time.value - 1
           }, 1000)
         })
+      }
     })
     .catch(() => {
       console.log('表单校验错误')
@@ -196,7 +232,7 @@ const sendVerificationCode = () => {
 }
 </script>
 <style lang="scss" scoped>
-#forget-password {
+#signup {
   .form {
     padding: 0 1rem;
     .el-form-item {
@@ -226,7 +262,7 @@ const sendVerificationCode = () => {
 }
 </style>
 <style lang="scss">
-#forget-password {
+#signup {
   .el-dialog,
   .el-input__wrapper {
     background-color: rgba(255, 255, 255, 0.9);
@@ -236,21 +272,21 @@ const sendVerificationCode = () => {
   }
 }
 @media screen and (max-width: 768px) {
-  #forget-password {
+  #signup {
     .el-dialog {
       --el-dialog-width: 90%;
     }
   }
 }
 @media screen and (min-width: 768px) and (max-width: 992px) {
-  #forget-password {
+  #signup {
     .el-dialog {
       --el-dialog-width: 55%;
     }
   }
 }
 @media screen and (min-width: 992px) {
-  #forget-password {
+  #signup {
     .el-dialog {
       --el-dialog-width: 30%;
     }
@@ -258,7 +294,7 @@ const sendVerificationCode = () => {
 }
 
 .dark {
-  #forget-password {
+  #signup {
     .el-dialog,
     .el-input__wrapper {
       background-color: rgba(0, 0, 0, 0.85);

@@ -84,8 +84,7 @@
         <el-menu-item index="/user/information">
           <span class="iconfont icon-gerenxinxi-"></span>{{ $t('menu.information') }}
         </el-menu-item>
-        <el-menu-item index="">
-          <!-- @click="changePassword" -->
+        <el-menu-item index="" @click="changePassword">
           <span class="iconfont icon-mima"></span>{{ $t('menu.changePassword') }}
         </el-menu-item>
         <el-menu-item index="" @click="logout">
@@ -113,9 +112,7 @@ const avatar = computed(() => {
 const user = computed(() => {
   return useUserStoreHook()
 })
-const dialog = computed(() => {
-  return useModuleStoreHook()
-})
+const dialog =useModuleStoreHook()
 // const { locale } = useI18n();
 const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
@@ -140,11 +137,11 @@ let scrollData: any = []
 let responseSpeed = 5
 const colorStyle = ref('white')
 const login = () => {
-  dialog.value.login = true
+  dialog.login = true
 }
-//     changePassword:()=>{
-//   store.state.dialog.ChangePassword=true
-// }
+   const changePassword=()=>{
+  dialog.changePassword=true
+}
 
 const logout= () => {
   user.value.logOut()

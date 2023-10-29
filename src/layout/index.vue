@@ -5,8 +5,9 @@
     <Mainer></Mainer>
     <Footer></Footer>
     <Login/>
-    <!-- <ChangePassword/>
-    <ForgetPassword/> -->
+    <Signup/>
+    <ChangePassword/>
+    <ForgetPassword/>
   </div>
 </template>
 <script lang="ts" setup>
@@ -14,8 +15,9 @@ import Mainer from './mainer/index.vue'
 import Footer from './footer/index.vue'
 import Menu from './menu/index.vue'
 import Login from "@/components/login/index.vue"
-// import ChangePassword from "@/components/changePassword/index.vue"
-// import ForgetPassword from "@/components/forgetPassword/index.vue"
+import Signup from "@/components/signup/index.vue"
+import ChangePassword from "@/components/changePassword/index.vue"
+import ForgetPassword from "@/components/forgetPassword/index.vue"
 import { useConfigStoreHook } from '@/store/modules/config';
 // 获取配置信息
 useConfigStoreHook().setConfigInfo()

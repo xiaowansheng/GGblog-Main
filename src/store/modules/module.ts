@@ -4,8 +4,9 @@ import { store } from '@/store'
 export const useModuleStore = defineStore('module', {
   state: () => ({
     login: false,
-    signuop: false,
-    changePassword:false
+    signup: false,
+    changePassword:false,
+    resetPassword:false
   }),
   getters: {},
   actions: {}

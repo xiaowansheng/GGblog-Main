@@ -104,7 +104,7 @@ import { t } from '@/plugins/i18s'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { useUserStoreHook } from '@/store/modules/user'
-// import { ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 const modules = useModuleStoreHook()
 const loginWays = computed(() => {
   return useConfigStoreHook().login
@@ -180,13 +180,16 @@ const login = () => {
       console.log('表单验证失败')
     })
 }
+
+
 const toSignup = () => {
-  dialog.Login = false
-  dialog.Signup = true
+  modules.login = false
+  modules.signup = true
 }
+
 const toResetPassword = () => {
-  dialog.Login = false
-  dialog.ForgetPassword = true
+  modules.login = false
+  modules.resetPassword = true
 }
 </script>
 <style lang="scss" scoped>
