@@ -93,11 +93,11 @@
         <el-menu-item index="/about">
           <span class="iconfont icon-guanyu"></span>{{ $t('menu.about') }}
         </el-menu-item>
-        <el-menu-item v-if="user.username" index="" @click="login">
+        <el-menu-item v-if="modules.Login && !user.username" index="" @click="login">
           <span class="iconfont icon-denglu"></span>{{ $t('menu.login') }}
         </el-menu-item>
 
-        <el-sub-menu index="" v-if="user.username">
+        <el-sub-menu index=""  v-if="modules.Login && user.username">
           <template #title>
             <span class="iconfont icon-gerenzhongxin"></span>
             {{ $t('menu.center') }}
@@ -168,15 +168,11 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
-const user = computed(() => {
-  return useUserStoreHook()
-})
-const components = computed(() => {
-  return useModuleStoreHook()
-})
-const menuConfig = computed(() => {
-  return useConfigStoreHook().menus
-})
+const user = useUserStoreHook()
+const dialog = useModuleStoreHook()
+// const menuConfig = computed(() => {
+//   return useConfigStoreHook().menus
+// })
 const author = computed(() => {
   return useConfigStoreHook().author
 })
@@ -241,13 +237,13 @@ const style = computed(() => {
   return topNavShow.value ? colorStyle.value : 'hidden ' + colorStyle.value
 })
 const login = () => {
-  components.value.login = true
+  dialog.login = true
 }
 const changePassword = () => {
-  components.value.changePassword = true
+  dialog.changePassword = true
 }
 const logout = () => {
-  user.value.logOut()
+  user.logOut()
   // console.log("token", store.state.user.token);
 }
 const toPage = (path: string) => {
