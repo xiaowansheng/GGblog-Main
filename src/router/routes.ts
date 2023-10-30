@@ -129,8 +129,22 @@ export const routes: RouteRecordRaw[] = [
         path: '/about',
         component: () => import('@/views/about/index.vue'),
         children: []
+      },
+      {
+        name: "User",
+        path: "/user",
+        redirect: "/user/information",
+        children: [
+          {
+            name: "Information",
+            path: "information",
+            component: () => import("@/views/user/information/index.vue"),
+            children: [],
+          },
+        ],
       }
-    ]
+    ]  
+        
   }
   // {
   //   path: '/about',

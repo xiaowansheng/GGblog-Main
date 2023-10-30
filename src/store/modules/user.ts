@@ -3,7 +3,7 @@ import { store } from '@/store'
 import type { userType } from '../types'
 import { login, logout, refreshToken } from '@/api/user'
 import { storageLocal, getLocalStorage, removeLocalStorage } from '@/utils/storageUtils'
-import {useModuleStoreHook} from "./module"
+import { useModuleStoreHook } from './module'
 // import { storageSession } from "@pureadmin/utils";
 const storageKey = 'user_info'
 const accessKey = 'authorized_token'
@@ -49,7 +49,7 @@ export const useUserStore = defineStore({
     setRoles(roles: Array<string>) {
       this.roles = roles
     },
-    setToken(accessToken: any, expires: number, refreshToken:string) {
+    setToken(accessToken: any, expires: number, refreshToken: string) {
       storageLocal(accessKey, {
         accessToken,
         expires,
@@ -59,8 +59,17 @@ export const useUserStore = defineStore({
     getToken() {
       return getLocalStorage(accessKey)
     },
-    storageInfo(info: any) {
-      storageLocal(storageKey, info)
+    storageInfo(info?: userType) {
+      if (info) {
+        storageLocal(storageKey, info)
+      } else {
+        storageLocal(storageKey, {
+          username: this.username,
+          nickname: this.nickname,
+          avatar:this.avatar,
+          roles:this.roles
+        })
+      }
     },
     removeInfo() {
       removeLocalStorage(accessKey)
@@ -106,10 +115,10 @@ export const useUserStore = defineStore({
     /** 前端登出（调用接口） */
     logOut() {
       const clearData = () => {
-          // 清除piano数据
-          this.clearUserCache()
-          // 清空本地存储
-          this.removeInfo()
+        // 清除piano数据
+        this.clearUserCache()
+        // 清空本地存储
+        this.removeInfo()
       }
       // 清空状态管理中用户信息
       // 调用注销接口

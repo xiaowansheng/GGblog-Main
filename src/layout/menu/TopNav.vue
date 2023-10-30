@@ -76,7 +76,7 @@
 
       <el-sub-menu index="" v-if="modules.Login && user.username">
         <template #title>
-          <el-avatar :size="35" :src="user.avatar??avatar.User" />
+          <el-avatar :size="35" :src="avatar" />
           <!-- user.information.avatar
                 ? user.information.avatar
                 : store.state.config.avatar.userDefault -->
@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref, toRefs } from 'vue'
+import { computed, onBeforeMount, ref, toRefs, type ComputedRef } from 'vue'
 import { useRouter } from 'vue-router'
 // import { getDefaultLang } from "@/locales/langUtils";
 import { useConfigStoreHook } from '@/store/modules/config'
@@ -106,11 +106,13 @@ import { useModuleStoreHook } from '@/store/modules/module'
 const modules = computed(() => {
   return useConfigStoreHook().module
 })
-const avatar = computed(() => {
+const avatars = computed(() => {
   return useConfigStoreHook().avatar
 })
-const user = computed(() => {
-  return useUserStoreHook()
+const user = useUserStoreHook()
+
+const avatar = computed(() => {
+  return user.avatar?user.avatar:avatars.value.User
 })
 const dialog =useModuleStoreHook()
 // const { locale } = useI18n();
@@ -144,7 +146,7 @@ const login = () => {
 }
 
 const logout= () => {
-  user.value.logOut()
+  user.logOut()
   // console.log("token", store.state.user.token);
 }
 onBeforeMount(() => {

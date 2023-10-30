@@ -40,3 +40,13 @@ export function changePassword(data: any) {
 export function resetPassword(data: any) {
   return http.put('/user/auth/reset/password', data)
 }
+
+// 查询当前用户的信息
+export function getInformation() {
+  return http.get('/user/info')
+}
+
+// 修改当前用户的信息
+export function updateInformation(data:any) {
+  return http.put('/user/info/person',data)
+}

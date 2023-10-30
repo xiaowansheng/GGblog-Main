@@ -2,7 +2,7 @@
   <div class="information">
     <Header :cover="covers.Information">
       <template #title>
-        {{ $t("menu.information") }}
+        {{ $t('menu.information') }}
       </template>
     </Header>
     <div class="content">
@@ -16,39 +16,41 @@
           ref="infoFormRef"
         >
           <el-form-item :label="$t('information.account')">
-            <el-input disabled v-model="store.state.user.username" />
+            <el-input disabled v-model="user.username" />
           </el-form-item>
           <el-form-item :label="$t('information.avatar')" class="avatar" prop="avatar">
             <div :class="disable ? 'disabled' : ''"></div>
             <!-- <el-input v-model="form.avatar" /> -->
-            <!-- <Avatar v-model:value="form.avatar" /> -->
+            <AvatarUpload width="150" height="150" :disable="disable" v-model:value="form.avatar" />
           </el-form-item>
           <el-form-item :label="$t('information.nickname')" prop="name">
-            <el-input :disabled="disable" v-model="form.name" />
+            <el-input :disabled="disable" v-model="form.nickname" />
           </el-form-item>
           <el-form-item :label="$t('information.email')" prop="email">
             <el-input :disabled="disable" v-model="form.email" />
+          </el-form-item>
+          <el-form-item :label="$t('information.qq')" prop="qq">
+            <el-input minlength="5" maxlength="10" :disabled="disable" v-model.number="form.qq" />
+          </el-form-item>
+          <el-form-item :label="$t('information.signature')" prop="signature">
+            <el-input  :disabled="disable" v-model="form.signature" />
           </el-form-item>
           <el-form-item :label="t('information.website')" prop="website">
             <el-input :disabled="disable" v-model="form.website" />
           </el-form-item>
           <el-form-item :label="$t('information.profile')" prop="introduction">
-            <el-input
-              :disabled="disable"
-              v-model="form.introduction"
-              type="textarea"
-            />
+            <el-input :disabled="disable" v-model="form.introduction" type="textarea" />
           </el-form-item>
-          <div class="btn" v-if="store.state.user.token">
-            <el-button v-show="!disable" type="primary" @click="submit"
-              >{{$t('information.submit')}}</el-button
-            >
-            <el-button v-show="!disable" type="info" @click="cancel"
-              >{{$t('information.cancel')}}</el-button
-            >
-            <el-button v-show="disable" type="warning" @click="disable = false"
-              >{{$t('information.open')}}</el-button
-            >
+          <div class="btn" v-if="user.getToken()">
+            <el-button v-show="!disable" type="primary" @click="submit">{{
+              $t('information.submit')
+            }}</el-button>
+            <el-button v-show="!disable" type="info" @click="cancel">{{
+              $t('information.cancel')
+            }}</el-button>
+            <el-button v-show="disable" type="warning" @click="disable = false">{{
+              $t('information.open')
+            }}</el-button>
           </div>
         </el-form>
       </div>
@@ -57,110 +59,122 @@
 </template>
 
 <script lang="ts" setup>
-import Header from "@/layout/header/index.vue";
-import { ElMessage, FormInstance, FormRules } from "element-plus";
-// import Avatar from "comps/Upload/Avatar/index.vue";
-// import { useI18n } from "vue-i18n";
-// const { t } = useI18n();
-// import { service } from "utils/axios";
-import { computed, onMounted, reactive, ref, watch } from "vue";
-// import { useStore } from "vuex";
-import {useConfigStoreHook} from "@/store/modules/config"
-import { useUserStoreHook } from "@/store/modules/user"
-import {t} from "@/plugins/i18s"
+import Header from '@/layout/header/index.vue'
+import { ElMessage, FormInstance } from 'element-plus'
+import type { FormRules } from 'element-plus'
+import AvatarUpload from "@/components/upload/singlePicture/index.vue";
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { useUserStoreHook } from '@/store/modules/user'
+import { useModuleStoreHook } from '@/store/modules/module'
+import { getInformation, updateInformation } from '@/api/user'
+import { t } from '@/plugins/i18s'
 const covers = computed(() => {
   return useConfigStoreHook().covers
-});
-const disable = ref(true);
-const infoFormRef = ref();
+})
+const dialog = useModuleStoreHook()
+const user = useUserStoreHook()
+const disable = ref(true)
+const infoFormRef = ref()
 
-const recovery = (data: any) => {
-  form.avatar = data.avatar;
-  form.email = data.email;
-  form.name = data.name;
-  form.introduction = data.introduction;
-  form.website = data.website;
-};
-const user=useUserStoreHook()
 const form = reactive({
-  avatar: "",
-  email: "",
-  name: "",
-  introduction: "",
-  website: "",
-});
-watch(
-  user,
-  (value: any) => {
-    // alert(JSON.stringify(value))
-    recovery(value);
-  },
-  {
-    immediate: true,
-  }
-);
+  id:"",
+  avatar: '',
+  email: '',
+  qq: '',
+  signature: '',
+  nickname: '',
+  introduction: '',
+  website: ''
+})
+
 const rules = reactive<FormRules>({
   avatar: [
     {
       validator: (rule: any, value: any, callback: any) => {
         // console.log("111");
-        if (value == "") {
-          callback(new Error(t('information.inputAvatar')));
+        if (value == '') {
+          callback(new Error(t('information.inputAvatar')))
         } else {
-          callback();
+          callback()
         }
       },
       required: true,
-      trigger: "blur",
-    },
+      trigger: 'blur'
+    }
   ],
-  name: [
+  nickname: [
     {
       validator: (rule: any, value: any, callback: any) => {
-        if (value == "") {
-          callback(new Error(t('information.inputName')));
+        if (value == '') {
+          callback(new Error(t('information.inputName')))
         } else if (value.length > 10) {
-          callback(new Error(t('information.longName')));
+          callback(new Error(t('information.longName')))
         } else {
-          callback();
+          callback()
         }
       },
       required: true,
-      trigger: "blur",
-    },
+      trigger: 'blur'
+    }
   ],
   email: [
     {
       validator: (rule: any, value: any, callback: any) => {
-        if (value == "") {
-          callback();
+        if (value == '') {
+          callback()
         }
-        let reg =
-          /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+        let reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
         if (!reg.test(value)) {
-          callback(new Error(t('information.inputEmail')));
+          callback(new Error(t('information.inputEmail')))
         } else {
-          callback();
+          callback()
         }
       },
       required: false,
-      trigger: "blur",
-    },
+      trigger: 'blur'
+    }
+  ],
+  qq: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        // if (value == "") {
+        //   callback(new Error(t('information.inputQQ')));
+        // } else {
+        callback()
+        // }
+      },
+      required: false,
+      trigger: 'blur'
+    }
+  ],
+  signature: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        // if (value == "") {
+        //   callback(new Error(t('information.inputSignature')));
+        // } else {
+        callback()
+        // }
+      },
+      required: false,
+      trigger: 'blur'
+    }
   ],
   website: [
     {
       validator: (rule: any, value: any, callback: any) => {
         let reg =
-          /^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$/;
-        if (value&&!reg.test(value)) {
-          callback(new Error(t('information.inputWebsite')));
+          /^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$/
+        if (value && !reg.test(value)) {
+          callback(new Error(t('information.inputWebsite')))
         } else {
-          callback();
+          callback()
         }
       },
       required: false,
-      trigger: "blur",
-    },
+      trigger: 'blur'
+    }
   ],
   introduction: [
     {
@@ -168,41 +182,64 @@ const rules = reactive<FormRules>({
         // if (value == "") {
         //   callback(new Error(t('information.inputProfile')));
         // } else {
-          callback();
+        callback()
         // }
       },
       required: false,
-      trigger: "blur",
-    },
-  ],
-});
+      trigger: 'blur'
+    }
+  ]
+})
+watch(user, () => {
+  // 用作登录失效时，重新登录后
+  getInfo()
+})
 const submit = () => {
   infoFormRef.value
     .validate()
     .then(() => {
-      service.put("/user/info", form).then(() => {
-        ElMessage.success("修改成功~");
-        disable.value = true;
-        store.dispatch("user/getUserInfo");
-      });
+      updateInformation(form).then(() => {
+        user.setNickname(form.nickname)
+        user.setAvatar(form.avatar)
+        user.storageInfo()
+        ElMessage.success('修改成功~')
+        disable.value = true
+      })
     })
     .catch((error: any) => {
-      console.log("表单校验失败~");
-    });
-};
+      console.log('表单校验失败~')
+    })
+}
+const getInfo = () => {
+  getInformation().then((data: any) => {
+      form.id = data.id
+      form.nickname = data.nickname
+      form.avatar = data.avatar
+      form.email = data.email
+      form.qq = data.qq
+      form.signature = data.signature
+      form.nickname = data.nickname
+      form.website = data.website
+      form.introduction = data.introduction
+    })
+}
 const cancel = () => {
-  recovery(user);
-  disable.value = true;
-};
-onMounted(() => {
-  if (!user.) {
-    console.log("未登录~");
-    store.state.dialog.Login = true;
+  disable.value = true
+  getInfo()
+}
+onBeforeMount(() => {
+  if (!user.getToken()) {
+    console.log('登录失效~')
+    ElMessage.warning(t("login.loginInvalid"))
+    user.loginAgain()
+    dialog.login = true
+  } else {
+    getInfo()
   }
-});
+})
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .information {
   .content {
     border-radius: 1.5rem;
@@ -239,7 +276,7 @@ onMounted(() => {
   }
 }
 @media screen and (min-width: 768px) and (max-width: 992px) {
-      .information {
+  .information {
     .content {
       width: 80%;
     }
@@ -247,7 +284,7 @@ onMounted(() => {
 }
 
 @media screen and (min-width: 992px) {
-      .information {
+  .information {
     .content {
       width: 60%;
     }

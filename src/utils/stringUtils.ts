@@ -1,5 +1,8 @@
 import { ElMessage } from "element-plus";
 
+import shortUUID from 'short-uuid'
+// 创建 ShortUUID 实例
+const uuidInstance = shortUUID();
 /**
  * 
  * @param message 例子：xxx/id/1
@@ -72,4 +75,12 @@ export function getParam(param: string) {
   } else {
     return value;
   }
+}
+
+/**
+ * 创建一个短的uuid
+ * @returns 
+ */
+export function shortUuid() {
+  return uuidInstance.new()
 }

@@ -72,7 +72,8 @@ export const useConfigStore = defineStore('config', {
       Friend: '',
       Guestbook: '',
       About: '',
-      Other: ''
+      Other: '',
+      Information: ''
     },
     login: {
       Email: false,
@@ -195,7 +196,6 @@ export const useConfigStore = defineStore('config', {
         this.setReward(data.reward)
       })
     }
-    
   }
 })
 

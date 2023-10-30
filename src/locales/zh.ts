@@ -134,6 +134,7 @@ export default {
       inputEmail: "请输入登录邮箱 ~",
       checkEmail: "邮箱不合法!",
       inputPassword: "请输入密码 ~",
+      loginInvalid: "登录凭证失效，请重新登录！"
     },
     signup: {
       title: "用户注册",
@@ -181,6 +182,8 @@ export default {
       avatar: "头像",
       nickname: "昵称",
       email: "邮箱",
+      qq: "QQ",
+      signature: "签名",
       website: "网站",
       profile: "介绍",
       open: "开启修改",

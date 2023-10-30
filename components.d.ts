@@ -22,6 +22,7 @@ declare module 'vue' {
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
@@ -33,6 +34,7 @@ declare module 'vue' {
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElTree: typeof import('element-plus/es')['ElTree']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     ForgetPassword: typeof import('./src/components/forgetPassword/index.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
@@ -43,7 +45,8 @@ declare module 'vue' {
     Login: typeof import('./src/components/login/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Signup: typeof import('./src/components/Signup/index.vue')['default']
+    Signup: typeof import('./src/components/signup/index.vue')['default']
+    SinglePicture: typeof import('./src/components/upload/singlePicture/index.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

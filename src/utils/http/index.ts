@@ -9,6 +9,7 @@ import Axios from 'axios'
 import { stringify } from 'qs'
 // import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from '@/store/modules/user'
+import {t} from "@/plugins/i18s"
 // import { baseURL } from "../utils";
 // 消息提示
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -17,7 +18,7 @@ import type { Result } from './type'
 // TODO 获取不到环境变量
 // const baseURL = import.meta.env.VITE_BASE_API
 const baseURL = 'http://localhost:8080'
-// console.log("url",import.meta.env, import.meta.env.VITE_APP_BASE_API)
+console.log("url",import.meta.env, import.meta.env.VITE_BASE_API)
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
@@ -155,14 +156,9 @@ class CommonHttp {
           ElMessage.error(message)
           if (code == 40011) {
             console.log(1)
-            ElMessageBox.confirm('登录凭证过期，是否跳转到登录页重新登录？', 'Warning', {
-              confirmButtonText: '跳转',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+            ElMessage.warning(t('login.loginInvalid'))
               // 重新登录
-              // useUserStoreHook().loginAgain();
-            })
+              useUserStoreHook().loginAgain()
             return
           }
           throw new Error('Error')
