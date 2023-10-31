@@ -43,7 +43,10 @@ import Header from "@/layout/header/index.vue";
 import { computed, onMounted, reactive, ref } from "vue";
 // import { useStore } from "vuex";
 import {useConfigStoreHook} from "@/store/modules/config"
-import {getAlbumPage} from "@/api/album"
+import { getAlbumPage } from "@/api/album"
+defineOptions({
+  name: 'Album'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 });

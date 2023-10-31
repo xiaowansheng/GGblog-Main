@@ -103,6 +103,9 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 // const menuConfig = useConfigStoreHook().menus
+defineOptions({
+  name: 'TopNav'
+})
 const modules = computed(() => {
   return useConfigStoreHook().module
 })

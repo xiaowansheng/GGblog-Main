@@ -175,6 +175,9 @@ import { onMounted, reactive, ref, nextTick, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { mdConvertToHtml } from '@/utils/markdown'
 import { useConfigStoreHook } from '@/store/modules/config'
+defineOptions({
+  name: 'Article'
+})
 const topicId = ref<number>(-1)
 const author = computed(() => {
   return useConfigStoreHook().author

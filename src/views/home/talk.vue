@@ -68,12 +68,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'Talk',
-  setup() {}
+<script lang="ts" setup>
+defineOptions({
+  name: 'TalkSection'
 })
 </script>
 

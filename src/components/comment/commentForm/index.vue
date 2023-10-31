@@ -110,7 +110,10 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from "@/plugins/i18s"
-import {addComment} from "@/api/comment"
+import { addComment } from "@/api/comment"
+defineOptions({
+  name: 'CommentForm'
+})
 const emits=defineEmits(["add"])
 const props = defineProps({
   topicType: {

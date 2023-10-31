@@ -27,7 +27,10 @@ import {useConfigStoreHook} from "@/store/modules/config"
 import { getArticlePage } from '@/api/article';
 import {getCategory} from "@/api/category"
 import { getTag } from "@/api/tag"
-import {t} from "@/plugins/i18s"
+import { t } from "@/plugins/i18s"
+defineOptions({
+  name: 'ArticleQuery'
+})
 const covers = useConfigStoreHook().covers
 const params = reactive<any>({
   page: 1,

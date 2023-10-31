@@ -32,7 +32,10 @@ import { computed, onMounted, ref } from 'vue'
 // import { useStore } from 'vuex'
 import {useConfigStoreHook} from "@/store/modules/config"
 const covers = computed(() => useConfigStoreHook().covers)
-import {getAllTag} from "@/api/tag"
+import { getAllTag } from "@/api/tag"
+defineOptions({
+  name: 'Tag'
+})
 // import { useI18n } from 'vue-i18n'
 // const { t } = useI18n()
 const tags: any = ref([])

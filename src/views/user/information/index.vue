@@ -69,6 +69,9 @@ import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { getInformation, updateInformation } from '@/api/user'
 import { t } from '@/plugins/i18s'
+defineOptions({
+  name: 'UserInformation'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 })

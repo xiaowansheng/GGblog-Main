@@ -10,6 +10,9 @@
 <script lang='ts' setup>
 import TopNav from "./TopNav.vue";
 import SideNav from "./SideNav.vue";
+defineOptions({
+  name: 'Menu'
+})
 </script>
 
 <style lang='scss' scoped>

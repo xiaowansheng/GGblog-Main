@@ -63,6 +63,9 @@ import Comment from "@/components/comment/index.vue";
 import { getQueryString } from '@/utils/stringUtils'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalk } from '@/api/talk'
+defineOptions({
+  name: 'TalkDetail'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 })

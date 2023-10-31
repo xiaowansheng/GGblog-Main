@@ -32,6 +32,9 @@ import Header from '@/layout/header/index.vue'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getAllCategory } from '@/api/category'
+defineOptions({
+  name: 'Category'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 })

@@ -40,7 +40,9 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue'
-
+defineOptions({
+  name: 'BriefArticleBlock'
+})
 const pros = defineProps({
   article: {
     type:Object,

@@ -34,7 +34,9 @@ import Header from '@/layout/header/index.vue'
 import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getArticleArchive } from '@/api/article'
-
+defineOptions({
+  name: 'Archive'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 })  

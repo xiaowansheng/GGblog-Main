@@ -81,8 +81,10 @@ import { t } from '@/plugins/i18s'
 import { getVerificationCode, signup as signupUser } from '@/api/user'
 // import { useI18n } from "vue-i18n";
 import { useModuleStoreHook } from '@/store/modules/module'
+defineOptions({
+  name: 'Signup'
+})
 // import { ElMessage } from "element-plus";
-// const store = useStore();
 const dialog = useModuleStoreHook()
 const user = reactive({
   email: '',

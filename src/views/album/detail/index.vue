@@ -60,7 +60,10 @@ import Header from "@/layout/header/index.vue";
 import { onMounted, reactive, ref } from "vue";
 import { getQueryString } from "@/utils/stringUtils";
 import {getPicturePage} from "@/api/picture"
-import {getAlbum} from "@/api/album"
+import { getAlbum } from "@/api/album"
+defineOptions({
+  name: 'AlbumDetail'
+})
 const pictures = reactive<any>([]);
 const pictureList: any = reactive([]);
 const album = ref({});

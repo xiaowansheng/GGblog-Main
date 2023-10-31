@@ -91,7 +91,10 @@ import { TopicType } from "@/enums/topic";
 import FriendLinkForm from "./friendLinkForm.vue";
 import { computed, onBeforeMount, onMounted, reactive, ref } from "vue"
 import { useConfigStoreHook } from "@/store/modules/config"
-import {getFriendPage} from "@/api/friend"
+import { getFriendPage } from "@/api/friend"
+defineOptions({
+  name: 'Friend'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 });

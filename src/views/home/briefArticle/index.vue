@@ -68,6 +68,9 @@ import { computed, ref, toRefs } from 'vue'
 // import Vditor from 'vditor'
 import { t } from '@/plugins/i18s'
 import { mdConvertToHtml } from '@/utils/markdown';
+defineOptions({
+  name: 'BriefArticle'
+})
 const props = defineProps({
   article: {
     type:Object,

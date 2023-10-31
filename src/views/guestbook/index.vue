@@ -95,6 +95,9 @@ import vueDanmaku from 'vue3-danmaku'
 
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getLeaveWordPage, addLeaveWord } from '@/api/guestbook'
+defineOptions({
+  name: 'Guestbook'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 })

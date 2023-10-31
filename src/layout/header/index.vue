@@ -15,6 +15,9 @@
 
 <script lang="ts" setup>
 import { computed, defineComponent, ref, toRef } from 'vue'
+defineOptions({
+  name: 'Header'
+})
 const props = defineProps({
   cover: {
     required: false

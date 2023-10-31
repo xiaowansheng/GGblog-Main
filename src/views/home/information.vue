@@ -49,6 +49,9 @@ import Bulletin from './bulletin.vue'
 import Record from './record.vue'
 import { getSimpleStatistic } from '@/api/article'
 import { useConfigStoreHook } from '@/store/modules/config'
+defineOptions({
+  name: 'Information'
+})
 const author = computed(() => {
   return useConfigStoreHook().author
 })

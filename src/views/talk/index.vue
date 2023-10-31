@@ -90,6 +90,9 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalkPage } from '@/api/talk'
+defineOptions({
+  name: 'Talk'
+})
 const router = useRouter()
 const author = computed(() => {
   return useConfigStoreHook().author

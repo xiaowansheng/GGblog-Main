@@ -60,6 +60,9 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import { addFriend } from '@/api/friend'
 import { t } from '@/plugins/i18s'
+defineOptions({
+  name: 'FriendLinkForm'
+})
 const props = defineProps({
   visible: {
     type: Boolean,

@@ -115,6 +115,9 @@ import { userType } from '@/types/userType'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
+defineOptions({
+  name: 'CommentItem'
+})
 import { t } from '@/plugins/i18s'
 const emits = defineEmits(['show', 'add'])
 const props = defineProps({

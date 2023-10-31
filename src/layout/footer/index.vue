@@ -14,7 +14,10 @@
 import { computed, ref, watch } from "vue";
 // import { useStore } from "vuex";
 // const store = useStore();
-import {useConfigStoreHook} from "@/store/modules/config"
+import { useConfigStoreHook } from "@/store/modules/config"
+defineOptions({
+  name: 'Footer'
+})
 const website = computed(() => {
   return useConfigStoreHook().website
 })

@@ -69,6 +69,9 @@ import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
 import { getCommentPage } from '@/api/comment'
+defineOptions({
+  name: 'CommentSection'
+})
 // const emits = defineEmits(['show', 'add'])
 const props = defineProps({
   topicType: {

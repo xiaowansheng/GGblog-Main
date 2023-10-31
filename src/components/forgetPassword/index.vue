@@ -66,7 +66,10 @@ import type { FormRules } from 'element-plus'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from "@/plugins/i18s"
-import {resetPassword as resetUserPassword,getVerificationCode} from "@/api/user"
+import { resetPassword as resetUserPassword, getVerificationCode } from "@/api/user"
+defineOptions({
+  name: 'Comment'
+})
 const dialog = useModuleStoreHook()
 const user = reactive({
   email: '',

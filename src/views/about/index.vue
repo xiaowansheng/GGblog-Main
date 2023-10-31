@@ -123,6 +123,9 @@ import { getAbout } from '@/api/config'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { mdConvertToHtml } from '@/utils/markdown'
 // import Vditor from 'vditor'
+defineOptions({
+  name: 'About'
+})
 const covers = computed(() => {
   return useConfigStoreHook().covers
 })

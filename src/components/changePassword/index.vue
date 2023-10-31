@@ -51,6 +51,9 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { changePassword } from '@/api/user'
 // import { ElMessage } from "element-plus";
+defineOptions({
+  name: 'ChangePassword'
+})
 const dialog = useModuleStoreHook()
 const user = reactive({
   oldPassword: '',

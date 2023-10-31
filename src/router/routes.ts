@@ -136,7 +136,7 @@ export const routes: RouteRecordRaw[] = [
         redirect: "/user/information",
         children: [
           {
-            name: "Information",
+            name: "UserInformation",
             path: "information",
             component: () => import("@/views/user/information/index.vue"),
             children: [],

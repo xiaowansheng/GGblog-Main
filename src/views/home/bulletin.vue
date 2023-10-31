@@ -10,6 +10,9 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useConfigStoreHook } from '@/store/modules/config'
+defineOptions({
+  name: 'Bulletin'
+})
 const website = computed(() => {
   return useConfigStoreHook().website
 })

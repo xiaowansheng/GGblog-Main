@@ -34,7 +34,11 @@
     </main>
   </div>
 </template>
-
+<script lang="ts" setup>
+defineOptions({
+  name: 'Mainer'
+})
+</script>
 <style lang="scss" scoped>
 // .temp {
 //   background-color: red;

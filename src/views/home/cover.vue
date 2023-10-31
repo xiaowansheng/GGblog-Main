@@ -31,6 +31,9 @@ import { computed, onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 // import { useStore } from 'vuex'
 import { useConfigStoreHook } from '@/store/modules/config'
+defineOptions({
+  name: 'Cover'
+})
 const cover = computed(() => {
   return `background-image: url('${useConfigStoreHook().covers.Home}')`
 })

@@ -168,6 +168,9 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
+defineOptions({
+  name: 'SideNav'
+})
 const user = useUserStoreHook()
 const dialog = useModuleStoreHook()
 // const menuConfig = computed(() => {

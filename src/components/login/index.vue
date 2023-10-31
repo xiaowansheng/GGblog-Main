@@ -105,6 +105,9 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { useUserStoreHook } from '@/store/modules/user'
 import { ElMessage } from "element-plus";
+defineOptions({
+  name: 'Login'
+})
 const modules = useModuleStoreHook()
 const loginWays = computed(() => {
   return useConfigStoreHook().login

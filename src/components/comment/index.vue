@@ -26,7 +26,10 @@ import CommentForm from './commentForm/index.vue'
 import CommentSection from './commentSection/index.vue'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
-import {userType} from "@/types/userType"
+import { userType } from "@/types/userType"
+defineOptions({
+  name: 'Comment'
+})
 const props = defineProps({
   topicType: {
     type: String,

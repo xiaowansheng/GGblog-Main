@@ -66,7 +66,9 @@
 
 <script lang="ts" setup>
 import { toRefs, ref } from 'vue'
-
+defineOptions({
+  name: 'FriendLink'
+})
 const props = defineProps({
   friend: {
     type: Object,

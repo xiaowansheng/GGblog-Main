@@ -42,6 +42,9 @@ import { useConfigStoreHook } from '@/store/modules/config'
 // import { service } from 'utils/axios'
 // const { t } = useI18n()
 import { t } from '@/plugins/i18s/index'
+defineOptions({
+  name: 'Record'
+})
 const website = computed(() => {
   return useConfigStoreHook().website
 })
