@@ -1,30 +1,17 @@
 <template>
   <div class="bulletin">
-    <div class="title"><span class="iconfont icon-gonggao5"></span>{{ t('home.bulletin') }}</div>
+    <div class="title"><span class="iconfont icon-gonggao5"></span>{{ $t('home.bulletin') }}</div>
     <div class="content">
-      {{ website.Bulletin }}
+      {{ website.bulletin }}
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-
-import { useI18n } from 'vue-i18n'
-import { useStore } from 'vuex'
-export default defineComponent({
-  name: 'Bulletin',
-  setup() {
-    const { t } = useI18n()
-    const store = useStore()
-    const website = computed(() => {
-      return store.state.website
-    })
-    return {
-      t,
-      website
-    }
-  }
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { useConfigStoreHook } from '@/store/modules/config'
+const website = computed(() => {
+  return useConfigStoreHook().website
 })
 </script>
 

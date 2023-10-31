@@ -35,7 +35,7 @@
       </div>
     </header>
     <main>
-      <!-- <Bulletin v-if="modules.Bulletin" /> -->
+      <Bulletin v-if="modules.Bulletin" />
       <!-- TODO 待做 -->
       <Record />
     </main>
@@ -51,6 +51,9 @@ import { getSimpleStatistic } from '@/api/article'
 import { useConfigStoreHook } from '@/store/modules/config'
 const author = computed(() => {
   return useConfigStoreHook().author
+})
+const modules = computed(() => {
+  return useConfigStoreHook().module
 })
 const numberInfo = computed(() => {
   return useConfigStoreHook().statistic
