@@ -5,14 +5,10 @@
         {{ t('comment.section.commentSection') }}
       </span>
     </div>
-    <div class="tip" v-if="!loading&&empty">
+    <div class="tip" v-if="!loading && empty">
       <el-empty description="Empty~" :image-size="200" />
     </div>
-    <div
-      class="loading"
-      v-loading="loading"
-      v-show="loading"
-    ></div>
+    <div class="loading" v-loading="loading" v-show="loading"></div>
     <div class="comments">
       <CommentItem
         :show="show"
@@ -21,19 +17,13 @@
         :key="comment.id"
         @show="showReply"
         :rootId="comment.id"
-        @addComment="addComment"
+        @add="addComment"
         :userInfo="userInfo"
       >
-        <template
-          #comment
-          v-if="comment.children && privacy.MultipleLayerComment"
-        >
+        <template #comment v-if="comment.children">
           <div
             class="child"
-            v-for="(child, index) in comment.children.slice(
-              0,
-              comment.showNumber
-            )"
+            v-for="(child, index) in comment.children.slice(0, comment.showNumber)"
             :key="child.id"
             v-show="index <= comment.showNumber - 1"
           >
@@ -44,16 +34,13 @@
               :rootId="comment.id"
               :comments="comment.children"
               v-if="index <= comment.showNumber"
-              @addComment="addComment"
+              @add="addComment"
               :userInfo="userInfo"
             />
           </div>
-          <div
-            class="more"
-            v-show="comment.children.length > comment.showNumber"
-          >
+          <div class="more" v-show="comment.children.length > comment.showNumber">
             <el-button link @click="showReplyNumber(comment)"
-              ><span>{{ t("comment.section.more")}}</span></el-button
+              ><span>{{ t('comment.section.more') }}</span></el-button
             >
           </div>
         </template>
@@ -62,155 +49,151 @@
     <!-- <div class="more" v-show="params.total > comments.length">
       <el-button @click="getData" link><span>查看更多评论</span></el-button>
     </div> -->
-    <div class="loading" v-show="loading" v-loading='loading'></div>
+    <div class="loading" v-show="loading" v-loading="loading"></div>
     <!-- <div class="item" v-for="number in [1, 2, 3, 4, 5]" :key="number"> -->
   </div>
 </template>
 
-<script lang='ts'>
-import {
-  computed,
-  defineComponent,
-  reactive,
-  ref,
-  toRefs,
-  watch,
-} from "vue-demi";
+<script lang="ts" setup>
+import { computed, onMounted, reactive, ref, toRefs, watch } from 'vue'
 
-import { useI18n } from "vue-i18n";
-import { ElMessage } from "element-plus";
-import { service } from "utils/axios";
-import CommentForm from "../commentForm/index";
-import CommentItem from "./commentItem.vue";
-import { useStore } from "vuex";
-export default defineComponent({
-  name: "CommentSection",
-  props: ["topicType", "topicId", "userInfo"],
-  setup(props) {
-    const {t}=useI18n()
-    const store = useStore();
+// import { useI18n } from "vue-i18n";
+import { ElMessage } from 'element-plus'
+// import { service } from "utils/axios";
+import CommentForm from '../commentForm/index.vue'
+import CommentItem from './commentItem.vue'
 
-    const privacy = computed(() => {
-      return store.state.config.privacy;
-    });
-    // const comments = props.comments;
-    const { topicType, topicId, userInfo } = toRefs(props);
-    const comments: any = reactive([]);
-    const params = reactive({
-      topicType: null,
-      topicId: null,
-      page: 1,
-      limit: 5,
-      total: 0,
-    });
-
-    const loading = ref(false);
-    const empty = ref(false);
-    const getData = () => {
-      if(loading.value){
-        return
-      }
-      loading.value = true;
-      // console.log("commentParam:", topicType.value);
-      // console.log("commentParam:", topicId.value);
-      params.topicType = topicType.value;
-      params.topicId = topicId.value;
-      const { total, ...other } = params;
-      // console.log("params:", other);
-      service
-        .get("/comment/info/page", { params: other })
-        .then((data: any) => {
-          if (data.total == 0) {
-            empty.value = true;
-          }
-          data.list.forEach((e: any) => {
-            e.showNumber = 2;
-            comments.push(e);
-          });
-          params.total = data.total;
-          params.page++;
-          loading.value = false;
-        })
-        .catch(() => {
-          loading.value = false;
-        });
-    };
-    const unwatch = watch(topicId, (value: any, preValue: any) => {
-      if (value != null && value != undefined && value != 0) {
-        getData();
-        unwatch();
-      }
-    });
-    const show: any = ref(-1);
-    return {
-      t,
-      privacy,
-      getData,
-      comments,
-      userInfo,
-      show,
-      params,
-      loading,
-      empty,
-      showReply(id: number) {
-        // console.log("show:", id);
-        show.value = id;
-      },
-      showMoreNumber: ref(2),
-      showReplyNumber: (parent: any) => {
-        let number = parent.showNumber + 5;
-        if (number > parent.children.length) {
-          parent.showNumber = parent.children.length;
-        } else {
-          parent.showNumber = number;
-        }
-      },
-      addComment: (comment: any) => {
-        if (comment.parentId == 0) {
-          comment.showNumber = 0;
-          comments.unshift(comment);
-        } else {
-          // console.log("comments", comments);
-          comments.forEach((e: any) => {
-            // console.log("e.id:", e.id, "comment.rootid:", comment.rootId);
-            if (e.children == undefined || e.children == null) {
-              e.children = [];
-            }
-            if (e.id == comment.rootId) {
-              e.children.unshift(comment);
-              e.showNumber++;
-            }
-          });
-        }
-        show.value = -1;
-        empty.value = false;
-      },
-    };
+import { userType } from '@/types/userType'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { useUserStoreHook } from '@/store/modules/user'
+import { useModuleStoreHook } from '@/store/modules/module'
+import { t } from '@/plugins/i18s'
+import { getCommentPage } from '@/api/comment'
+// const emits = defineEmits(['show', 'add'])
+const props = defineProps({
+  topicType: {
+    type: String,
+    required: true
   },
-  mounted() {
-    if (this.topicId == 0) {
-      //如果没有ID则直接查询整个模块
-      this.getData();
-      // console.log("this.topicId",this.topicId)
+  topicId: {
+    type: Number,
+    required: true
+  },
+  userInfo: {
+    type: Object,
+    required: true
+  }
+})
+
+const privacy = computed(() => {
+  return useConfigStoreHook().privacy
+})
+// const comments = props.comments;
+const { topicType, topicId, userInfo } = toRefs(props)
+const comments: any = reactive([])
+const params = reactive({
+  topicType: '',
+  topicId: -1,
+  page: 1,
+  limit: 5,
+  total: 0
+})
+
+const loading = ref(false)
+const empty = ref(false)
+const getData = () => {
+  if (loading.value) {
+    return
+  }
+  loading.value = true
+  // console.log("commentParam:", topicType.value);
+  // console.log("commentParam:", topicId.value);
+  params.topicType = topicType.value
+  params.topicId = topicId.value
+  const { total, ...other } = params
+  // console.log("params:", other);
+  getCommentPage(other)
+    .then((data: any) => {
+      if (data.total == 0) {
+        empty.value = true
+      }
+      data.list.forEach((e: any) => {
+        e.showNumber = 2
+        comments.push(e)
+      })
+      params.total = data.total
+      params.page++
+      loading.value = false
+    })
+    .catch(() => {
+      loading.value = false
+    })
+}
+// const unwatch = watch(topicId, (value: any) => {
+//   if (value != null && value != undefined && value > 0) {
+//     getData()
+//     unwatch()
+//   }
+// })
+const show: any = ref(-1)
+const showReply = (id: number) => {
+  // console.log("show:", id);
+  show.value = id
+}
+// const showMoreNumber = ref(2)
+const showReplyNumber = (parent: any) => {
+  let number = parent.showNumber + 5
+  if (number > parent.children.length) {
+    parent.showNumber = parent.children.length
+  } else {
+    parent.showNumber = number
+  }
+}
+const addComment = (comment: any) => {
+  console.log('addComment-section1')
+
+  if (comment.parentId == 0) {
+    comment.showNumber = 0
+    comments.unshift(comment)
+  } else {
+    // console.log("comments", comments);
+    comments.forEach((e: any) => {
+      // console.log("e.id:", e.id, "comment.rootid:", comment.rootId);
+      if (e.children == undefined || e.children == null) {
+        e.children = []
+      }
+      if (e.id == comment.rootId) {
+        e.children.unshift(comment)
+        e.showNumber++
+      }
+    })
+  }
+  show.value = -1
+  empty.value = false
+}
+
+// 像 defineExpose 这样的编译器宏不需要导入
+defineExpose({
+  addComment
+})
+onMounted(() => {
+  getData()
+  window.onscroll = () => {
+    const scrollH = document.documentElement.scrollHeight // 文档的完整高度
+    const scrollT = document.documentElement.scrollTop || document.body.scrollTop // 当前滚动条的垂直偏移
+    const screenH = window.screen.height // 屏幕可视高度
+    if (scrollH - scrollT - screenH < 5) {
+      // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
+      // 执行请求
+      if (params.total > comments.length) {
+        getData()
+      }
     }
-    window.onscroll =  ()=> {
-      const scrollH = document.documentElement.scrollHeight; // 文档的完整高度
-      const scrollT =
-        document.documentElement.scrollTop || document.body.scrollTop; // 当前滚动条的垂直偏移
-      const screenH = window.screen.height; // 屏幕可视高度
-      if (scrollH - scrollT - screenH < 5) {
-        // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
-        // 执行请求
-        if (this.params.total > this.comments.length) {
-          this.getData();
-        }
-      }
-    };
-  },
-});
+  }
+})
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .conmment-section {
   margin-top: 3rem;
   .title {
@@ -235,7 +218,7 @@ export default defineComponent({
   }
 }
 </style>
- <style lang="less">
+<style lang="scss">
 .conmment-section {
   //   .reply {
   //     .text {

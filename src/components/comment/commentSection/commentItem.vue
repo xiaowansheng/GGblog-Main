@@ -5,28 +5,20 @@
       <div class="head">
         <div class="comment-title">
           <div class="avatar">
-            <el-popover
-              placement="bottom-start"
-              :title="getName()"
-              :width="200"
-              trigger="hover"
-            >
+            <el-popover placement="bottom-start" :title="getName()" :width="200" trigger="hover">
               <template #reference>
                 <el-avatar :size="50" :src="url" />
               </template>
-              <div
-                class="user-brief-pop"
-                v-if="comment.type == userType.loginUser"
-              >
+              <div class="user-brief-pop" v-if="comment.type == userType.loginUser">
                 <!-- <p>{{comment.infoEmail}}</p> -->
                 <p>
-                  <span>{{ t('comment.section.profile') }}：</span>
+                  <span>{{ $t('comment.section.profile') }}：</span>
                   {{ comment.introduction }}
                 </p>
                 <p class="website" v-show="comment.infoWebsite">
-                  <a @click="toWebsite" href="javascript:;" target="_blank"
-                    >{{t('comment.section.home')}}</a
-                  >
+                  <a @click="toWebsite" href="javascript:;" target="_blank">{{
+                    $t('comment.section.home')
+                  }}</a>
                 </p>
               </div>
             </el-popover>
@@ -50,48 +42,39 @@
                 "
                 >{{
                   comment.roleLabel
-                    ? comment.roleLabel == "admin"
-                      ? t("comment.section.author")
-                      : comment.roleLabel == "test"
-                      ? t("comment.section.test")
-                      : t("comment.section.user")
+                    ? comment.roleLabel == 'admin'
+                      ? $t('comment.section.author')
+                      : comment.roleLabel == 'test'
+                      ? $t('comment.section.test')
+                      : $t('comment.section.user')
                     : comment.type == 2
-                    ? t("comment.section.visitor")
+                    ? $t('comment.section.visitor')
                     : comment.type == 3
-                    ?t("comment.section.anonymous")
-                    : t("comment.section.unknown")
+                    ? $t('comment.section.anonymous')
+                    : $t('comment.section.unknown')
                 }}</el-tag
               >
             </div>
 
-            <div
-              class="parent_name"
-              v-if="parent_name != undefined && parent_name != ''"
-            >
-              <span> {{ t('comment.reply') }} @{{ parent_name }}</span>
+            <div class="parent_name" v-if="parent_name != undefined && parent_name != ''">
+              <span> {{ $t('comment.reply') }} @{{ parent_name }}</span>
             </div>
             <div class="date">{{ comment.createTime }}</div>
           </div>
         </div>
-        <div class="reply-btn" v-if="privacy.MultipleLayerComment">
-          <el-button
-            v-show="show != comment.id"
-            link
-            @click="showItem(comment.id)"
-            ><span>{{ t('comment.section.reply') }}</span></el-button
+        <div class="reply-btn">
+          <el-button v-show="show != comment.id" link @click="showItem(comment.id)"
+            ><span>{{ $t('comment.section.reply') }}</span></el-button
           >
           <el-button v-show="show == comment.id" link @click="showItem(-1)"
-            ><span>{{ t('comment.section.close') }}</span></el-button
+            ><span>{{ $t('comment.section.close') }}</span></el-button
           >
         </div>
       </div>
       <div class="content">
         {{ comment.content }}
       </div>
-      <div
-        class="bottom"
-        v-if="privacy.Device || privacy.Browser || privacy.Address"
-      >
+      <div class="bottom" v-if="privacy.Device || privacy.Browser || privacy.Address">
         <div class="address" v-if="privacy.Address">
           <el-tag>
             <span>{{ comment.ipSource }}</span>
@@ -105,11 +88,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="reply"
-      v-if="privacy.MultipleLayerComment"
-      v-show="show == comment.id"
-    >
+    <div class="reply" v-show="show == comment.id">
       <div class="divided"></div>
       <!-- TODO 未登录状态 -->
       <CommentForm
@@ -118,7 +97,7 @@
         :to="parentName"
         :rootId="rootId"
         :parentId="comment.id"
-        @addComment="addComment"
+        @add="addComment"
         :userInfo="userInfo"
       />
     </div>
@@ -128,132 +107,130 @@
   </div>
 </template>
 
-<script lang='ts'>
-import {
-  computed,
-  defineComponent,
-  reactive,
-  ref,
-  toRef,
-  toRefs,
-} from "vue-demi";
-import CommentForm from "../commentForm/index";
+<script lang="ts" setup>
+import { computed, onBeforeMount, ref, toRefs } from 'vue'
+import CommentForm from '../commentForm/index.vue'
 
-import { useI18n } from "vue-i18n";
-import { userType } from "types/userType";
-import { useStore } from "vuex";
-export default defineComponent({
-  name: "CommentItem",
-  props: ["comment", "show", "rootId", "userInfo", "comments"],
-  setup(props, { emit }) {
-    const {t}=useI18n()
-    const store = useStore();
-    const privacy = computed(() => {
-      return store.state.config.privacy;
-    });
-    // const avatar: any = computed(() => {
-    //   return store.state.config.avatar;
-    // });
-    const url = computed(() => {
-      let avatar=store.state.config.avatar
-      // return store.state.config.avatar;
-      if (comment.value.type == userType.loginUser) {
-        return comment.value.infoAvatar
-          ? comment.value.infoAvatar
-          : avatar.userDefault;
-      } else if (comment.value.type == userType.visitor) {
-        return avatar.visitorDefault;
-      } else {
-        return avatar.anonymousDefault;
-      }
-    });
-    const { userInfo, show, comment, rootId } = toRefs(props);
-    const comments = props.comments;
-    // console.log("rootId", props.rootId);
-    // const show: any = ref(-1);
-    const parent_name = ref("");
-    const findParent = () => {
-      if (!comments) {
-        return;
-      }
-      comments.forEach((e: any) => {
-        if (e.id == comment.value.parentId) {
-          // console.log("name:", e.nickname);
-          parent_name.value =
-            e.type == userType.loginUser
-              ? e.infoName
-              : e.type == userType.visitor
-              ? e.nickname
-              : `【${t('comment.section.anonymous')}】`;
-        }
-      });
-    };
-    return {
-      t,
-      privacy,
-      url,
-      userInfo,
-      comment,
-      userType,
-      getName: () => {
-        if (comment.value.type == userType.loginUser) {
-          return comment.value.infoName;
-        }
-        if (comment.value.type == userType.visitor) {
-          return comment.value.nickname;
-        }
-        if (comment.value.type == 3) {
-          return t('comment.section.anonymous');
-        } else {
-          return t("comment.section.unknown");
-        }
-      },
-      parentName: computed(() => {
-        let value = comment.value;
-        switch (value.type) {
-          case userType.loginUser:
-            return value.infoName;
-          case userType.visitor:
-            return value.nickname;
-          case userType.annonymous:
-          return t('comment.section.anonymous');
-          default:
-          return t("comment.section.unknown");
-        }
-      }),
-      show,
-      rootId,
-      comments,
-      findParent,
-      showItem: (id: number) => {
-        emit("show", id);
-      },
-      parent_name,
-      addComment: (comment: any) => {
-        emit("addComment", comment);
-      },
-      toWebsite: () => {
-        let website = comment.value.infoWebsite;
-        if (website) {
-          let reg = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
-          if (reg.test(website)) {
-            window.open(website);
-          } else {
-            window.open(`http://${website}`);
-          }
-        }
+import { userType } from '@/types/userType'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { useUserStoreHook } from '@/store/modules/user'
+import { useModuleStoreHook } from '@/store/modules/module'
+import { t } from '@/plugins/i18s'
+const emits = defineEmits(['show', 'add'])
+const props = defineProps({
+  // props: ["comment", "show", "rootId", "userInfo", "comments"],
+  comment: {
+    type: Object,
+    required: true
+  },
+  show: {
+    type: Number,
+    required: true
+  },
+  userInfo: {
+    type: Object,
+    required: true
+  },
+  rootId: {
+    type: Number,
+    required: true
+  },
+  comments: {
+    type: Object,
+    required: false
+  }
+})
+const privacy = computed(() => {
+  return useConfigStoreHook().privacy
+})
+// const avatar: any = computed(() => {
+//   return store.state.config.avatar;
+// });
+const url = computed(() => {
+  let avatars = useConfigStoreHook().avatar
+  // return store.state.config.avatar;
+  if (comment.value.type == userType.loginUser) {
+    return comment.value.infoAvatar ? comment.value.infoAvatar : avatars.User
+  } else if (comment.value.type == userType.visitor) {
+    return avatars.Visitor
+  } else {
+    return avatars.Anonymous
+  }
+})
+const { userInfo, show, comment, rootId } = toRefs(props)
+const comments = props.comments
+// console.log("rootId", props.rootId);
+// const show: any = ref(-1);
+const parent_name = ref('')
+const findParent = () => {
+  if (!comments) {
+    return
+  }
+  comments.forEach((e: any) => {
+    if (e.id == comment.value.parentId) {
+      // console.log("name:", e.nickname);
+      parent_name.value =
+        e.type == userType.loginUser
+          ? e.infoName
+          : e.type == userType.visitor
+          ? e.nickname
+          : `【${t('comment.section.anonymous')}】`
+    }
+  })
+}
 
-        return false;
-      },
-    };
-  },
-  beforeMount() {
-    this.findParent();
-  },
-});
+const getName = () => {
+  if (comment.value.type == userType.loginUser) {
+    return comment.value.infoName
+  }
+  if (comment.value.type == userType.visitor) {
+    return comment.value.nickname
+  }
+  if (comment.value.type == 3) {
+    return t('comment.section.anonymous')
+  } else {
+    return t('comment.section.unknown')
+  }
+}
+const parentName = computed(() => {
+  let value = comment.value
+  switch (value.type) {
+    case userType.loginUser:
+      return value.infoName
+    case userType.visitor:
+      return value.nickname
+    case userType.annoymous:
+      return t('comment.section.anonymous')
+    default:
+      return t('comment.section.unknown')
+  }
+})
+const showItem = (id: number) => {
+  emits('show', id)
+}
+const addComment = (comment: any) => {
+  emits('add', comment)
+}
+const toWebsite = () => {
+  let website = comment.value.infoWebsite
+  if (website) {
+    let reg = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
+    if (reg.test(website)) {
+      window.open(website)
+    } else {
+      window.open(`http://${website}`)
+    }
+  }
+
+  return false
+}
+
+onBeforeMount(() => {
+  findParent()
+})
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .conmment-item {
   background-color: rgba(227, 240, 239, 0.5);
   border: 1px solid rgb(149, 216, 227);
@@ -368,7 +345,7 @@ export default defineComponent({
   }
 }
 </style>
-<style lang="less">
+<style lang="scss">
 .user-brief-pop {
   .website {
     text-align: center;

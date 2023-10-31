@@ -3,16 +3,16 @@
     <div class="text">
       <div class="head">
         <div class="title">
-          <span class="text-title">{{$t('comment.comment')}}</span>
+          <span class="text-title">{{ $t('comment.comment') }}</span>
           <!-- 暂时不开放登录 -->
           <div
             class="select-user"
-            v-show="!store.state.user.token&&userType.tyle!=1"
+            v-show="!user.username && userInfo.type != userType.loginUser"
             v-if="modules.Login || privacy.Visitor || privacy.Anonymous"
           >
             <el-select v-model="userInfo.type" :placeholder="$t('comment.select')">
               <el-option
-              v-if="modules.Login"
+                v-if="modules.Login"
                 :label="$t('comment.user')"
                 :value="userType.loginUser"
               />
@@ -39,18 +39,14 @@
         :model="commentForm"
       >
         <div v-show="userInfo.type == 2" class="user-info">
-          <el-form-item :label="t('comment.nickname')" prop="nickname">
+          <el-form-item :label="$t('comment.nickname')" prop="nickname">
             <el-input name="nickname" v-model="userInfo.nickname" />
           </el-form-item>
-          <el-form-item :label="t('comment.email')" prop="email">
+          <el-form-item :label="$t('comment.email')" prop="email">
             <el-input name="email" v-model="userInfo.email" />
           </el-form-item>
-          <el-form-item :label="t('comment.QQ')" prop="qq">
-            <el-input
-              name="qq"
-              placeholder=""
-              v-model.number="userInfo.qq"
-            />
+          <el-form-item :label="$t('comment.QQ')" prop="qq">
+            <el-input name="qq" placeholder="" v-model.number="userInfo.qq" />
           </el-form-item>
         </div>
         <div class="content">
@@ -60,7 +56,7 @@
               v-model="commentForm.content"
               :rows="3"
               type="textarea"
-              :placeholder="to ? `${t('comment.reply')}：@` + to : t('comment.commentContent')"
+              :placeholder="to ? `${$t('comment.reply')}：@` + to : $t('comment.commentContent')"
               class="comment-content"
             />
           </el-form-item>
@@ -85,14 +81,18 @@
               content="this is content, this is content, this is content"
             >
               <template #reference>
-                <el-button type="info">{{t('comment.emoji')}}</el-button>
+                <el-button type="info">{{$t('comment.emoji')}}</el-button>
               </template>
             </el-popover>
-            <el-button type="info">{{t('comment.picture')}}</el-button> -->
+            <el-button type="info">{{$t('comment.picture')}}</el-button> -->
           </div>
           <div class="sent">
-            <el-button :disabled='commentForm.content==""' v-loading="loading" @click="submit" type="primary"
-              >{{t("comment.send")}}</el-button
+            <el-button
+              :disabled="commentForm.content == ''"
+              v-loading="loading"
+              @click="submit"
+              type="primary"
+              >{{ $t('comment.send') }}</el-button
             >
           </div>
         </div>
@@ -101,234 +101,244 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, reactive, ref, toRefs, watch } from "vue-demi";
-import { ElMessage } from "element-plus";
-import type { FormInstance, FormRules } from "element-plus";
-import { service } from "utils/axios";
-import { userType } from "types/userType";
-import { useStore } from "vuex";
-import { useI18n } from "vue-i18n";
-export default defineComponent({
-  name: "CommentForm",
-  props: ["topicType", "topicId", "rootId", "userInfo", "to", "parentId"],
-  setup(props, { emit }) {
-const {t}=useI18n()
-    const { topicType, topicId, userInfo, rootId, parentId } = toRefs(props);
-    const to = props.to;
-    const store = useStore();
-    const privacy:any = computed(() => {
-      return store.state.config.privacy
-    });
-    const modules:any = computed(() => {
-      return store.state.config.module;
-    });
-    // userInfo.value.type=computed(()=>{
-    //   if(modules.Login){
-    //     return 1
-    //   }else if(privacy.Visitor){
-    //     return 2
-    //   }else if(privacy.Anonymous){
-    //     return 3
-    //   }else{
-    //     return null
-    //   }
-    // })
-    // const userSelect = ref(2);
-    const commentFormRef = ref<FormInstance>();
-    const commentForm: any = reactive({
-      userAuthId: null,
-      topicType: null,
-      topicId: null,
-      rootId: userInfo.value.type,
-      parentId: null,
-      content: "",
-      type: null,
-      nickname: userInfo.value.nickname,
-      email: userInfo.value.email,
-      qq: userInfo.value.qq,
-      url:window.location.href
-    });
+<script lang="ts" setup>
+import { computed, reactive, ref, toRefs, watch, defineProps,defineEmits } from 'vue'
+import { ElMessage } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
+import { userType } from '@/types/userType'
+import { useConfigStoreHook } from '@/store/modules/config'
+import { useUserStoreHook } from '@/store/modules/user'
+import { useModuleStoreHook } from '@/store/modules/module'
+import { t } from "@/plugins/i18s"
+import {addComment} from "@/api/comment"
+const emits=defineEmits(["add"])
+const props = defineProps({
+  topicType: {
+    type: String,
+    required: true
+  },
+  topicId: {
+    type: Number,
+    required: true
+  },
+  rootId: {
+    type: Number,
+    required: false
+  },
+  userInfo: {
+    type: Object,
+    required: true
+  },
+  to: {
+    type: String,
+    required: false
+  },
+  parentId: {
+    type: Number,
+    required: true
+  }
+})
+const { topicType, topicId, userInfo, rootId, parentId } = toRefs(props)
+const to = props.to
+// const store = useStore();
+const privacy: any = computed(() => {
+  return useConfigStoreHook().privacy
+})
+const modules: any = computed(() => {
+  return useConfigStoreHook().module
+})
+const user = useUserStoreHook()
+const dialog=useModuleStoreHook()
+// userInfo.value.type=computed(()=>{
+//   if(modules.Login){
+//     return 1
+//   }else if(privacy.Visitor){
+//     return 2
+//   }else if(privacy.Anonymous){
+//     return 3
+//   }else{
+//     return null
+//   }
+// })
+// const userSelect = ref(2);
+const commentFormRef = ref<FormInstance>()
+const commentForm: any = reactive({
+  userAuthId: null,
+  topicType: null,
+  topicId: null,
+  rootId: null,
+  parentId: null,
+  content: '',
+  type: userInfo.value.type,
+  nickname: userInfo.value.nickname,
+  email: userInfo.value.email,
+  qq: userInfo.value.qq,
+  url: window.location.href
+})
 
-    watch(userInfo.value, (value, preValue) => {
-      commentForm.type = value.type;
-      commentForm.nickname = value.nickname;
-      commentForm.email = value.email;
-      commentForm.qq = value.qq;
-    });
-    // const type = {
-    //   loginUser: 1,
-    //   visitor: 2,
-    //   annoymous: 3,
-    // };
-    const rules = reactive<FormRules>({
-      content: [
-        {
-          validator: (rule: any, value: any, callback: any) => {
-            // console.log("111");
-            if (value == "") {
-              callback(new Error("请输入评论内容~"));
-            } else {
-              callback();
-            }
-          },
-          required: true,
-          trigger: "blur",
-        },
-      ],
-      nickname: [
-        {
-          validator: (rule: any, value: any, callback: any) => {
-            if (commentForm.type != userType.visitor) {
-              callback();
-              return;
-            }
-            // console.log("校验");
-            if (value == "") {
-              callback(new Error("Please input the nickname"));
-            } else if (value.length > 10) {
-              callback(new Error("昵称过长~"));
-            } else {
-              callback();
-            }
-          },
-          required: true,
-          trigger: "blur",
-        },
-      ],
-      email: [
-        {
-          validator: (rule: any, value: any, callback: any) => {
-            if (commentForm.type != userType.visitor) {
-              callback();
-              return;
-            }
-            let reg =
-              /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-            if (value == "") {
-              callback(new Error("Please input the email"));
-            }
-            if (!reg.test(value)) {
-              callback(new Error("邮箱不合法！"));
-            } else {
-              callback();
-            }
-          },
-          required: true,
-          trigger: "blur",
-        },
-      ],
-      qq: [
-        {
-          validator: (rule: any, value: any, callback: any) => {
-            if (value.length > 10 || (value.length < 5 && value.length > 0)) {
-              callback(new Error("qq不合法"));
-            } else {
-              callback();
-            }
-          },
-          required: false,
-          trigger: "blur",
-        },
-      ],
-    });
-    const loading = ref(false);
-    const submit = () => {
-      if (!modules.value.Login && !privacy.value.Visitor && !privacy.value.Anonymous) {
-        console.log(t('comment.close'),modules.value.Login,privacy.value.Visitor,privacy.value.Anonymous)
-        ElMessage({
-          message: `当前评论系统已关闭！`,
-          type: "warning",
-        });
-        return;
+watch(userInfo.value, (value, preValue) => {
+  commentForm.type = value.type
+  commentForm.nickname = value.nickname
+  commentForm.email = value.email
+  commentForm.qq = value.qq
+})
+// const type = {
+//   loginUser: 1,
+//   visitor: 2,
+//   annoymous: 3,
+// };
+const rules = reactive<FormRules>({
+  content: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        // console.log("111");
+        if (value == '') {
+          callback(new Error('请输入评论内容~'))
+        } else {
+          callback()
+        }
+      },
+      required: true,
+      trigger: 'blur'
+    }
+  ],
+  nickname: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        if (commentForm.type != userType.visitor) {
+          callback()
+          return
+        }
+        // console.log("校验");
+        if (value == '') {
+          callback(new Error('Please input the nickname'))
+        } else if (value.length > 10) {
+          callback(new Error('昵称过长~'))
+        } else {
+          callback()
+        }
+      },
+      required: true,
+      trigger: 'blur'
+    }
+  ],
+  email: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        if (commentForm.type != userType.visitor) {
+          callback()
+          return
+        }
+        let reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+        if (value == '') {
+          callback(new Error('Please input the email'))
+        }
+        if (!reg.test(value)) {
+          callback(new Error('邮箱不合法！'))
+        } else {
+          callback()
+        }
+      },
+      required: true,
+      trigger: 'blur'
+    }
+  ],
+  qq: [
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        if (value.length > 10 || (value.length < 5 && value.length > 0)) {
+          callback(new Error('qq不合法'))
+        } else {
+          callback()
+        }
+      },
+      required: false,
+      trigger: 'blur'
+    }
+  ]
+})
+const loading = ref(false)
+const submit = () => {
+  if (!modules.value.Login && !privacy.value.Visitor && !privacy.value.Anonymous) {
+    console.log(
+      t('comment.close'),
+      modules.value.Login,
+      privacy.value.Visitor,
+      privacy.value.Anonymous
+    )
+    ElMessage({
+      message: t('comment.close'),
+      type: 'warning'
+    })
+    return
+  }
+  if (!userInfo.value.type) {
+    ElMessage({
+      message: t("comment.selectUser"),
+      type: 'warning'
+    })
+    return;
+  }
+  if (loading.value) {
+    return
+  }
+  if (userInfo.value.type == userType.loginUser && !user.getToken()) {
+    dialog.login = true
+    return
+  }
+  loading.value = true
+  commentFormRef.value
+    ?.validate()
+    .then(() => {
+      // console.log("form:", commentForm);
+      commentForm.topicType = topicType.value
+      commentForm.topicId = topicId.value
+      if (rootId?.value) {
+        commentForm.rootId = rootId.value
       }
-      if(!userInfo.value.type){
-        ElMessage({
-          message: `请选择操作用户！`,
-          type: "warning",
-        });
-          return 0
+      commentForm.parentId = parentId.value
+      // if (parentId.value) {
+      // }
+      // console.log("parentid",parentId,'rootId',rootId)
+      // console.log("formRef：", commentFormRef);
+      // console.log("topicId", topicId.value);
+      // return;
+      let form: any = commentForm
+      const { email, nickname, qq, userAuthId, ...other } = commentForm
+      if (commentForm.type == userType.loginUser) {
+        //TODO
+        commentForm.userAuthId = null
+      } else if (commentForm.type == userType.annoymous) {
+        // commentForm.nickname = "";
+        // commentForm.email = "";
+        // commentForm.qq = "";
+        form = other
       }
-      if (loading.value) {
-        return;
-      }
-      if(userInfo.value.type==userType.loginUser&&!store.state.user.token){
-        store.state.dialog.Login=true
-        return
-      }
-      loading.value = true;
-      commentFormRef.value
-        ?.validate()
-        .then(() => {
-          // console.log("form:", commentForm);
-          commentForm.topicType = topicType.value;
-          commentForm.topicId = topicId.value;
-          if (rootId.value) {
-            commentForm.rootId = rootId.value;
-          }
-            commentForm.parentId = parentId.value;
-          // if (parentId.value) {
-          // }
-          // console.log("parentid",parentId,'rootId',rootId)
-          // console.log("formRef：", commentFormRef);
-          // console.log("topicId", topicId.value);
-          // return;
-          let form: any = commentForm;
-          const { email, nickname, qq, userAuthId, ...other } = commentForm;
-          if (commentForm.type == userType.loginUser) {
-            //TODO
-            commentForm.userAuthId = null;
-          } else if (commentForm.type == userType.annoymous) {
-            // commentForm.nickname = "";
-            // commentForm.email = "";
-            // commentForm.qq = "";
-            form = other;
-          }
 
-          service
-            .post("/comment", form)
-            .then((data: any) => {
-              commentForm.content = "";
-              // console.log("commendto：",data)
-              ElMessage({
-                message: `${t('form.post')}${
-                  data.review == 1 ? t('form.visiable') : ""
-                }`,
-                type: "success",
-              });
-              emit("addComment", data, commentForm);
-              loading.value = false;
-            })
-            .catch(() => {
-              loading.value = false;
-            });
+      addComment(form)
+        .then((data: any) => {
+          commentForm.content = ''
+          // console.log("commendto：",data)
+          ElMessage({
+            message: `${t('form.post')}${data.review == 1 ? t('form.visiable') : ''}`,
+            type: 'success'
+          })
+          emits('add', data)
+          loading.value = false
         })
         .catch(() => {
-          console.log("表单验证失败");
-          // return false;
-          loading.value = false;
-        });
-    };
-    return {
-      t,
-      store,
-      privacy,
-      modules,
-      to,
-      commentFormRef,
-      // userSelect,
-      userInfo,
-      commentForm,
-      submit,
-      loading,
-      userType,
-      rules,
-    };
-  },
-});
+          loading.value = false
+        })
+    })
+    .catch(() => {
+      console.log('表单验证失败')
+      // return false;
+      loading.value = false
+    })
+}
 </script>
 
-<style lang='less' scoped>
+<style lang="scss" scoped>
 .comment-form {
   width: 100%;
   overflow: hidden;
@@ -371,7 +381,7 @@ const {t}=useI18n()
   }
 }
 </style>
-<style lang="less">
+<style lang="scss">
 // .select-user {
 //   width: 0rem;
 //   text-align: center;

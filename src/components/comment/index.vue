@@ -4,14 +4,14 @@
       <CommentForm
         :topicType="topicType"
         :topicId="topicId"
-        @addComment="addComment"
+        @add="addComment"
         :userInfo="userInfo"
         :parentId="0"
       />
     </div>
     <div class="comments">
       <CommentSection
-        ref="commentSection"
+        ref="commentSectionRef"
         :topicType="topicType"
         :topicId="topicId"
         :userInfo="userInfo"
@@ -21,10 +21,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, toRefs, watch } from 'vue'
+import { computed, reactive, ref, toRefs, watch,onBeforeMount } from 'vue'
 import CommentForm from './commentForm/index.vue'
 import CommentSection from './commentSection/index.vue'
 import { useConfigStoreHook } from '@/store/modules/config'
+import { useUserStoreHook } from '@/store/modules/user'
+import {userType} from "@/types/userType"
 const props = defineProps({
   topicType: {
     type: String,
@@ -38,27 +40,34 @@ const props = defineProps({
 const modules = computed(() => {
   return useConfigStoreHook().module
 })
+const user = useUserStoreHook()
 const { topicType, topicId } = toRefs(props)
-const commentSection = ref()
+const commentSectionRef = ref()
 const userInfo = reactive({
-  type: 1,
+  type: "",
   nickname: '',
   email: '',
   qq: ''
 })
-watch(store.state.user, (value: any) => {
-  if (value.token) {
-    userInfo.type = 1
+const setUserType = () => {
+    if (user.getToken()) {
+    userInfo.type = userType.loginUser
   } else {
-    userInfo.type = 2
+    userInfo.type = userType.visitor
   }
+}
+watch(user, () => {
+  setUserType()
 })
 const addComment = (comment: any) => {
-  commentSection.value?.addComment(comment)
+  commentSectionRef.value.addComment(comment)
 }
+onBeforeMount(() => {
+  setUserType()
+})
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .comment {
   .form {
     margin-top: 2.5rem;

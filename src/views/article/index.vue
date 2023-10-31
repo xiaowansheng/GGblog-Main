@@ -151,7 +151,7 @@
             >{{ $t('article.protocol') }}{{ $t('article.transit') }}
           </p>
         </div>
-        <!-- <Comment :topicType="TopicType.article" :topicId="topicId" /> -->
+        <Comment :topicType="TopicType.article" :topicId="topicId" />
       </el-main>
     </el-container>
   </div>
@@ -160,7 +160,7 @@
 <script lang="ts" setup>
 // import 'github-markdown-css'
 import Header from '@/layout/header/index.vue'
-// import Comment from 'comps/comment/index.vue'
+import Comment from '@/components/comment/index.vue'
 
 import { TopicType } from '@/enums/topic'
 import { getArticle } from '@/api/article'
@@ -175,9 +175,7 @@ import { onMounted, reactive, ref, nextTick, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { mdConvertToHtml } from '@/utils/markdown'
 import { useConfigStoreHook } from '@/store/modules/config'
-const topicId: any = ref(null)
-// const { t } = useI18n()
-// const store = useStore()
+const topicId = ref<number>(-1)
 const author = computed(() => {
   return useConfigStoreHook().author
 })
@@ -371,7 +369,7 @@ const getData = (id: string | number) => {
 onMounted(() => {
   let id = getQueryString('')
   if (id) {
-    topicId.value = id
+    topicId.value = Number.parseInt(id)
     getData(id)
   } else {
     ElMessage.error('Error~')

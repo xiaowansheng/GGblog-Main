@@ -77,6 +77,7 @@ export default {
     anonymous: 'Anonymous',
     reply: 'reply',
     commentContent: 'please input content of comment ~',
+    selectUser: 'Please select the user for the operation ~',
     emoji: 'emoji',
     picture: 'picture',
     send: 'Send',

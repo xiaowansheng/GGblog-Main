@@ -76,6 +76,7 @@ export default {
       anonymous: "匿名",
       reply: "回复",
       commentContent: "请输入评论内容~",
+      selectUser: "请选择操作用户~",
       emoji: "表情",
       picture: "图片",
       send: "发送",
