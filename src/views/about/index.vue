@@ -99,7 +99,14 @@
           </div>
         </div>
 
-        <div ref="mdDivRef" id="profile" class="profile markdown-body md cherry-markdown"  v-html="aboutMd">
+        <div
+          ref="mdDivRef"
+          id="profile"
+          class="profile markdown-body md cherry-markdown"
+          v-html="aboutMd"
+        ></div>
+        <div class="comment">
+          <Comment :topicType="TopicType.about" :topicId="0" />
         </div>
       </div>
     </div>
@@ -108,6 +115,9 @@
 
 <script lang="ts" setup>
 import Header from '@/layout/header/index.vue'
+
+import Comment from '@/components/comment/index.vue'
+import { TopicType } from '@/enums/topic'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { getAbout } from '@/api/config'
 import { useConfigStoreHook } from '@/store/modules/config'
@@ -130,7 +140,7 @@ const getData = () => {
     aboutMd.value = data
     // convetToMarkdown()
     // mdShow(idName,data)
-    aboutMd.value=mdConvertToHtml(data)
+    aboutMd.value = mdConvertToHtml(data)
     // if (data) {
     // let profileDiv = document.getElementById('profile')
 
@@ -185,6 +195,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.comment{
+  margin-top: 2rem;
+}
 .about {
   .content {
     margin: 0 auto;

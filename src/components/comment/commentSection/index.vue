@@ -92,8 +92,8 @@ const privacy = computed(() => {
 const { topicType, topicId, userInfo } = toRefs(props)
 const comments: any = reactive([])
 const params = reactive({
-  topicType: '',
-  topicId: -1,
+  topicType: topicType.value,
+  topicId: topicId.value,
   page: 1,
   limit: 5,
   total: 0
@@ -108,8 +108,8 @@ const getData = () => {
   loading.value = true
   // console.log("commentParam:", topicType.value);
   // console.log("commentParam:", topicId.value);
-  params.topicType = topicType.value
-  params.topicId = topicId.value
+  // params.topicType = topicType.value
+  // params.topicId = topicId.value
   const { total, ...other } = params
   // console.log("params:", other);
   getCommentPage(other)

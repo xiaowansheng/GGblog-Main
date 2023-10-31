@@ -77,7 +77,7 @@
       </div>
       <div
         class="loading"
-        v-show="params.total != 0 && params.total > talks.length"
+        v-show="total != 0 && total > talks.length"
         v-loading="true"
       ></div>
     </div>

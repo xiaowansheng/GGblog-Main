@@ -75,9 +75,9 @@
           />
         </div>
       </div>
-      <!-- <div class="comment">
+      <div class="comment">
         <Comment :topicType="TopicType.blogroll" :topicId="0" />
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -86,8 +86,8 @@
 import Header from "@/layout/header/index.vue";
 import FriendLink from "./friendLink.vue";
 
-// import Comment from "comps/comment/index.vue";
-// import { TopicType } from "@/enums/topic";
+import Comment from "@/components/comment/index.vue";
+import { TopicType } from "@/enums/topic";
 import FriendLinkForm from "./friendLinkForm.vue";
 import { computed, onBeforeMount, onMounted, reactive, ref } from "vue"
 import { useConfigStoreHook } from "@/store/modules/config"

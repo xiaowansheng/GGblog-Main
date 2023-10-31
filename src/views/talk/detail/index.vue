@@ -46,9 +46,9 @@
           </div>
         </div>
       </div>
-      <!-- <div class="coment">
+      <div class="coment">
         <Comment :topicType="TopicType.talk" :topicId="topicId" />
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +59,7 @@ import Header from '@/layout/header/index.vue'
 import { TopicType } from '@/enums/topic'
 import { computed, onMounted, reactive, ref } from 'vue'
 
-// import Comment from "comps/comment/index.vue";
+import Comment from "@/components/comment/index.vue";
 import { getQueryString } from '@/utils/stringUtils'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalk } from '@/api/talk'
@@ -97,7 +97,6 @@ const getClassName = (images: any) => {
 }
 const getData = (id: any) => {
   getTalk(id).then((data: any) => {
-    topicId.value = data.id
     // let imgs = [];
     // for (let i = 0; i < 6; i++) {
     //   //   imgs.push(
@@ -119,7 +118,8 @@ const getData = (id: any) => {
 }
 onMounted(() => {
   let id = getQueryString('error~')
-  if (id != '') {
+  if (id) {
+    topicId.value = Number.parseInt(id)
     getData(id)
   }
 })
