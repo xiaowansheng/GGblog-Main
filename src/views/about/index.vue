@@ -122,6 +122,8 @@ import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { getAbout } from '@/api/config'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { mdConvertToHtml } from '@/utils/markdown'
+
+import { useModuleStoreHook } from '@/store/modules/module'
 // import Vditor from 'vditor'
 defineOptions({
   name: 'About'
@@ -135,20 +137,27 @@ const author = computed(() => {
 const contact = computed((): any => {
   return useConfigStoreHook().contact
 })
+const dialog = useModuleStoreHook()
 const idName = 'markdown-about'
 const mdDivRef = ref<HTMLDivElement>()
 const aboutMd = ref('')
 const getData = () => {
-  getAbout().then((data: any) => {
-    aboutMd.value = data
-    // convetToMarkdown()
-    // mdShow(idName,data)
-    aboutMd.value = mdConvertToHtml(data)
-    // if (data) {
-    // let profileDiv = document.getElementById('profile')
+  dialog.loading++
+  getAbout()
+    .then((data: any) => {
+      aboutMd.value = data
+      // convetToMarkdown()
+      // mdShow(idName,data)
+      aboutMd.value = mdConvertToHtml(data)
+      // if (data) {
+      // let profileDiv = document.getElementById('profile')
 
-    // }
-  })
+      // }
+      dialog.loading--
+    })
+    .catch(() => {
+      dialog.loading--
+    })
 }
 const convetToMarkdown = () => {
   // Vditor.preview(mdDivRef.value, aboutMd.value, {
@@ -192,13 +201,13 @@ const convetToMarkdown = () => {
   //   }
   // })
 }
-onMounted(() => {
+onBeforeMount(() => {
   getData()
 })
 </script>
 
 <style lang="scss" scoped>
-.comment{
+.comment {
   margin-top: 2rem;
 }
 .about {

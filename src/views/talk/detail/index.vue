@@ -57,12 +57,14 @@
 import Header from '@/layout/header/index.vue'
 
 import { TopicType } from '@/enums/topic'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 
-import Comment from "@/components/comment/index.vue";
+import Comment from '@/components/comment/index.vue'
 import { getQueryString } from '@/utils/stringUtils'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalk } from '@/api/talk'
+import { useModuleStoreHook } from '@/store/modules/module'
+const dialog = useModuleStoreHook()
 defineOptions({
   name: 'TalkDetail'
 })
@@ -99,27 +101,34 @@ const getClassName = (images: any) => {
   }
 }
 const getData = (id: any) => {
-  getTalk(id).then((data: any) => {
-    // let imgs = [];
-    // for (let i = 0; i < 6; i++) {
-    //   //   imgs.push(
-    //   //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/201021LATX2.jpg"
-    //   //   );
-    //   //   imgs.push(
-    //   //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/231419vaVVJ.jpg"
-    //   //   );
-    //   imgs.push(
-    //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/234256qhzWe.jpg"
-    //   );
-    // }
-    data.images = JSON.parse(data.images)
-    if (data.content) {
-      data.content = data.content.replace(/\n/g, '<br>')
-    }
-    talk.value = data
-  })
+  dialog.loading++
+  getTalk(id)
+    .then((data: any) => {
+      // let imgs = [];
+      // for (let i = 0; i < 6; i++) {
+      //   //   imgs.push(
+      //   //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/201021LATX2.jpg"
+      //   //   );
+      //   //   imgs.push(
+      //   //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/231419vaVVJ.jpg"
+      //   //   );
+      //   imgs.push(
+      //     "https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/images/234256qhzWe.jpg"
+      //   );
+      // }
+      data.images = JSON.parse(data.images)
+      if (data.content) {
+        data.content = data.content.replace(/\n/g, '<br>')
+      }
+      talk.value = data
+
+      dialog.loading--
+    })
+    .catch(() => {
+      dialog.loading--
+    })
 }
-onMounted(() => {
+onBeforeMount(() => {
   let id = getQueryString('error~')
   if (id) {
     topicId.value = Number.parseInt(id)

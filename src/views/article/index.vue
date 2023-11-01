@@ -175,6 +175,7 @@ import { onMounted, reactive, ref, nextTick, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { mdConvertToHtml } from '@/utils/markdown'
 import { useConfigStoreHook } from '@/store/modules/config'
+import { useModuleStoreHook } from '@/store/modules/module'
 defineOptions({
   name: 'Article'
 })
@@ -182,6 +183,7 @@ const topicId = ref<number>(-1)
 const author = computed(() => {
   return useConfigStoreHook().author
 })
+const dialog = useModuleStoreHook()
 const defaultProps = {
   children: 'children',
   label: 'title'
@@ -309,6 +311,8 @@ const buildTree = (arr: Array<Title>, rootDeep: number, maxDeep: number) => {
 
 const loading = ref(true)
 const getData = (id: string | number) => {
+  dialog.loading++
+  loading.value = true
   getArticle(id)
     .then((data: any) => {
       article.value = data
@@ -363,9 +367,11 @@ const getData = (id: string | number) => {
       //   }
       // });
       loading.value = false
+      dialog.loading--
     })
     .catch(() => {
       loading.value = false
+      dialog.loading--
     })
 }
 // const articleMd=ref("")

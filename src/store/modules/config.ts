@@ -3,6 +3,8 @@ import { store } from '@/store'
 import { getConfig } from '@/api/config'
 
 import { getSimpleStatistic } from '@/api/article'
+
+import { useModuleStoreHook } from '@/store/modules/module'
 export const useConfigStore = defineStore('config', {
   state: () => ({
     author: {
@@ -175,25 +177,47 @@ export const useConfigStore = defineStore('config', {
     setReward(data: any) {
       Object.assign(this.reward, data)
     },
-    setStatistic() {
-      getSimpleStatistic().then((data: any) => {
-        this.statistic = data
+    async setStatistic(): Promise<boolean> {
+      return new Promise<boolean>((resolve, reject) => {
+        useModuleStoreHook().loading++
+        getSimpleStatistic()
+          .then((data: any) => {
+            this.statistic = data
+
+            useModuleStoreHook().loading--
+            resolve(true)
+          })
+          .catch(() => {
+            useModuleStoreHook().loading--
+            reject(false)
+          })
       })
     },
-    setConfigInfo() {
-      getConfig().then((data: any) => {
-        console.log('配置信息:', data)
-        this.setAuthor(data.author)
-        this.setMenus(data.menu)
-        this.setCovers(data.cover)
-        this.setWebsite(data.website)
-        this.setPageView(data.pageView)
-        this.setSocialAccount(data.socialAccount)
-        this.setThirdPartLogin(data.login)
-        this.setComponent(data.component)
-        this.setPrivacy(data.privacy)
-        this.setAvatar(data.avatar)
-        this.setReward(data.reward)
+    async setConfigInfo(): Promise<boolean> {
+      return new Promise<boolean>((resolve, reject) => {
+        useModuleStoreHook().loading++
+        getConfig()
+          .then((data: any) => {
+            console.log('配置信息:', data)
+            this.setAuthor(data.author)
+            this.setMenus(data.menu)
+            this.setCovers(data.cover)
+            this.setWebsite(data.website)
+            this.setPageView(data.pageView)
+            this.setSocialAccount(data.socialAccount)
+            this.setThirdPartLogin(data.login)
+            this.setComponent(data.component)
+            this.setPrivacy(data.privacy)
+            this.setAvatar(data.avatar)
+            this.setReward(data.reward)
+
+            useModuleStoreHook().loading--
+            resolve(true)
+          })
+          .catch(() => {
+            useModuleStoreHook().loading--
+            reject(false)
+          })
       })
     }
   }

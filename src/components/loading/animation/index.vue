@@ -10,7 +10,7 @@ watch(
   (value, preValue) => {
     console.log('全屏加载动画~ ：',value?"开启":"关闭")
     // console.log('value:', value)
-    if (value) {
+    if (value>0) {
       hideScrollbars()
     } else {
       showScrollbars()
@@ -38,7 +38,7 @@ function showScrollbars() {
 <template>
   <div class="loader-wrapper" v-show="dialog.loading">
     <div class="loader">
-      <img src="/logo.png" alt=""/>
+      <img src="/logo.png" alt="LOGO"/>
     </div>
     <div class="loader-text">
       <div>L</div>
@@ -61,7 +61,7 @@ function showScrollbars() {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 999;
+  z-index: 9999;
   width: 100%;
   height: 100%;
   /* 溢出隐藏 */
@@ -151,7 +151,7 @@ function showScrollbars() {
   top: 72%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 300;
   /* 防止选取 */
   user-select: none;
 }
