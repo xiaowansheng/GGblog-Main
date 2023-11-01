@@ -91,6 +91,7 @@
       <!-- <div id="temp"></div> -->
       <el-main class="content">
         <div ref="mdRef" id="markdown" class="md markdown-body cherry-markdown" v-html="html"></div>
+        <ReadProgress/>
         <!-- <div ref="mdRef" id="markdown" class="md markdown-body"></div> -->
         <div class="article-tag">
           <div class="category">
@@ -161,7 +162,7 @@
 // import 'github-markdown-css'
 import Header from '@/layout/header/index.vue'
 import Comment from '@/components/comment/index.vue'
-
+import ReadProgress from "@/components/progress/index.vue"
 import { TopicType } from '@/enums/topic'
 import { getArticle } from '@/api/article'
 import { getQueryString } from '@/utils/stringUtils'

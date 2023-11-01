@@ -51,6 +51,7 @@ declare module 'vue' {
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     Loading: typeof import('./src/components/loading/index.vue')['default']
     Login: typeof import('./src/components/login/index.vue')['default']
+    Progress: typeof import('./src/components/progress/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Signup: typeof import('./src/components/signup/index.vue')['default']
