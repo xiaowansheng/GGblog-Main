@@ -6,6 +6,61 @@
       </template>
     </Header>
     <div class="content">
+      <el-skeleton :count="5" :throttle="200" :loading="loading" animated>
+        <template #template>
+          <div class="talk-item">
+            <el-card class="box-card">
+              <template #header>
+                <div class="card-header">
+                  <div class="title">
+                    <div class="avatar">
+                      <!-- <el-avatar :size="65" :src="author.avatar" /> -->
+
+                      <el-skeleton-item
+                        variant="image"
+                        style="border-radius: 50%; height: 65px; width: 65px"
+                      />
+                    </div>
+                    <div class="info">
+                      <div class="name">
+                        <el-skeleton-item variant="text" style="width: 10rem; height: 2.3rem" />
+                      </div>
+                      <div class="date">
+                        <el-skeleton-item variant="text" style="width: 12rem; height: 1.6rem" />
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <el-button class="button" text>button</el-button> -->
+                </div>
+              </template>
+              <div class="text">
+                <el-skeleton-item variant="p" />
+                <el-skeleton-item variant="p" />
+                <el-skeleton-item variant="p" />
+                <el-skeleton-item variant="p" />
+                <el-skeleton-item variant="p" />
+              </div>
+
+              <div class="bottom">
+                <div class="address">
+                  <p>
+                    <el-skeleton-item variant="p" style="width: 6rem" />
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    <el-skeleton-item variant="p" style="width: 6rem" />
+                  </p>
+                  <p>
+                    <el-skeleton-item variant="p" style="width: 6rem" />
+                  </p>
+                </div>
+              </div>
+            </el-card>
+          </div>
+        </template>
+        <template #default> </template>
+      </el-skeleton>
       <el-card
         class="box-card"
         @click="toPage('/talk/' + talk.id)"
@@ -75,18 +130,14 @@
       <div class="empty" v-if="!loading && talks.length == 0">
         <el-empty description="Empty~" />
       </div>
-      <div
-        class="loading"
-        v-show="total != 0 && total > talks.length"
-        v-loading="true"
-      ></div>
+      <div class="loading" v-show="total != 0 && total > talks.length" v-loading="true"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import Header from '@/layout/header/index.vue'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalkPage } from '@/api/talk'
@@ -193,14 +244,14 @@ const getData = () => {
       })
 
       params.page++
-      params.total = data.total
+      total.value = data.total
       loading.value = false
     })
     .catch(() => {
       loading.value = false
     })
 }
-onMounted(() => {
+onBeforeMount(() => {
   getData()
   window.onscroll = function () {
     const scrollH = document.documentElement.scrollHeight // 文档的完整高度
@@ -209,7 +260,7 @@ onMounted(() => {
     if (scrollH - scrollT - screenH < 5) {
       // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
       // 执行请求
-      if (params.total > talks.length) {
+      if (total.value > talks.length) {
         getData()
       }
     }

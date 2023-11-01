@@ -39,8 +39,8 @@ export default {
     },
     record: {
       title: "网站数据",
-      runtime: "网站运行时间",
-      pageView: "网站访问量",
+      runtime: "运行时间",
+      pageView: "访问量",
       days: "天 ",
       hours: "小时 ",
       minutes: "分钟 ",

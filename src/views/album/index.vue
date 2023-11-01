@@ -65,12 +65,12 @@ const getData = () => {
   loading.value = true;
   getAlbumPage(params)
     .then((data: any) => {
-      params.total = data.total;
+      total.value = data.total;
       data.list.forEach((e: any) => {
         albums.push(e);
       });
       params.page++;
-      if (params.total == 0) {
+      if (total.value == 0) {
         empty.value = true;
       } else {
         empty.value = false;
@@ -91,7 +91,7 @@ onMounted(() => {
     if (scrollH - scrollT - screenH < 5) {
       // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
       // 执行请求
-      if (params.total > albums.length) {
+      if (total.value > albums.length) {
         getData();
       }
     }
@@ -120,7 +120,7 @@ onMounted(() => {
         border-radius: 1.5rem;
         overflow: hidden;
         .img {
-          height: 18rem;
+          height: 20rem;
           background-size: cover;
           background-position: center;
         }

@@ -4,6 +4,8 @@
     <Menu></Menu>
     <Mainer></Mainer>
     <Footer></Footer>
+    <FullScreenLoading />
+    <!-- <FullScreenLoading2 /> -->
     <Login />
     <Signup />
     <ChangePassword />
@@ -14,6 +16,8 @@
 import Mainer from './mainer/index.vue'
 import Footer from './footer/index.vue'
 import Menu from './menu/index.vue'
+// import FullScreenLoading2 from '@/components/loading/index.vue'
+import FullScreenLoading from '@/components/loading/animation/index.vue'
 import Login from '@/components/login/index.vue'
 import Signup from '@/components/signup/index.vue'
 import ChangePassword from '@/components/changePassword/index.vue'

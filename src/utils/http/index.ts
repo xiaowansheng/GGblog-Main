@@ -14,6 +14,8 @@ import {t} from "@/plugins/i18s"
 // 消息提示
 import { ElMessage, ElMessageBox } from 'element-plus'
 // import type { type } from 'os'
+import NProgress from '../progress'
+
 import type { Result } from './type'
 // TODO 获取不到环境变量
 // const baseURL = import.meta.env.VITE_BASE_API
@@ -70,7 +72,7 @@ class CommonHttp {
     CommonHttp.axiosInstance.interceptors.request.use(
       async (config: AxiosRequestConfig): Promise<any> => {
         // 开启进度条动画
-        // NProgress.start();
+        NProgress.start();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         // if (typeof config.beforeRequestCallback === "function") {
         //   config.beforeRequestCallback(config);
@@ -136,7 +138,7 @@ class CommonHttp {
       (response: AxiosResponse) => {
         const $config = response.config
         // 关闭进度条动画
-        // NProgress.done();
+        NProgress.done();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         // if (typeof $config.beforeResponseCallback === "function") {
         //   $config.beforeResponseCallback(response);
@@ -155,7 +157,7 @@ class CommonHttp {
         } else if (code && message) {
           ElMessage.error(message)
           if (code == 40011) {
-            console.log(1)
+            // console.log(1)
             ElMessage.warning(t('login.loginInvalid'))
               // 重新登录
               useUserStoreHook().loginAgain()

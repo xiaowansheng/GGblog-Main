@@ -306,7 +306,7 @@ onMounted(() => {
   position: fixed;
   width: 100%;
   overflow: hidden;
-  z-index: 999;
+  z-index: 99;
 
   .white {
     color: white;

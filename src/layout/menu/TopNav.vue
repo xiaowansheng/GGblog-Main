@@ -223,7 +223,7 @@ onBeforeMount(() => {
   transition-duration: 0.2s;
   transition-property: all;
   transition-timing-function: linear;
-  z-index: 999;
+  z-index: 99;
   // border-color: rgba(238, 245, 245, 0.4);
 }
 

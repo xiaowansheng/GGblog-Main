@@ -1,14 +1,12 @@
 <template>
   <div class="record">
-    <div class="title">
-      <span class="iconfont icon-zixun1"></span><span>{{ $t('record.title') }}</span>
-    </div>
+    <div class="title"><span class="iconfont icon-zixun1"></span>{{ $t('record.title') }}</div>
     <div class="content">
       <!-- <div>{{ createTime }}</div> -->
       <table border="0">
         <tr>
           <td class="runtime">
-            <label>{{ $t('record.runtime') }}:</label>
+            <label>{{ $t('record.runtime') }} : </label>
           </td>
           <td>
             <span>{{ createTime }}</span>
@@ -20,7 +18,7 @@
           <td><span>987654</span></td> -->
 
           <td>
-            <label>{{ $t('record.pageView') }}:</label>
+            <label>{{ $t('record.pageView') }} : </label>
           </td>
           <td>
             {{ website.pageView }}

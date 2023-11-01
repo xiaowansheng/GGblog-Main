@@ -66,7 +66,7 @@
 import { computed, ref, toRefs } from 'vue'
 
 // import Vditor from 'vditor'
-import { t } from '@/plugins/i18s'
+// import { t } from '@/plugins/i18s'
 import { mdConvertToHtml } from '@/utils/markdown';
 defineOptions({
   name: 'BriefArticle'
@@ -192,11 +192,6 @@ str.value=domElement.body.innerText
         // border-radius: 1.5rem;
         border-top-left-radius: 1.5rem;
         border-bottom-left-radius: 1.5rem;
-        .el-image__wrapper {
-        }
-        img {
-          // width: 19.2 * 1.8rem;
-        }
       }
     }
 
@@ -210,8 +205,6 @@ str.value=domElement.body.innerText
         padding: 1rem 1rem;
         font-size: 1.8rem;
         // text-align: center;
-      }
-      .other {
       }
       .introduction {
         margin-top: 0.5rem;

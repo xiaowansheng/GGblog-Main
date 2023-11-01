@@ -31,8 +31,44 @@
               <div class="talk">
               </div> -->
             </div>
-            <div class="article" v-for="article in list" :key="article.id">
-              <BriefArticle :article="article" />
+            <div class="aticles">
+              
+            <el-skeleton :count="10" :loading="loading" :throttle="200" animated>
+              <template #template>
+                <div class="skeleton-item">
+                  <div class="cover">
+                    <el-skeleton-item class="image" variant="image" style="height: 100%" />
+                  </div>
+                  <div class="content">
+                    <el-skeleton-item class="title" variant="h2" />
+                    <div class="info">
+                      <div>
+                        <el-skeleton-item class="date" variant="p" />
+                      </div>
+                      <el-skeleton-item class="tag" variant="tag" />
+                      <el-skeleton-item class="tag" variant="tag" />
+                      <el-skeleton-item class="tag" variant="tag" />
+                    </div>
+                    <div class="description">
+                      <!-- <el-skeleton-item variant="p" style="width: 50%" /> -->
+                      <div style="align-items: center; justify-items: space-between">
+                        <el-skeleton-item class="text" variant="text" />
+                        <el-skeleton-item class="text" variant="text" />
+                        <el-skeleton-item class="text" variant="text" />
+                        <!-- <el-skeleton-item class="text" variant="text" /> -->
+                        <!-- <el-skeleton-item class="text" variant="text" />
+                        <el-skeleton-item class="text" variant="text" /> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template #default>
+                <div class="article" v-for="article in list" :key="article.id">
+                  <BriefArticle :article="article" />
+                </div>
+              </template>
+            </el-skeleton>
             </div>
             <!-- 
             <div
@@ -40,7 +76,7 @@
               v-show="params.total != 0 && params.total > list.length"
               v-loading="true"
             ></div> -->
-            <div class="article" v-show="loading" v-loading="loading"></div>
+            <!-- <div class="article" v-show="loading" v-loading="loading"></div> -->
           </div>
           <div class="empty" v-if="!loading && list.length == 0">
             <el-empty description="Empty~" />
@@ -132,6 +168,62 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$cover-height: 10.8 * 1.8rem;
+$cover-height2: 10.8 * 1.3rem;
+.skeleton-item {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  margin-bottom: 15px;
+  background-color: rgb(231, 234, 237);
+  .cover {
+    .image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .content {
+    width: 100%;
+    padding: 1.8rem;
+    .title {
+      width: 100%;
+      height: 4rem;
+    }
+    .info {
+      .date {
+        width: 13rem;
+      }
+      .tag {
+        width: 5rem;
+        margin-right: 1rem;
+      }
+    }
+    .description {
+      .text {
+        width: 100%;
+        height: 2rem;
+      }
+    }
+  }
+}
+
+  @media screen and (min-width: 768px) {
+    .skeleton-item {
+      display: flex;
+      height: $cover-height;
+      .cover {
+        width: 70%;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .skeleton-item {
+      .cover {
+        height: $cover-height2;
+        width: 100%;
+      }
+    }
+  }
+
 .header {
   position: relative;
 }
@@ -152,11 +244,6 @@ onMounted(() => {
   //     0 2px 2px 2px rgba(149, 226, 228, 0.5);
   // }
 }
-// .float {
-//   position: fixed !important;
-//   width: inherit;
-//   top: 2rem;
-// }
 @media screen and (max-width: 768px) {
   .home {
     .content {
