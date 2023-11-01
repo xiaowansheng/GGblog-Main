@@ -17,13 +17,12 @@ const computeScrollHeight = () => {
 onMounted(() => {
   // 添加滚动监听器
   document.addEventListener('scroll', function (e) {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
     computeScrollHeight()
   })
 })
 onUnmounted(() => {
   // 去除滚动监听器
-  document.removeEventListener("scroll",()=>{})
+  document.removeEventListener('scroll', () => {})
 })
 </script>
 
@@ -47,6 +46,8 @@ onUnmounted(() => {
   position: absolute;
   left: 0;
   height: 100%;
+  // border-radius:1.5rem;
+  
   background-color: #75f1d2;
 }
 </style>

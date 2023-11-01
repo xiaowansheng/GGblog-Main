@@ -1,9 +1,9 @@
 /* 整个滚动条背景 */
 ::-webkit-scrollbar {
   /* 对垂直滚动条有效 */
-  width: 13px;
+  width: 12px;
   /* 对垂直滚动条有效 */
-  height: 15px;
+  height: 12px;
   background-color: #f5f5f5;
 }
 body::-webkit-scrollbar {
@@ -17,22 +17,22 @@ body::-webkit-scrollbar {
 
 /* 滚动条上的按钮 (上下箭头). */
 ::-webkit-scrollbar-button {
-  /* width: 20px;
-  background-color: rgb(246, 250, 251);
-  opacity: 0.2; */
+  // width: 20px;
+  // background-color: rgb(246, 250, 251);
+  // opacity: 0.2; 
 }
 ::-webkit-scrollbar-thumb {
   width: 10px;
   /* 上下两头给个圆角 */
   background-color: #a0ecf7;
-  border-radius: 10px;
+  border-radius: 6px;
   /* 还可以给它加个阴影 */
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 /* 滚动条轨道 */
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  // border-radius: 10px;
   background-color: #d2edf1;
 }
 /* 当同时有垂直滚动条和水平滚动条时交汇的部分. */
@@ -49,6 +49,7 @@ body::-webkit-scrollbar {
 /* TODO 莫名其妙解决开启drawer，body可以滑动问题 */
 html,
 body {
+  padding: 0;
   height: 100%;
   font-size: 12px;
   /* 解决 开启drawer，body可以滑动问题*/
