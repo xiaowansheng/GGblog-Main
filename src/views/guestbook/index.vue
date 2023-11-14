@@ -127,13 +127,13 @@ const getData = () => {
     data.list.forEach((e: any) => {
       if (e.type == 'user') {
         if (!e.userAvatar) {
-          e.userAvatar = avatar.User
+          e.userAvatar = avatar.value.User
         }
       } else if (e.type == 'visitor') {
-        e.userAvatar = avatar.User
+        e.userAvatar = avatar.value.User
         e.userNickname = e.nickname
       } else if (e.type == 'anonymous') {
-        e.userAvatar = avatar.Anonymous
+        e.userAvatar = avatar.value.Anonymous
         e.userNickname = ''
       }
       leaveWords.push(e)
@@ -162,7 +162,7 @@ const submit = () => {
     // refreshDanmus()
   })
 }
-let timer = null
+let timer:number|null = null
 const startTimer = () => {
   timer = setTimeout(() => {
     getData()

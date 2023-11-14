@@ -9,7 +9,7 @@ import Axios from 'axios'
 import { stringify } from 'qs'
 // import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from '@/store/modules/user'
-import {t} from "@/plugins/i18s"
+import { t } from '@/plugins/i18s'
 // import { baseURL } from "../utils";
 // 消息提示
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -17,11 +17,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import NProgress from '../progress'
 
 import type { Result } from './type'
-// TODO 获取不到环境变量
-// const baseURL = import.meta.env.VITE_BASE_API
-const baseURL = 'http://localhost:8080'
-console.log("url",import.meta.env, import.meta.env.VITE_BASE_API)
-
+//  获取环境变量
+const baseURL = import.meta.env.VITE_BASE_API
+const symbol = 'Authorization'
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
   // 请求基路径
@@ -61,7 +59,7 @@ class CommonHttp {
   private static retryOriginalRequest(config: AxiosRequestConfig): Promise<any> {
     return new Promise((resolve) => {
       CommonHttp.requests.push((token: string) => {
-        config.headers!['Authorization'] = token
+        config.headers![symbol] = token
         resolve(config)
       })
     })
@@ -72,7 +70,7 @@ class CommonHttp {
     CommonHttp.axiosInstance.interceptors.request.use(
       async (config: AxiosRequestConfig): Promise<any> => {
         // 开启进度条动画
-        NProgress.start();
+        NProgress.start()
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         // if (typeof config.beforeRequestCallback === "function") {
         //   config.beforeRequestCallback(config);
@@ -98,16 +96,16 @@ class CommonHttp {
                 if (expired) {
                   if (!CommonHttp.isRefreshing) {
                     CommonHttp.isRefreshing = true
-                    console.log('token过期，暂存待执行的请求，刷新token')
+                    console.info('token过期，暂存待执行的请求，刷新token')
 
                     // token过期刷新
                     useUserStoreHook()
                       .handRefreshToken({ refreshToken: data.refreshToken })
                       .then((res) => {
-                        console.log('获取了新token')
+                        console.info('获取了新token')
 
                         const token = res.accessToken
-                        config.headers!['Authorization'] = token
+                        config.headers![symbol] = token
                         CommonHttp.requests.forEach((cb) => cb(token))
                         CommonHttp.requests = []
                       })
@@ -117,7 +115,7 @@ class CommonHttp {
                   }
                   resolve(CommonHttp.retryOriginalRequest(config))
                 } else {
-                  config.headers!['Authorization'] = data.accessToken
+                  config.headers![symbol] = data.accessToken
                   resolve(config)
                 }
               } else {
@@ -138,7 +136,7 @@ class CommonHttp {
       (response: AxiosResponse) => {
         const $config = response.config
         // 关闭进度条动画
-        NProgress.done();
+        NProgress.done()
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         // if (typeof $config.beforeResponseCallback === "function") {
         //   $config.beforeResponseCallback(response);
@@ -153,14 +151,29 @@ class CommonHttp {
         console.log('api:[', response.config.url, '],data:', response.data)
 
         if (code && code == 200) {
+          const whiteList = ['/user/auth/signup', '/user/auth/login']
+          // 登录和注册不显示公共的提示信息
+          if (!whiteList.some((v) => v == response.config.url)) {
+            let method = response.config.method
+            // 显示操作提示
+            if (method == 'post') {
+              ElMessage.success(t('form.post'))
+            } else if (method == 'put') {
+              ElMessage.success(t('form.put'))
+            } else if (method == 'delete') {
+              ElMessage.success(t('form.delete'))
+            }
+          }
+          // console.log('request:', response)
+
           return data
         } else if (code && message) {
           ElMessage.error(message)
           if (code == 40011) {
             // console.log(1)
             ElMessage.warning(t('login.loginInvalid'))
-              // 重新登录
-              useUserStoreHook().loginAgain()
+            // 重新登录
+            useUserStoreHook().loginAgain()
             return
           }
           throw new Error('Error')

@@ -97,7 +97,7 @@ export const useUserStore = defineStore({
       return new Promise<any>((resolve, reject) => {
         login(loginForm)
           .then((data: any) => {
-            console.log('logindfata', data)
+            // console.log('logindfata', data)
             this.setData(data)
             resolve(data)
           })

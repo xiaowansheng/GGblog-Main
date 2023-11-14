@@ -91,6 +91,7 @@
       <!-- <div id="temp"></div> -->
       <el-main class="content">
         <div ref="mdRef" id="markdown" class="md markdown-body cherry-markdown" v-html="html"></div>
+        <!-- 阅读进度条 -->
         <ReadProgress/>
         <!-- <div ref="mdRef" id="markdown" class="md markdown-body"></div> -->
         <div class="article-tag">

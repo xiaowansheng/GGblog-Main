@@ -162,7 +162,6 @@ const submit = () => {
     .loginByUsername(user)
     .then(() => {
       // loginFormRef.value.resetFields();
-      console.log(111)
 
       ElMessage.success(t('form.login'))
       modules.login = false
