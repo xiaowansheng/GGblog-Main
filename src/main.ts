@@ -3,6 +3,7 @@ import 'cherry-markdown/dist/cherry-markdown.css'
 // 引入图标字体
 import '@/assets/font/font_blog/iconfont.css'
 // import "vditor/dist/index.css";
+import '@/assets/css/global.scss'; // 引入全局样式文件
 import '@/assets/main.scss'
 
 import '@/assets/css/markdown.scss'

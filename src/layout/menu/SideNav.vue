@@ -139,8 +139,8 @@
           </div>
           <div id="pageView">
             <label>
-              {{ $t('record.pageView') }}： <span>{{ website.pageView }}</span></label
-            >
+              {{ $t('record.pageView') }}： </label
+            ><span>{{ website.pageView }}</span>
           </div>
         </div>
       </template>
@@ -150,17 +150,9 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, onMounted, watch, ref } from 'vue'
-// import { getDefaultLang } from "@/locales/langUtils";
 
 import { convertIntervalTime } from '@/utils/timeUtils'
 import { useRouter } from 'vue-router'
-// import {
-//   Document,
-//   Menu as IconMenu,
-//   Location,
-//   Setting,
-// } from "@element-plus/icons-vue";
-
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
@@ -186,16 +178,8 @@ const numberInfo = computed(() => {
   return useConfigStoreHook().statistic
 })
 const router = useRouter()
-// const { locale } = useI18n();
 const leftDrawer = ref(false)
 const topDrawer = ref(true)
-const handleScroll = function () {}
-// const handleOpen = (key: string, keyPath: string[]) => {
-//   // console.log(key, keyPath);
-// };
-// const handleClose = (key: string, keyPath: string[]) => {
-//   // console.log(key, keyPath);
-// };
 const colorStyle = ref('white')
 const topNavShow = ref(true)
 let timer = null
@@ -223,9 +207,7 @@ const formatTime = (value: any) => {
     }, 1000)
   }
 }
-// setLanguage(language: any) {
-//         locale.value = language;
-// }
+
 
 const backColor = ref('')
 // 声明一个数组存放比对数据
@@ -316,9 +298,6 @@ onMounted(() => {
 }
 .el-menu {
   border: 0;
-  svg {
-    // margin-right: 1rem;
-  }
 }
 
 .el-drawer {
@@ -394,43 +373,10 @@ onMounted(() => {
       }
     }
   }
-  .set {
-    margin-top: 1rem;
-    // padding: 0.5rem;
-    border-radius: 15px;
-    // border: 1px rgb(156, 210, 235) solid;
-    .title {
-      // text-align: center;
-      padding-left: 2rem;
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
-    .content {
-      margin-top: 0.5rem;
-      // padding-left: 1.5rem;
-      // background-color: red;
-      ul {
-        list-style: none;
-
-        // margin: 0;
-        // padding: 0;
-        li {
-          // text-align: center;
-          padding-left: 2.5rem;
-          // padding: 0.2rem 0;
-          .iconfont {
-            font-size: 3.5rem;
-          }
-        }
-      }
-    }
-  }
-  #runtime,
+  #runTime,
   #pageView {
     label {
-    }
-    // text-align: left;
-    span {
+      font-weight: bold;
     }
   }
   #pageView {
@@ -462,36 +408,38 @@ onMounted(() => {
   #sideNav {
     .el-menu {
       width: 100% !important;
-    }
-    .el-sub-menu__title {
-      font-size: 1.35rem;
-      // 解决菜单背景透明度不一样问题
-      background-color: rgba(255, 255, 255, 0) !important;
-    }
-    li {
-      font-size: 1.35rem;
-    }
-    li:active {
-      --el-menu-hover-bg-color: rgba(255, 255, 255, 0);
-    }
-    li:hover {
-      --el-menu-hover-bg-color: rgba(255, 255, 255, 0);
-      color: rgb(133, 198, 242) !important;
-    }
-    li:focus {
-      --el-menu-hover-bg-color: rgba(255, 255, 255, 0);
-      // color: white !important;
+
+      .el-sub-menu__title {
+        font-size: 1.35rem;
+        background-color: rgba(255, 255, 255, 0) !important;
+      }
+
+      li {
+        font-size: 1.35rem;
+
+        &:active,
+        &:hover,
+        &:focus {
+          --el-menu-hover-bg-color: rgba(255, 255, 255, 0);
+        }
+
+        &:hover {
+          color: rgb(133, 198, 242) !important;
+        }
+
+        &:focus {
+          color: rgba(0, 0, 0, 1) !important;
+          // color: white !important;
+        }
+
+        .iconfont {
+          margin-right: 1rem;
+        }
+      }
     }
   }
 }
-.mobile {
-  #sideNav {
-    li:focus {
-      color: rgba(0, 0, 0, 1) !important;
-      // color: white !important;
-    }
-  }
-}
+
 .dark {
   .mobile {
     #sideNav {
@@ -502,6 +450,7 @@ onMounted(() => {
     }
   }
 }
+
 @media screen and (max-width: 768px) {
   .nav {
     #sideNav {
@@ -509,6 +458,7 @@ onMounted(() => {
     }
   }
 }
+
 @media screen and (min-width: 768px) and (max-width: 1000px) {
   .nav {
     #sideNav {
@@ -516,6 +466,7 @@ onMounted(() => {
     }
   }
 }
+
 /* 去除滚动条 */
 .el-drawer__body::-webkit-scrollbar {
   /* 滚动条的宽度 */

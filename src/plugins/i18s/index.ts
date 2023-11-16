@@ -23,6 +23,8 @@ const i18n = createI18n({
   messages, 
 })
 
+
+
 export default i18n;
 
 export function useI18n(app:App){
@@ -33,3 +35,20 @@ export function t(key: string) {
   return i18n.global.t(key)
 }
 
+export function toggleLanguage() :string{
+  if ( i18n.global.locale == 'zh') {
+     i18n.global.locale = 'en'
+  } else {
+     i18n.global.locale = 'zh'
+  }
+  return i18n.global.locale
+}
+
+
+export function setLanguage(language:string) :string{
+  if (language == 'zh') {
+    i18n.global.locale = 'zh'
+  } else {
+    i18n.global.locale = 'en'
+  }
+}

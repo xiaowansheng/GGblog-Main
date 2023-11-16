@@ -238,7 +238,7 @@ onBeforeMount(() => {
         justify-content: center;
         // text-align: center;
         a {
-          padding: 0.3rem;
+          padding: 0.3rem 0.8rem;
         }
       }
       .profile {

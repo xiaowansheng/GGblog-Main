@@ -1,26 +1,24 @@
 <template>
   <div id="settings">
-    <div class="set skin">
-      <div link @click="toggleDark">
-        <span v-show="isDaylight">
-          <!-- <span v-show="isDaylight">
+    <div class="set language" @click="onClickToggleLanguage">
+      <span v-show="isChinese"><span class="iconfont icon-zhongyingwen2zhongwen"></span> </span
+      ><span v-show="!isChinese"><span class="iconfont icon-zhongyingwen"></span></span>
+    </div>
+    <div class="set skin" @click="toggleDark">
+      <span v-show="isDaylight">
+        <!-- <span v-show="isDaylight">
           <svg-icon name="sun" iconStyle="width:50px;height:50px"></svg-icon> </span
         ><span v-show="!isDaylight">
           <svg-icon name="night" iconStyle="width:50px;height:50px"></svg-icon>
         </span> -->
-          <span class="iconfont icon-tianqitaiyangqichuang daylight"></span> </span
-        ><span v-show="!isDaylight"><span class="iconfont icon-Star-Night night"></span></span>
-      </div>
+        <span class="iconfont icon-tianqitaiyangqichuang daylight"></span> </span
+      ><span v-show="!isDaylight"><span class="iconfont icon-Star-Night night"></span></span>
     </div>
 
     <div class="set" v-show="toUp">
       <div @click="handleScroll">
         <span class="iconfont icon-24gl-paperPlane arrow"></span>
       </div>
-
-      <!-- <el-backtop right="50" bottom="50">
-        <div>↑</div>
-      </el-backtop> -->
     </div>
   </div>
 </template>
@@ -29,6 +27,22 @@
 import { useDark, useToggle } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 import { useConfigStoreHook } from '@/store/modules/config'
+
+import { getDefaultLang } from '@/utils/languageUtils'
+import { toggleLanguage, setLanguage } from '@/plugins/i18s'
+// 设置启动时默认语言(会自动检查，不用主动写)
+// setLanguage(getDefaultLang())
+const isChinese = ref(true)
+const onClickToggleLanguage = () => {
+  console.log('切换语言~')
+  if (toggleLanguage() == 'zh') {
+  console.log('中文~')
+    isChinese.value = true
+  } else {
+  console.log('英文~')
+    isChinese.value = false
+  }
+}
 const modules = computed(() => {
   return useConfigStoreHook().module
 })
@@ -82,6 +96,7 @@ onMounted(() => {
   // padding: 0.2rem;
   color: rgb(47, 47, 134);
   text-align: center;
+  z-index: 100;
   .set {
     padding: 0;
     margin: 0;

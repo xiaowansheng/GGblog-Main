@@ -43,7 +43,7 @@
       <div class="catalog-mobile">
         <div class="btn">
           <el-button link @click="showCatalog = true">
-            <span class="iconfont icon-shejimulu"></span
+            <span class="iconfont icon-fenlei"></span
           ></el-button>
         </div>
         <el-drawer id="catalogDialog" v-model="showCatalog" direction="ltr">
@@ -92,7 +92,7 @@
       <el-main class="content">
         <div ref="mdRef" id="markdown" class="md markdown-body cherry-markdown" v-html="html"></div>
         <!-- 阅读进度条 -->
-        <ReadProgress/>
+        <ReadProgress />
         <!-- <div ref="mdRef" id="markdown" class="md markdown-body"></div> -->
         <div class="article-tag">
           <div class="category">
@@ -163,7 +163,7 @@
 // import 'github-markdown-css'
 import Header from '@/layout/header/index.vue'
 import Comment from '@/components/comment/index.vue'
-import ReadProgress from "@/components/progress/index.vue"
+import ReadProgress from '@/components/progress/index.vue'
 import { TopicType } from '@/enums/topic'
 import { getArticle } from '@/api/article'
 import { getQueryString } from '@/utils/stringUtils'
@@ -542,13 +542,15 @@ onMounted(() => {
       }
     }
     .catalog-mobile {
-      .el-tree {
-      }
       .btn {
+        .iconfont {
+          font-size: 2rem;
+          // font-weight: bold;
+        }
         .el-button {
-          background-color: rgba(153, 238, 238, 0.8);
+          background-color: rgba(136, 232, 232, 0.8);
           position: fixed;
-          z-index: 100;
+          z-index: 10;
           left: 5px;
           bottom: 3rem;
           width: 4rem;
