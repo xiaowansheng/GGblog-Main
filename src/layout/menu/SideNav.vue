@@ -2,6 +2,7 @@
   <div class="nav mobile">
     <div class="top-nav" id="topNav-mobile" :class="style">
       <div id="top-btn">
+        <!-- <span class="iconfont icon-liebiao"></span> -->
         <svg-icon
           name="menu"
           iconStyle="width:3.5rem;height:3.5rem"
@@ -11,11 +12,7 @@
         <!-- <span v-if="modules.Search && false">搜索<span class="iconfont icon-sousuo"></span></span> -->
       </div>
       <div class="logo" @click="toPage('/')">
-        <el-image
-          style="width: 185px"
-          src="https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/temp/wbxnl.png"
-          fit="scale-down"
-        />
+        <el-image style="width: 185px" src="/images/wbxnl.png" fit="scale-down" />
       </div>
     </div>
 
@@ -54,7 +51,7 @@
       </div>
       <el-menu class="el-menu" :router="true" id="sideNav" @select="leftDrawer = false">
         <el-menu-item index="/">
-          <span class="iconfont icon-home1"></span>{{ $t('menu.homepage') }}
+          <span class="iconfont icon-home"></span>{{ $t('menu.homepage') }}
         </el-menu-item>
         <el-sub-menu index="1">
           <template #title>
@@ -77,39 +74,39 @@
         </el-menu-item>
         <el-sub-menu index="2">
           <template #title>
-            <span class="iconfont icon-yule1"></span>{{ t('menu.pastime') }}
+            <span class="iconfont icon-weibiaoti1"></span>{{ t('menu.pastime') }}
           </template>
           <el-menu-item index="/album">
-            <span class="iconfont icon-tupian"></span>{{ t('menu.album') }}
+            <span class="iconfont icon-shangchuantupian"></span>{{ t('menu.album') }}
           </el-menu-item>
         </el-sub-menu>
         <el-menu-item index="/friend">
-          <span class="iconfont icon-lianjie"></span>
+          <span class="iconfont icon-pengyou"></span>
           {{ $t('menu.blogroll') }}
         </el-menu-item>
         <el-menu-item index="/guestbook">
-          <span class="iconfont icon-liuyan"></span>{{ $t('menu.guestbook') }}
+          <span class="iconfont icon-liuyanban-05"></span>{{ $t('menu.guestbook') }}
         </el-menu-item>
         <el-menu-item index="/about">
           <span class="iconfont icon-guanyu"></span>{{ $t('menu.about') }}
         </el-menu-item>
         <el-menu-item v-if="modules.Login && !user.username" index="" @click="login">
-          <span class="iconfont icon-denglu"></span>{{ $t('menu.login') }}
+          <span class="iconfont icon-gerenzhongxin"></span>{{ $t('menu.login') }}
         </el-menu-item>
 
-        <el-sub-menu index=""  v-if="modules.Login && user.username">
+        <el-sub-menu index="" v-if="modules.Login && user.username">
           <template #title>
             <span class="iconfont icon-gerenzhongxin"></span>
             {{ $t('menu.center') }}
           </template>
           <el-menu-item index="/user/information">
-            <span class="iconfont icon-gerenxinxi-"></span>{{ $t('menu.information') }}
+            <span class="iconfont icon-gerenxinxi1"></span>{{ $t('menu.information') }}
           </el-menu-item>
           <el-menu-item index="" @click="changePassword">
-            <span class="iconfont icon-mima"></span>{{ $t('menu.changePassword') }}
+            <span class="iconfont icon-xiugaimima"></span>{{ $t('menu.changePassword') }}
           </el-menu-item>
           <el-menu-item index="" @click="logout">
-            <span class="iconfont icon-zhuxiao1"></span>{{ $t('menu.logout') }}
+            <span class="iconfont icon-zhuxiao"></span>{{ $t('menu.logout') }}
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
@@ -215,7 +212,7 @@ const timeWatch = watch(website.value, () => {
   formatTime(website.value)
   timeWatch()
 })
-const formatTime = (value:any) => {
+const formatTime = (value: any) => {
   if (value.createTime) {
     let dateStr = value.createTime
     dateStr = dateStr.replace(/-/g, '/')

@@ -6,8 +6,8 @@ export function getSimpleStatistic() {
 }
 
 // 分页查询文章信息
-export function getArticlePage(params?:any) {
-  return http.get('/article/user/page',params)
+export function getArticlePage(params?: any) {
+  return http.get('/article/user/page', params)
 }
 
 // 查询文章归档信息

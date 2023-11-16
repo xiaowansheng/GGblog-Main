@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO 待做 -->
   <div id="footer">
     <p><span>©</span>{{dateStr}} By {{ author.nickname }}</p>
     <p>
@@ -12,8 +11,6 @@
 
 <script lang='ts' setup>
 import { computed, ref, watch } from "vue";
-// import { useStore } from "vuex";
-// const store = useStore();
 import { useConfigStoreHook } from "@/store/modules/config"
 defineOptions({
   name: 'Footer'
@@ -25,9 +22,9 @@ const author = computed(() => {
   return useConfigStoreHook().author
 })
 const dateStr=ref("")
-watch(website,()=>{
+watch(website.value,()=>{
   if(website.value.createTime){
-  let timeStr=website.value.createTime
+    let timeStr = website.value.createTime
   let str=timeStr.replace(/-/g,"/")
   let date:Date=new Date(str)
     let start=date.getFullYear()

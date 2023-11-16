@@ -9,10 +9,10 @@
       <div class="talk-content">
         <div class="title">
           <div class="avatar">
-            <el-avatar :size="65" :src="authorInfo.Avatar" />
+            <el-avatar :size="65" :src="authorInfo.avatar" />
           </div>
           <div class="info">
-            <div class="name">{{ authorInfo.Nickname }}</div>
+            <div class="name">{{ authorInfo.nickname }}</div>
             <div class="date">{{ talk.createTime }}</div>
           </div>
         </div>
@@ -27,7 +27,7 @@
               :initial-index="index"
             >
               <template #error>
-                <div class="image-slot" style="font-size: 1.6rem">Image Loading Error</div>
+                <div class="image-slot" style="font-size: 1.6rem">Loading Error</div>
               </template>
             </el-image>
             <!-- <el-image-viewer @close="closeImgViewer" :url-list="imageList" v-if="showImageViewer"/> -->

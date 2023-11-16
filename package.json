@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --mode development",
+    "dev": "vite --mode development --host",
     "build": "run-p type-check build-only --mode production",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -13,11 +13,12 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vueuse/core": "^10.6.1",
     "add": "^2.0.6",
     "axios": "^1.5.0",
     "cherry-markdown": "^0.8.26",
     "echarts": "4.6.0",
-    "element-plus": "^2.3.14",
+    "element-plus": "^2.4.2",
     "fast-glob": "^3.3.1",
     "mermaid": "9.4.3",
     "nprogress": "^0.2.0",

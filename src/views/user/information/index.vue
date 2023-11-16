@@ -60,10 +60,10 @@
 
 <script lang="ts" setup>
 import Header from '@/layout/header/index.vue'
-import { ElMessage, FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import AvatarUpload from "@/components/upload/singlePicture/index.vue";
-import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
@@ -205,7 +205,6 @@ const submit = () => {
         user.setNickname(form.nickname)
         user.setAvatar(form.avatar)
         user.storageInfo()
-        ElMessage.success('修改成功~')
         disable.value = true
       })
     })

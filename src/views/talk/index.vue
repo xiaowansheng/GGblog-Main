@@ -59,85 +59,95 @@
             </el-card>
           </div>
         </template>
-        <template #default> </template>
-      </el-skeleton>
-      <el-card
-        class="box-card"
-        @click="toPage('/talk/' + talk.id)"
-        v-for="talk in talks"
-        :key="talk.id"
-      >
-        <template #header>
-          <div class="card-header">
-            <span v-if="talk.top" class="top"
-              ><el-tag>{{ $t('talk.top') }}</el-tag></span
-            >
-            <div class="title">
-              <div class="avatar">
-                <el-avatar :size="65" :src="author.avatar" />
+        <template #default>
+          <el-card
+            class="box-card"
+            @click="toPage('/talk/' + talk.id)"
+            v-for="talk in talks"
+            :key="talk.id"
+          >
+            <template #header>
+              <div class="card-header">
+                <span v-if="talk.top" class="top"
+                  ><el-tag>{{ $t('talk.top') }}</el-tag></span>
+                <div class="title">
+                  <div class="avatar">
+                    <el-avatar :size="65" :src="author.avatar" />
+                  </div>
+                  <div class="info">
+                    <div class="name">{{ author.nickname }}</div>
+                    <div class="date">{{ talk.createTime }}</div>
+                  </div>
+                </div>
+                <!-- <el-button class="button" text>button</el-button> -->
               </div>
-              <div class="info">
-                <div class="name">{{ author.nickname }}</div>
-                <div class="date">{{ talk.createTime }}</div>
+            </template>
+            <div class="text" v-html="talk.content"></div>
+            <div class="imgs" @click.stop :class="getClassName(talk.images)" v-if="talk.images">
+              <div
+                class="img"
+                v-show="
+                  (talk.images.length < 6 && index < 3) ||
+                  talk.images.length == 4 ||
+                  (talk.images.length >= 6 && index < 6) ||
+                  (talk.images.length >= 9 && index < 9)
+                "
+                v-for="(img, index) in talk.images.slice(0, 9)"
+                :key="index"
+              >
+                <!-- TODO 还差左滑下一张，右滑上一张 -->
+                <el-image
+                  :src="img"
+                  fit="cover"
+                  :preview-src-list="talk.images ?? []"
+                  :initial-index="index"
+                >
+                  <template #error>
+                    <div class="image-slot" style="font-size: 1.6rem">Loading Error</div>
+                  </template>
+                </el-image>
+                <router-link
+                  :to="'/talk/' + talk.id"
+                  class="more"
+                  v-if="showMore(talk.images, index)"
+                >
+                  <span class="sign">{{ '+' }}</span>
+                  <span class="number">{{ getRemainNumber(talk.images) }}</span>
+                </router-link>
               </div>
             </div>
-            <!-- <el-button class="button" text>button</el-button> -->
-          </div>
-        </template>
-        <div class="text" v-html="talk.content"></div>
-        <div class="imgs" @click.stop :class="getClassName(talk.images)" v-if="talk.images">
-          <div
-            class="img"
-            v-show="
-              (talk.images.length < 6 && index < 3) ||
-              talk.images.length == 4 ||
-              (talk.images.length >= 6 && index < 6) ||
-              (talk.images.length >= 9 && index < 9)
-            "
-            v-for="(img, index) in talk.images.slice(0, 9)"
-            :key="index"
-          >
-            <!-- TODO 还差左滑下一张，右滑上一张 -->
-            <el-image
-              :src="img"
-              fit="cover"
-              :preview-src-list="talk.images ? talk.images : []"
-              :initial-index="index"
-            >
-              <template #error>
-                <div class="image-slot" style="font-size: 1.6rem">Image Loading Error</div>
-              </template>
-            </el-image>
-            <router-link :to="'/talk/' + talk.id" class="more" v-if="showMore(talk.images, index)">
-              <span class="sign">{{ '+' }}</span>
-              <span class="number">{{ getRemainNumber(talk.images) }}</span>
-            </router-link>
-          </div>
-        </div>
 
-        <div v-if="privacy.Browser || privacy.Device || privacy.Address" class="bottom">
-          <div v-if="privacy.Address" class="address">
-            <el-tag
-              ><span>{{ talk.ipSource }}</span></el-tag
-            >
-          </div>
-          <div>
-            <p v-if="privacy.Browser">{{ talk.browser }}</p>
-            <p v-if="privacy.Device">{{ talk.device }}</p>
-          </div>
-        </div>
-      </el-card>
+            <div v-if="privacy.Browser || privacy.Device || privacy.Address" class="bottom">
+              <div v-if="privacy.Address" class="address">
+                <el-tag
+                  ><span>{{ talk.ipSource }}</span></el-tag
+                >
+              </div>
+              <div>
+                <p v-if="privacy.Browser">{{ talk.browser }}</p>
+                <p v-if="privacy.Device">{{ talk.device }}</p>
+              </div>
+            </div>
+          </el-card>
+        </template>
+      </el-skeleton>
+
       <div class="empty" v-if="!loading && talks.length == 0">
         <el-empty description="Empty~" />
       </div>
-      <div class="loading" v-show="total != 0 && total > talks.length" v-loading="true"></div>
+      <div
+        class="loading"
+        ref="loadingRef"
+        v-show="total != 0 && total > talks.length"
+        v-loading="true"
+      ></div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import Header from '@/layout/header/index.vue'
-import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalkPage } from '@/api/talk'
@@ -253,17 +263,33 @@ const getData = () => {
 }
 onBeforeMount(() => {
   getData()
-  window.onscroll = function () {
-    const scrollH = document.documentElement.scrollHeight // 文档的完整高度
-    const scrollT = document.documentElement.scrollTop || document.body.scrollTop // 当前滚动条的垂直偏移
-    const screenH = window.screen.height // 屏幕可视高度
-    if (scrollH - scrollT - screenH < 5) {
-      // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
-      // 执行请求
-      if (total.value > talks.length) {
+})
+let myObserver: IntersectionObserver | null = null
+const loadingRef = ref()
+onMounted(() => {
+  //回调函数
+  const callback = (entries: any, observer: any) => {
+    entries.forEach((entry: any) => {
+      // 当目标元素进入视窗时
+      if (entry.isIntersecting) {
+        console.log('目标元素进入视窗！')
         getData()
+      } else {
+        // 当目标元素离开视窗时
+        console.log('目标元素离开视窗！')
       }
-    }
+    })
+  }
+  //配置对象
+  const options = {}
+  myObserver = new IntersectionObserver(callback, options)
+  //获取目标元素
+  //开始监听目标元素
+  myObserver.observe(loadingRef.value)
+})
+onUnmounted(() => {
+  if (myObserver) {
+    myObserver.disconnect()
   }
 })
 </script>
@@ -306,10 +332,6 @@ onBeforeMount(() => {
         // justify-content: space-between;
         align-items: center;
         // justify-content: center;
-        .avatar {
-          span {
-          }
-        }
         .info > div {
           margin: 1rem;
         }
@@ -341,13 +363,6 @@ onBeforeMount(() => {
             // text-align: center;
             align-items: center;
             justify-content: center;
-
-            .sign {
-              // font-size: 5rem;
-            }
-            .number {
-              // font-size: 5rem;
-            }
           }
         }
       }
@@ -387,18 +402,12 @@ onBeforeMount(() => {
       }
       .images-two {
         grid-template-columns: repeat(2, 1fr);
-        .img {
-        }
       }
       .images-three {
         grid-template-columns: repeat(3, 1fr);
-        .img {
-        }
       }
       .images-four {
         grid-template-columns: repeat(2, 1fr);
-        .img {
-        }
       }
       .images-nine {
         grid-template-columns: repeat(3, 1fr);
@@ -426,6 +435,7 @@ onBeforeMount(() => {
 @media screen and (max-width: 768px) {
   .talk {
     .content {
+      padding: 1rem 0.8rem;
       .imgs {
         .img {
           .more {

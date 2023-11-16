@@ -3,7 +3,7 @@
     <div class="header">
       <Cover />
     </div>
-    <div class="common-layout content" id="home-content">
+    <div class="common-layout content" ref="contentRef" id="home-content">
       <el-container>
         <el-aside class="aside">
           <div id="information" class="info">
@@ -32,43 +32,56 @@
               </div> -->
             </div>
             <div class="aticles">
-              
-            <el-skeleton :count="10" :loading="loading" :throttle="200" animated>
-              <template #template>
-                <div class="skeleton-item">
-                  <div class="cover">
-                    <el-skeleton-item class="image" variant="image" style="height: 100%" />
-                  </div>
-                  <div class="content">
-                    <el-skeleton-item class="title" variant="h2" />
-                    <div class="info">
-                      <div>
-                        <el-skeleton-item class="date" variant="p" />
-                      </div>
-                      <el-skeleton-item class="tag" variant="tag" />
-                      <el-skeleton-item class="tag" variant="tag" />
-                      <el-skeleton-item class="tag" variant="tag" />
+              <el-skeleton :count="10" :loading="loading" :throttle="200" animated>
+                <template #template>
+                  <div class="skeleton-item">
+                    <div class="cover">
+                      <el-skeleton-item class="image" variant="image" style="height: 100%" />
                     </div>
-                    <div class="description">
-                      <!-- <el-skeleton-item variant="p" style="width: 50%" /> -->
-                      <div style="align-items: center; justify-items: space-between">
-                        <el-skeleton-item class="text" variant="text" />
-                        <el-skeleton-item class="text" variant="text" />
-                        <el-skeleton-item class="text" variant="text" />
-                        <!-- <el-skeleton-item class="text" variant="text" /> -->
-                        <!-- <el-skeleton-item class="text" variant="text" />
+                    <div class="content">
+                      <el-skeleton-item class="title" variant="h3" />
+                      <div class="info">
+                        <div>
+                          <el-skeleton-item class="date" variant="p" />
+                        </div>
+                        <el-skeleton-item class="tag" variant="text" />
+                        <el-skeleton-item class="tag" variant="text" />
+                        <el-skeleton-item class="tag" variant="text" />
+                      </div>
+                      <div class="description">
+                        <!-- <el-skeleton-item variant="p" style="width: 50%" /> -->
+                        <div style="align-items: center; justify-items: space-between">
+                          <el-skeleton-item class="text" variant="text" />
+                          <el-skeleton-item class="text" variant="text" />
+                          <el-skeleton-item class="text" variant="text" />
+                          <!-- <el-skeleton-item class="text" variant="text" /> -->
+                          <!-- <el-skeleton-item class="text" variant="text" />
                         <el-skeleton-item class="text" variant="text" /> -->
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </template>
-              <template #default>
-                <div class="article" v-for="article in list" :key="article.id">
-                  <BriefArticle :article="article" />
-                </div>
-              </template>
-            </el-skeleton>
+                </template>
+                <template #default>
+                  <div class="article" v-for="article in list" :key="article.id">
+                    <BriefArticle :article="article" />
+                  </div>
+                  <div class="pagination">
+                    <el-pagination
+                      :hide-on-single-page="true"
+                      v-model:current-page="params.page"
+                      v-model:page-size="params.limit"
+                      :disabled="false"
+                      :background="true"
+                      layout="prev, pager, next, jumper,total"
+                      :total="total"
+                      :pager-count="5"
+                      @size-change="toTop"
+                      @current-change="toTop"
+                    />
+                  </div>
+                </template>
+              </el-skeleton>
             </div>
             <!-- 
             <div
@@ -91,7 +104,6 @@
 import Cover from './cover.vue'
 import Information from './information.vue'
 import BriefArticle from './briefArticle/index.vue'
-// import Share from "./share.vue";
 import Talk from './talk.vue'
 import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
 import { getArticlePage } from '@/api/article'
@@ -110,66 +122,62 @@ const params = reactive({
   limit: 10
 })
 const total = ref(0)
-const list = reactive<any>([])
+const list = ref<any>([])
 const loading = ref(false)
-const getData = () => {
-  if (loading.value) {
-    return
-  }
-  loading.value = true
-  getArticlePage(params)
-    .then((data: any) => {
-      total.value = data.total
-      data.list.forEach((e: any) => {
-        console.log(e)
-
-        list.push(e)
+const contentRef = ref()
+/**
+ * 获取某页数据，并跳转顶部
+ */
+async function toTop() {
+  // 获取数据
+  try {
+    await getData()
+    // 滚到顶部
+    if (contentRef.value) {
+      contentRef.value.scrollIntoView({ behavior: 'auto' })
+    }
+  } catch (e) {}
+}
+const getData = (): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    if (loading.value) {
+      return
+    }
+    loading.value = true
+    // 使用await调用异步函数
+    getArticlePage(params)
+      .then((data: any) => {
+        total.value = data.total
+        list.value = data.list
+        loading.value = false
+        resolve(null)
       })
-      params.page++
-      loading.value = false
-    })
-    .catch(() => {
-      loading.value = false
-    })
+      .catch(() => {
+        loading.value = false
+        reject(null)
+      })
+  })
 }
 onBeforeMount(() => {
   getData()
 })
-onMounted(() => {
-  // TODO 分页，而不是滑动刷新
-  // window.onscroll = function () {
-  //   const scrollH = document.documentElement.scrollHeight // 文档的完整高度
-  //   const scrollT = document.documentElement.scrollTop || document.body.scrollTop // 当前滚动条的垂直偏移
-  //   const screenH = window.screen.height // 屏幕可视高度
-  //   if (scrollH - scrollT - screenH < 10) {
-  //     // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
-  //     // 执行请求
-  //     if (total.value > list.length) {
-  //       getData()
-  //     }
-  //   }
-  // }
-  window.addEventListener('scroll', (event) => {
-    // console.log("scroll", event);
-    let element: HTMLElement | null = document.getElementById('information')
-    let aside: HTMLElement | null = document.getElementById('home-content')
-    let offsetTop = aside?.offsetTop
-    let winHeight =
-      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-    // console.log("scroll", element, offsetTop, winHeight);
-    if (offsetTop && winHeight > offsetTop) {
-      // console.log(1)
-      element?.classList.add('float')
-    } else {
-      element?.classList.remove('float')
-    }
-  })
-})
+onMounted(() => {})
 </script>
 
 <style lang="scss" scoped>
 $cover-height: 10.8 * 1.8rem;
 $cover-height2: 10.8 * 1.3rem;
+
+.pagination {
+  display: flex;
+  justify-content: right;
+
+  .el-pagination {
+    flex-wrap: wrap;
+    justify-content: right;
+    gap: 0.8rem;
+  }
+}
 .skeleton-item {
   border-radius: 1.5rem;
   overflow: hidden;
@@ -206,23 +214,23 @@ $cover-height2: 10.8 * 1.3rem;
   }
 }
 
-  @media screen and (min-width: 768px) {
-    .skeleton-item {
-      display: flex;
-      height: $cover-height;
-      .cover {
-        width: 70%;
-      }
+@media screen and (min-width: 768px) {
+  .skeleton-item {
+    display: flex;
+    height: $cover-height;
+    .cover {
+      width: 70%;
     }
   }
-  @media screen and (max-width: 768px) {
-    .skeleton-item {
-      .cover {
-        height: $cover-height2;
-        width: 100%;
-      }
+}
+@media screen and (max-width: 768px) {
+  .skeleton-item {
+    .cover {
+      height: $cover-height2;
+      width: 100%;
     }
   }
+}
 
 .header {
   position: relative;

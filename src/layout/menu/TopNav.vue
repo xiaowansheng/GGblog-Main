@@ -14,54 +14,58 @@
       <el-menu-item index="/">
         <el-image
           style="height: 50px"
-          :src="'https://wbxnl-blog.oss-cn-chengdu.aliyuncs.com/temp/wbxnl.png'"
+          src="/images/wbxnl.png"
           fit="scale-down"
         />
       </el-menu-item>
       <div class="flex-grow" />
       <el-menu-item index="/">
-        <span class="iconfont icon-home1"></span>{{ $t('menu.homepage') }}
+        <span class="iconfont icon-home"></span>
+        <span>{{ $t('menu.homepage') }}</span>
       </el-menu-item>
       <el-sub-menu index="1">
         <template #title>
           <span class="iconfont icon-bianjiwenzhang_huaban"></span>
-          {{ $t('menu.blog') }}
+          <span>{{ $t('menu.blog') }}</span>
         </template>
         <el-menu-item index="/article/archive">
           <span class="iconfont icon-guidang"></span>
-          {{ $t('menu.archive') }}
+          <span>{{ $t('menu.archive') }}</span>
         </el-menu-item>
         <el-menu-item index="/article/category">
-          <span class="iconfont icon-fenlei"></span>{{ $t('menu.category') }}
+          <span class="iconfont icon-fenlei"></span>
+          <span>{{ $t('menu.category') }}</span>
         </el-menu-item>
         <el-menu-item index="/article/tag">
-          <span class="iconfont icon-biaoqian"></span>{{ $t('menu.tag') }}
+          <span class="iconfont icon-biaoqian"></span>
+          <span>{{ $t('menu.tag') }}</span>
         </el-menu-item>
       </el-sub-menu>
       <el-menu-item index="/talk">
-        <span class="iconfont icon-41shuoshuo"></span>{{ $t('menu.talk') }}
+        <span class="iconfont icon-41shuoshuo"></span>
+        <span>{{ $t('menu.talk') }}</span>
       </el-menu-item>
       <el-sub-menu index="2">
         <template #title>
-          <span class="iconfont icon-yule1"></span>{{ $t('menu.pastime') }}
+          <span class="iconfont icon-weibiaoti1"></span>
+          <span>{{ $t('menu.pastime') }}</span>
         </template>
         <el-menu-item index="/album">
-          <span class="iconfont icon-tupian"></span>{{ $t('menu.album') }}
+          <span class="iconfont icon-shangchuantupian"></span>
+          <span>{{ $t('menu.album') }}</span>
         </el-menu-item>
-        <!-- <el-menu-item index="/">
-          <span class="iconfont icon-icon_xinyong_xianxing_jijin-139"></span
-          >{{ $t('menu.learningPath') }}
-        </el-menu-item> -->
       </el-sub-menu>
       <el-menu-item index="/friend">
-        <span class="iconfont icon-lianjie"></span>
-        {{ $t('menu.blogroll') }}
+        <span class="iconfont icon-pengyou"></span>
+        <span>{{ $t('menu.blogroll') }}</span>
       </el-menu-item>
       <el-menu-item index="/guestbook">
-        <span class="iconfont icon-liuyan"></span>{{ $t('menu.guestbook') }}
+        <span class="iconfont icon-liuyanban-05"></span>
+        <span>{{ $t('menu.guestbook') }}</span>
       </el-menu-item>
       <el-menu-item index="/about">
-        <span class="iconfont icon-guanyu"></span>{{ $t('menu.about') }}
+        <span class="iconfont icon-guanyu"></span>
+        <span>{{ $t('menu.about') }}</span>
       </el-menu-item>
       <!-- <el-menu-item index="" @click="setLanguage(locale == 'zh'?'en':'zh')">
 
@@ -71,7 +75,8 @@
       </span>
       </el-menu-item> -->
       <el-menu-item v-if="modules.Login && !user.username" index="" @click="login">
-        <span class="iconfont icon-denglu"></span>{{ $t('menu.login') }}
+        <span class="iconfont icon-gerenzhongxin"></span>
+        <span>{{ $t('menu.login') }}</span>
       </el-menu-item>
 
       <el-sub-menu index="" v-if="modules.Login && user.username">
@@ -82,13 +87,16 @@
                 : store.state.config.avatar.userDefault -->
         </template>
         <el-menu-item index="/user/information">
-          <span class="iconfont icon-gerenxinxi-"></span>{{ $t('menu.information') }}
+          <span class="iconfont icon-gerenzhongxin"></span>
+          <span>{{ $t('menu.information') }}</span>
         </el-menu-item>
         <el-menu-item index="" @click="changePassword">
-          <span class="iconfont icon-mima"></span>{{ $t('menu.changePassword') }}
+          <span class="iconfont icon-xiugaimima"></span>
+          <span> {{ $t('menu.changePassword') }}</span>
         </el-menu-item>
         <el-menu-item index="" @click="logout">
-          <span class="iconfont icon-zhuxiao1"></span>{{ $t('menu.logout') }}
+          <span class="iconfont icon-zhuxiao"></span>
+          <span>{{ $t('menu.logout') }}</span>
         </el-menu-item>
       </el-sub-menu>
     </el-menu>
@@ -115,9 +123,9 @@ const avatars = computed(() => {
 const user = useUserStoreHook()
 
 const avatar = computed(() => {
-  return user.avatar?user.avatar:avatars.value.User
+  return user.avatar ? user.avatar : avatars.value.User
 })
-const dialog =useModuleStoreHook()
+const dialog = useModuleStoreHook()
 // const { locale } = useI18n();
 const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
@@ -144,11 +152,11 @@ const colorStyle = ref('white')
 const login = () => {
   dialog.login = true
 }
-   const changePassword=()=>{
-  dialog.changePassword=true
+const changePassword = () => {
+  dialog.changePassword = true
 }
 
-const logout= () => {
+const logout = () => {
   user.logOut()
   // console.log("token", store.state.user.token);
 }

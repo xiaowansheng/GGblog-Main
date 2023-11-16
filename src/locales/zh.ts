@@ -139,7 +139,7 @@ export default {
     },
     signup: {
       title: "用户注册",
-      email: "登录邮箱",
+      email: "邮箱",
       code: "验证码",
       nickname: "昵称",
       password: "新密码",
@@ -156,7 +156,7 @@ export default {
     },
     forget: {
       title: "忘记密码",
-      email: "登录邮箱",
+      email: "邮箱",
       code: "验证码",
       newPassword: "新密码",
       send: "发送",

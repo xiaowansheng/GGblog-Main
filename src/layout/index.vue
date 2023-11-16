@@ -8,6 +8,7 @@
     <!-- <FullScreenLoading2 /> -->
     <Login />
     <Signup />
+    <Settings />
     <ChangePassword />
     <ForgetPassword />
   </div>
@@ -16,6 +17,7 @@
 import Mainer from './mainer/index.vue'
 import Footer from './footer/index.vue'
 import Menu from './menu/index.vue'
+import Settings from './settings/index.vue'
 // import FullScreenLoading2 from '@/components/loading/index.vue'
 import FullScreenLoading from '@/components/loading/animation/index.vue'
 import Login from '@/components/login/index.vue'

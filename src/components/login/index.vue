@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <el-dialog v-model="modules.login" :close-on-click-modal="false" :title="$t('login.title')">
+    <el-dialog v-model="dialog.login" :close-on-click-modal="false" :title="$t('login.title')">
       <div class="form">
         <el-form
           label-position="left"
@@ -13,13 +13,13 @@
           <el-form-item prop="username">
             <template #label>
               <!-- <span class="email">{{ t("login.email") }}</span> -->
-              <span class="iconfont icon-youxiang email"></span>
+              <span class="iconfont icon-zhanghu email"></span>
             </template>
             <el-input ref="account" v-model="user.username" />
           </el-form-item>
           <el-form-item prop="password">
             <template #label>
-              <span class="iconfont icon-ziyuanxhdpi password"></span>
+              <span class="iconfont icon-mima password"></span>
               <!-- <span class="password">{{ t("login.password") }}</span> -->
             </template>
             <el-input @keyup.enter="login" type="password" v-model="user.password" />
@@ -30,7 +30,7 @@
             <span>{{ $t('login.login') }}</span>
           </el-button>
         </div>
-        <div class="third-part-login">
+        <div class="third-part-login" v-if="module.ThirdPartLogin">
           <el-tooltip
             class="box-item"
             effect="light"
@@ -38,7 +38,9 @@
             placement="top-start"
             v-if="loginWays.QQ"
           >
-            <a href="" alt="a"><span class="iconfont icon-QQ qq"></span></a>
+            <a href="" alt="a">
+              <svg-icon name="qq" iconStyle="width:40px;height:40px"></svg-icon>
+            </a>
           </el-tooltip>
           <el-tooltip
             class="box-item"
@@ -47,7 +49,9 @@
             placement="top-start"
             v-if="loginWays.Weibo"
           >
-            <a href=""><span class="iconfont icon-weibo weibo"></span></a>
+            <a href="">
+              <svg-icon name="weibo" iconStyle="width:40px;height:40px"></svg-icon>
+            </a>
           </el-tooltip>
           <el-tooltip
             class="box-item"
@@ -56,7 +60,9 @@
             placement="top-start"
             v-if="loginWays.Google"
           >
-            <a href=""><span class="iconfont icon-guge google"></span></a>
+            <a href="">
+              <svg-icon name="google" iconStyle="width:40px;height:40px"></svg-icon>
+            </a>
           </el-tooltip>
           <el-tooltip
             class="box-item"
@@ -65,7 +71,9 @@
             placement="top-start"
             v-if="loginWays.Github"
           >
-            <a href=""><span class="iconfont icon-github-fill github"></span></a>
+            <a href="">
+              <svg-icon name="github" iconStyle="width:40px;height:40px"></svg-icon>
+            </a>
           </el-tooltip>
           <el-tooltip
             class="box-item"
@@ -74,7 +82,9 @@
             placement="top-start"
             v-if="loginWays.Gitee"
           >
-            <a href=""><span class="iconfont icon-gitee gitee"></span></a>
+            <a href="">
+              <svg-icon name="gitee" iconStyle="width:40px;height:40px"></svg-icon>
+            </a>
           </el-tooltip>
         </div>
 
@@ -104,11 +114,14 @@ import { t } from '@/plugins/i18s'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { useUserStoreHook } from '@/store/modules/user'
-import { ElMessage } from "element-plus";
+import { ElMessage } from 'element-plus'
 defineOptions({
   name: 'Login'
 })
-const modules = useModuleStoreHook()
+const dialog = useModuleStoreHook()
+const module = computed(() => {
+  return useConfigStoreHook().module
+})
 const loginWays = computed(() => {
   return useConfigStoreHook().login
 })
@@ -164,7 +177,7 @@ const submit = () => {
       // loginFormRef.value.resetFields();
 
       ElMessage.success(t('form.login'))
-      modules.login = false
+      dialog.login = false
       disable.value = false
     })
     .catch(() => {
@@ -183,15 +196,14 @@ const login = () => {
     })
 }
 
-
 const toSignup = () => {
-  modules.login = false
-  modules.signup = true
+  dialog.login = false
+  dialog.signup = true
 }
 
 const toResetPassword = () => {
-  modules.login = false
-  modules.resetPassword = true
+  dialog.login = false
+  dialog.resetPassword = true
 }
 </script>
 <style lang="scss" scoped>
@@ -221,7 +233,12 @@ const toResetPassword = () => {
       display: flex;
       justify-content: center;
       a {
-        margin: 1rem 1.5rem;
+        @media screen and (min-width: 768px) {
+          margin: 1rem 1.5rem;
+        }
+        @media screen and (max-width: 768px) {
+          margin: 1rem 1rem;
+        }
         .iconfont {
           font-size: 2.8rem;
         }
