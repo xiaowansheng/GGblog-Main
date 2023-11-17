@@ -44,8 +44,9 @@
       </div>
 
       <div
+      ref="loadingRef"
         class="loading"
-        v-show="params.total != 0 && params.total > pictures.length"
+        v-show="total != 0 && total > pictures.length"
         v-loading="true"
       ></div>
       <!-- <div class="more" v-show="pictures.length<params.total">
@@ -57,7 +58,7 @@
 
 <script lang="ts" setup>
 import Header from "@/layout/header/index.vue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted,onBeforeMount,onUnmounted, reactive, ref  } from "vue";
 import { getQueryString } from "@/utils/stringUtils";
 import {getPicturePage} from "@/api/picture"
 import { getAlbum } from "@/api/album"
@@ -98,27 +99,42 @@ const getData = () => {
       loading.value = false;
     });
 };
-onMounted(() => {
+onBeforeMount(() => {
   let id = getQueryString("error~");
   if (id != "") {
     params.albumId = id;
     getAlbumInfo()
     getData();
   }
-  window.onscroll = function () {
-    const scrollH = document.documentElement.scrollHeight; // 文档的完整高度
-    const scrollT =
-      document.documentElement.scrollTop || document.body.scrollTop; // 当前滚动条的垂直偏移
-    const screenH = window.screen.height; // 屏幕可视高度
-    if (scrollH - scrollT - screenH < 5) {
-      // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
-      // 执行请求
-      if (total.value > pictures.length) {
-        getData();
-      }
-    }
-  };
 });
+let myObserver: IntersectionObserver | null = null
+const loadingRef = ref()
+onMounted(() => {
+  //回调函数
+  const callback = (entries: any, observer: any) => {
+    entries.forEach((entry: any) => {
+      // 当目标元素进入视窗时
+      if (entry.isIntersecting) {
+        console.log('目标元素进入视窗！')
+        getData()
+      } else {
+        // 当目标元素离开视窗时
+        console.log('目标元素离开视窗！')
+      }
+    })
+  }
+  //配置对象
+  const options = {}
+  myObserver = new IntersectionObserver(callback, options)
+  //获取目标元素
+  //开始监听目标元素
+  myObserver.observe(loadingRef.value)
+})
+onUnmounted(() => {
+  if (myObserver) {
+    myObserver.disconnect()
+  }
+})
 </script>
 
 <style lang="scss" scoped>

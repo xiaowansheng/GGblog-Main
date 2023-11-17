@@ -19,7 +19,7 @@
         </div>
         <div
           class="more"
-          v-show="params.total != 0 && params.total > friends.length"
+          v-show="total != 0 && total > friends.length"
         >
           <el-button link @click="getData"
             ><span>{{ $t("blogroll.more") }}</span></el-button
@@ -108,8 +108,8 @@ const imglogo="@/assets/favicon.jpg"
 const params = reactive({
   page: 1,
   limit: 12,
-  total: 0,
 });
+const total=ref(0)
 const friends: any = reactive([]);
 const loading = ref(false);
 const getData = () => {
@@ -119,7 +119,7 @@ const getData = () => {
   loading.value = true;
   getFriendPage(params)
     .then((data: any) => {
-      params.total = data.total;
+      total.value = data.total;
       data.list.forEach((e: any) => {
         friends.push(e);
       });

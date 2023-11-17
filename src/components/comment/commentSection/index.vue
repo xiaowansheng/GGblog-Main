@@ -49,13 +49,13 @@
     <!-- <div class="more" v-show="params.total > comments.length">
       <el-button @click="getData" link><span>查看更多评论</span></el-button>
     </div> -->
-    <div class="loading" v-show="loading" v-loading="loading"></div>
+    <div ref="loadingRef" class="loading" v-show="loading" v-loading="true"></div>
     <!-- <div class="item" v-for="number in [1, 2, 3, 4, 5]" :key="number"> -->
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref, toRefs, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref, toRefs, watch } from 'vue'
 
 // import { useI18n } from "vue-i18n";
 import { ElMessage } from 'element-plus'
@@ -99,8 +99,8 @@ const params = reactive({
   topicId: topicId.value,
   page: 1,
   limit: 5,
-  total: 0
 })
+const total=ref(0)
 
 const loading = ref(false)
 const empty = ref(false)
@@ -113,9 +113,8 @@ const getData = () => {
   // console.log("commentParam:", topicId.value);
   // params.topicType = topicType.value
   // params.topicId = topicId.value
-  const { total, ...other } = params
   // console.log("params:", other);
-  getCommentPage(other)
+  getCommentPage(params)
     .then((data: any) => {
       if (data.total == 0) {
         empty.value = true
@@ -124,7 +123,7 @@ const getData = () => {
         e.showNumber = 2
         comments.push(e)
       })
-      params.total = data.total
+      total.value = data.total
       params.page++
       loading.value = false
     })
@@ -179,19 +178,35 @@ const addComment = (comment: any) => {
 defineExpose({
   addComment
 })
-onMounted(() => {
+onBeforeMount(() => {
   getData()
-  window.onscroll = () => {
-    const scrollH = document.documentElement.scrollHeight // 文档的完整高度
-    const scrollT = document.documentElement.scrollTop || document.body.scrollTop // 当前滚动条的垂直偏移
-    const screenH = window.screen.height // 屏幕可视高度
-    if (scrollH - scrollT - screenH < 5) {
-      // 5 只是一个相对值，可以让页面再接近底面的时候就开始请求
-      // 执行请求
-      if (params.total > comments.length) {
+})
+let myObserver: IntersectionObserver | null = null
+const loadingRef = ref()
+onMounted(() => {
+  //回调函数
+  const callback = (entries: any, observer: any) => {
+    entries.forEach((entry: any) => {
+      // 当目标元素进入视窗时
+      if (entry.isIntersecting) {
+        console.log('目标元素进入视窗！')
         getData()
+      } else {
+        // 当目标元素离开视窗时
+        console.log('目标元素离开视窗！')
       }
-    }
+    })
+  }
+  //配置对象
+  const options = {}
+  myObserver = new IntersectionObserver(callback, options)
+  //获取目标元素
+  //开始监听目标元素
+  myObserver.observe(loadingRef.value)
+})
+onUnmounted(() => {
+  if (myObserver) {
+    myObserver.disconnect()
   }
 })
 </script>
