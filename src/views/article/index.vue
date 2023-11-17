@@ -485,7 +485,6 @@ onMounted(() => {
         border-color: rgb(193, 216, 221);
         border-style: solid;
         p {
-          // padding: 0;
           margin: 0.8rem 0;
         }
         .label {
@@ -517,20 +516,6 @@ onMounted(() => {
       .el-tree {
         padding: 1rem 0;
         background-color: rgba(255, 255, 255, 0);
-        .el-icon {
-          // display: none;
-        }
-        .el-tree-node {
-          .el-tree-node__content {
-            // box-sizing: border-box;
-            // padding: 0rem 0;
-            // text-align: left;
-            // line-height: 150%;
-            // display: flex;
-            // flex-direction: row-reverse;
-            // justify-content: space-between;
-          }
-        }
         .catalog-item {
           .btn-jump {
             font-size: 1.4rem;

@@ -24,7 +24,7 @@
         <component :is="Component" v-show="!$route.meta.keepAlive" />
       </router-view> -->
 
-      <router-view v-slot="{ Component, route }">
+      <router-view :key="$route.fullPath" v-slot="{ Component, route }">
         <keep-alive v-if="route.meta.keepAlive">
           <component :is="Component" />
         </keep-alive>
