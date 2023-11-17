@@ -9,7 +9,7 @@
       <div class="articles">
         <BriefArticleBlock v-for="article in articles" :key="article.id" :article="article" />
       </div>
-      <el-empty v-show="!loading && params.total == 0" description="Empty ~" />
+      <el-empty v-show="!loading && total == 0" description="Empty ~" />
       <div class="loading" v-show="loading" v-loading="loading"></div>
     </div>
   </div>
@@ -94,8 +94,6 @@ onBeforeMount(() => {
     padding: 1rem 1rem;
     box-sizing: border-box;
   }
-  .content > div {
-  }
 }
 
 @media screen and (min-width: 992px) {
@@ -128,8 +126,6 @@ onBeforeMount(() => {
         // grid-template-rows: repeat(3, 1fr);
       }
     }
-    .content > div {
-    }
   }
 }
 @media screen and (max-width: 768px) {
@@ -141,8 +137,6 @@ onBeforeMount(() => {
         grid-template-columns: repeat(1, 1fr);
         grid-row-gap: 1.5rem;
       }
-    }
-    .content > div {
     }
   }
 }

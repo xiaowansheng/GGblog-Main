@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, ref, toRef } from 'vue'
+import { computed } from 'vue'
 defineOptions({
   name: 'Header'
 })
@@ -53,7 +53,6 @@ const url = computed(() => {
     .show {
       position: absolute;
       z-index: 1;
-      top: 52%;
       bottom: 0;
       left: 0;
       right: 0;
@@ -66,10 +65,6 @@ const url = computed(() => {
         -webkit-line-clamp: 2; /*显示行数*/
       }
     }
-    //     display: flex;
-    // // text-align: center;
-    // align-items: center;
-    // justify-content: center;
   }
 }
 @media screen and (max-width: 768px) {
@@ -77,6 +72,7 @@ const url = computed(() => {
     .main {
       height: 25rem;
       .show {
+        top: 40%;
         .title {
           font-size: 2rem;
         }
@@ -92,6 +88,7 @@ const url = computed(() => {
     .main {
       height: 30rem;
       .show {
+        top: 52%;
         .title {
           font-size: 2.5rem;
         }
@@ -107,6 +104,7 @@ const url = computed(() => {
     .main {
       height: 36rem;
       .show {
+        top: 52%;
         .title {
           font-size: 3rem;
         }
