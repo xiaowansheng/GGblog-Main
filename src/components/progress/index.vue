@@ -5,14 +5,16 @@ defineOptions({
   name: 'ReadProgress'
 })
 const readRef = ref()
-let scrollHeight = 0
-let clientHeight = 0
-let scrollTop = 0
+const percent = ref<number>(0)
+let scrollHeight: number = 0
+let clientHeight: number = 0
+let scrollTop: number = 0
 const computeScrollHeight = () => {
   scrollHeight = document.documentElement.scrollHeight
   clientHeight = document.documentElement.clientHeight
   scrollTop = document.documentElement.scrollTop || document.body.scrollTop
   readRef.value.style.width = +(scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100 + '%'
+  percent.value = readRef.value.style.width
 }
 onMounted(() => {
   // 添加滚动监听器
@@ -28,6 +30,7 @@ onUnmounted(() => {
 
 <template>
   <div class="read_pro">
+    <div class="percent">{{ percent }}</div>
     <div class="read_pro_inner" ref="readRef"></div>
   </div>
 </template>
@@ -47,7 +50,17 @@ onUnmounted(() => {
   left: 0;
   height: 100%;
   // border-radius:1.5rem;
-  
+
   background-color: #75f1d2;
+  z-index: 9;
+}
+.percent {
+  line-height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 10;
 }
 </style>
