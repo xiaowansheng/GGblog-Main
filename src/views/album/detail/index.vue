@@ -45,20 +45,13 @@
           class="waterfall-item"
           style="display: none"
         >
-          <img
-            :src="item.url"
-            @click="
-              previewIndex = index;
-              preview = true
-            "
-            alt="Image"
-          />
+          <img :src="item.url" @click="previewImg(index)" alt="Image" />
         </div>
         <el-image-viewer
           v-if="preview"
           :url-list="pictureList"
           teleported
-          @close="preview = false"
+          @close="closePreview()"
           :initial-index="previewIndex"
         />
         <!-- 随机图片测试 -->
@@ -86,6 +79,7 @@ import { getQueryString } from '@/utils/stringUtils'
 import { getPicturePage } from '@/api/picture'
 import { getAlbum } from '@/api/album'
 import { debouncedFunction } from '@/utils/tool'
+import { handleScrollbars } from '@/utils/pageUtils'
 defineOptions({
   name: 'AlbumDetail'
 })
@@ -93,6 +87,15 @@ const pictures = reactive<any>([])
 const pictureList: any = reactive([])
 const preview = ref(false)
 const previewIndex = ref(0)
+const previewImg = (index: number) => {
+  handleScrollbars(true)
+  preview.value = true
+  previewIndex.value = index
+}
+const closePreview = () => {
+  handleScrollbars(false)
+  preview.value = false
+}
 const album = ref<any>({})
 const params = reactive<any>({
   albumId: 0,
