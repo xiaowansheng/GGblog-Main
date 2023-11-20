@@ -45,8 +45,22 @@
           class="waterfall-item"
           style="display: none"
         >
-          <img :src="item.url" alt="Image" />
+          <img
+            :src="item.url"
+            @click="
+              previewIndex = index;
+              preview = true
+            "
+            alt="Image"
+          />
         </div>
+        <el-image-viewer
+          v-if="preview"
+          :url-list="pictureList"
+          teleported
+          @close="preview = false"
+          :initial-index="previewIndex"
+        />
         <!-- 随机图片测试 -->
         <!-- <div v-for="(item, index) in 100" :key="index" class="waterfall-item" style="display: none;">
           <img :src="`https://www.dmoe.cc/random.php?${index}`" alt="Image" />
@@ -77,6 +91,8 @@ defineOptions({
 })
 const pictures = reactive<any>([])
 const pictureList: any = reactive([])
+const preview = ref(false)
+const previewIndex = ref(0)
 const album = ref<any>({})
 const params = reactive<any>({
   albumId: 0,
