@@ -69,7 +69,8 @@
             <template #header>
               <div class="card-header">
                 <span v-if="talk.top" class="top"
-                  ><el-tag>{{ $t('talk.top') }}</el-tag></span>
+                  ><el-tag>{{ $t('talk.top') }}</el-tag></span
+                >
                 <div class="title">
                   <div class="avatar">
                     <el-avatar :size="65" :src="author.avatar" />
@@ -96,16 +97,14 @@
                 :key="index"
               >
                 <!-- TODO 还差左滑下一张，右滑上一张 -->
-                <el-image
-                  :src="img"
-                  fit="cover"
-                  :preview-src-list="talk.images ?? []"
-                  :initial-index="index"
-                >
+                <el-image :src="img" fit="cover" lazy @click="previewImg(talk, index)">
+                  <!-- :preview-src-list="talk.images ?? []"
+                  :initial-index="index" -->
                   <template #error>
                     <div class="image-slot" style="font-size: 1.6rem">Loading Error</div>
                   </template>
                 </el-image>
+
                 <router-link
                   :to="'/talk/' + talk.id"
                   class="more"
@@ -116,6 +115,13 @@
                 </router-link>
               </div>
             </div>
+            <el-image-viewer
+              v-if="talk.preview"
+              :url-list="talk.images"
+              teleported
+              @close="closePreview(talk)"
+              :initial-index="talk.previewIndex"
+            />
 
             <div v-if="privacy.Browser || privacy.Device || privacy.Address" class="bottom">
               <div v-if="privacy.Address" class="address">
@@ -151,6 +157,7 @@ import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from '
 import { useRouter } from 'vue-router'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalkPage } from '@/api/talk'
+import {handleScrollbars} from "@/utils/pageUtils"
 defineOptions({
   name: 'Talk'
 })
@@ -174,6 +181,15 @@ const params = reactive({
   limit: 10
 })
 const total = ref(0)
+const previewImg = (talk: any, index: number) => {
+  handleScrollbars(true)
+  talk.previewIndex = index
+  talk.preview = true
+}
+const closePreview = (talk:any) => {
+  handleScrollbars(false)
+  talk.preview = false
+}
 const getClassName = (images: any) => {
   if (!images || images.length == 0) {
     return ''
@@ -250,6 +266,9 @@ const getData = () => {
         if (e.content) {
           e.content = e.content.replace(/\n/g, '<br>')
         }
+        // 自定义预览
+        e.preview = false
+        e.previewIndex = 0
         talks.push(e)
       })
 

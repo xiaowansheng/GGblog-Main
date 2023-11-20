@@ -19,17 +19,20 @@
         <div class="text" v-html="talk.content"></div>
         <div class="imgs" :class="getClassName(talk.images)" v-if="talk.images">
           <div class="img" v-for="(img, index) in talk.images" :key="index">
-            <el-image
-              :src="img"
-              fit="cover"
-              lazy
-              :preview-src-list="talk.images"
-              :initial-index="index"
-            >
+            <el-image :src="img" fit="cover" lazy @click="previewImg(index)">
+              <!-- :preview-src-list="talk.images"
+              :initial-index="index" -->
               <template #error>
                 <div class="image-slot" style="font-size: 1.6rem">Loading Error</div>
               </template>
             </el-image>
+            <el-image-viewer
+              v-if="preview"
+              :url-list="talk.images"
+              teleported
+              @close="closePreview()"
+              :initial-index="previewIndex"
+            />
             <!-- <el-image-viewer @close="closeImgViewer" :url-list="imageList" v-if="showImageViewer"/> -->
           </div>
         </div>
@@ -64,6 +67,7 @@ import { getQueryString } from '@/utils/stringUtils'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalk } from '@/api/talk'
 import { useModuleStoreHook } from '@/store/modules/module'
+import {handleScrollbars} from "@/utils/pageUtils"
 const dialog = useModuleStoreHook()
 defineOptions({
   name: 'TalkDetail'
@@ -81,6 +85,17 @@ const authorInfo = computed(() => {
 const topicId: any = ref(null)
 // const { t } = useI18n();
 const talk: any = ref({})
+const preview = ref(false)
+const previewIndex = ref(0)
+const previewImg = (index: number) => {
+  handleScrollbars(true)
+  previewIndex.value = index
+  preview.value = true
+}
+const closePreview = () => {
+  handleScrollbars(false)
+  preview.value = false
+}
 const getClassName = (images: any) => {
   if (!images || images.length == 0) {
     return ''
@@ -166,10 +181,6 @@ onBeforeMount(() => {
         display: flex;
         // justify-content: space-between;
         align-items: center;
-        .avatar {
-          span {
-          }
-        }
         .info > div {
           margin: 1rem;
         }
@@ -202,13 +213,6 @@ onBeforeMount(() => {
             // text-align: center;
             align-items: center;
             justify-content: center;
-
-            .sign {
-              // font-size: 5rem;
-            }
-            .number {
-              // font-size: 5rem;
-            }
           }
         }
       }
@@ -241,25 +245,16 @@ onBeforeMount(() => {
           .el-image {
             max-height: 35rem;
           }
-          // max-width: 45rem;
-          // width: 33%;
-          // padding-bottom: 33%;
         }
       }
       .images-two {
         grid-template-columns: repeat(2, 1fr);
-        .img {
-        }
       }
       .images-three {
         grid-template-columns: repeat(3, 1fr);
-        .img {
-        }
       }
       .images-four {
         grid-template-columns: repeat(2, 1fr);
-        .img {
-        }
       }
       .images-nine {
         grid-template-columns: repeat(3, 1fr);
@@ -277,29 +272,28 @@ onBeforeMount(() => {
         p {
           text-align: right;
           margin: 0.5rem 0;
-          // padding: 0;
         }
       }
     }
   }
 }
 
-@media screen and (max-width: 768px) {
-  .talk-detail {
-    .content {
-      .talk-content {
-      }
-    }
-  }
-}
-@media screen and (min-width: 768px) {
-  .talk-detail {
-    .content {
-      .talk-content {
-      }
-    }
-  }
-}
+// @media screen and (max-width: 768px) {
+//   .talk-detail {
+//     .content {
+//       .talk-content {
+//       }
+//     }
+//   }
+// }
+// @media screen and (min-width: 768px) {
+//   .talk-detail {
+//     .content {
+//       .talk-content {
+//       }
+//     }
+//   }
+// }
 
 @media screen and (min-width: 768px) and (max-width: 992px) {
   .talk-detail {

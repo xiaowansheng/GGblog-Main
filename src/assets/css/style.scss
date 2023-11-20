@@ -21,6 +21,7 @@ body::-webkit-scrollbar {
   // background-color: rgb(246, 250, 251);
   // opacity: 0.2; 
 }
+
 ::-webkit-scrollbar-thumb {
   width: 10px;
   /* 上下两头给个圆角 */
@@ -60,18 +61,3 @@ a {
   text-decoration: none;
 }
 
-/* 字体样式 */
-/* .icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-} */
-
-@media screen and (max-width: 768px) {
-  /*   
-  body::-webkit-scrollbar{
-    width: 0px;
-  } */
-}
