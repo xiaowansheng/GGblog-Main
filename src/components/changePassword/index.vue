@@ -113,7 +113,7 @@ const submit = () => {
   const { password2, ...other } = user
   changePassword(other)
     .then(() => {
-      ElMessage.success(t('form.put'))
+      // ElMessage.success(t('form.put'))
       userFormRef.value.resetFields()
       dialog.changePassword = false
       disable.value = false

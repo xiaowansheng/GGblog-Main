@@ -151,9 +151,9 @@ class CommonHttp {
         console.log('api:[', response.config.url, '],data:', response.data)
 
         if (code && code == 200) {
-          const whiteList = ['/user/auth/signup', '/user/auth/login']
+          const whiteList = ['/user/auth/signup', '/user/auth/login', '/user/auth/reset/password']
           // 登录和注册不显示公共的提示信息
-          if (!whiteList.some((v) => v == response.config.url)) {
+          if (!whiteList.some((v) => v.trim() == response.config.url)) {
             let method = response.config.method
             // 显示操作提示
             if (method == 'post') {

@@ -4,7 +4,16 @@ import { routes } from './routes'
 import NProgress from '@/utils/progress'
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
-  routes: routes
+  routes: routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 如果存在 savedPosition，则恢复到之前的滚动位置
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      // 否则，滚动到页面顶部
+      return { top: 0 }
+    }
+  }
 })
 
 router.beforeEach((to: any, _from, next) => {
@@ -16,7 +25,10 @@ router.beforeEach((to: any, _from, next) => {
   next()
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
+  // if (!to.meta.keepAlive) {
+    
+  // }
   NProgress.done()
 })
 export default router
