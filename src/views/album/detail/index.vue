@@ -45,7 +45,7 @@
           class="waterfall-item"
           style="display: none"
         >
-          <img :src="item.url" @click="previewImg(index,item)" alt="Image" />
+          <img :src="item.url" @click="previewImg(index, item)" alt="Image" />
         </div>
         <!-- <el-image-viewer
           v-if="preview"
@@ -91,19 +91,19 @@ defineOptions({
   name: 'AlbumDetail'
 })
 const pictures = reactive<any>([])
-// BUG 由于图片加载顺序和获取的图片地址顺序不一致，所有切换预览图片时会导致和页面显示的顺序不一致，
+// 由于图片加载顺序和获取的图片地址顺序不一致
 const pictureList: any = reactive([])
 const preview = ref(false)
 const previewIndex = ref(0)
-const previewImg = (index: number,item:any) => {
+const previewImg = (index: number, item: any) => {
   // 根据原图片数据地址,找到图片在预览列表中的索引
-  let newIndex=index
-  for (let i = 0; i < pictureList.length; i++){
-    if (pictureList[i]== item.url) {
+  let newIndex = index
+  for (let i = 0; i < pictureList.length; i++) {
+    if (pictureList[i] == item.url) {
       newIndex = i
       // console.log("找到索引了");
-      break;
-    } 
+      break
+    }
   }
   preview.value = true
   previewIndex.value = newIndex
@@ -289,11 +289,12 @@ onBeforeMount(() => {
 })
 let myObserver: IntersectionObserver | null = null
 const loadingRef = ref()
+const debouncedFunctionImpl = debouncedFunction(setupWaterfallLayout)
 onMounted(() => {
   // 窗口尺寸变化事件
   // 变化时，更新瀑布流样式
   // 向下还原和最大化监听不到,只要拖动改变窗口大小时能监听到
-  window.addEventListener('resize', () => debouncedFunction(setupWaterfallLayout))
+  window.addEventListener('resize', debouncedFunctionImpl)
 
   //回调函数
   const callback = (entries: any, observer: any) => {
@@ -319,6 +320,8 @@ onUnmounted(() => {
   if (myObserver) {
     myObserver.disconnect()
   }
+  // 移除监听器
+  window.removeEventListener('resize', debouncedFunctionImpl)
 })
 </script>
 <style lang="scss" scoped>

@@ -13,7 +13,6 @@ export const useModuleStore = defineStore('module', {
   getters: {},
   actions: {}
 })
-
 export function useModuleStoreHook() {
   return useModuleStore(store)
 }

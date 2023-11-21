@@ -5,11 +5,12 @@ defineOptions({
   name: 'ReadProgress'
 })
 const readRef = ref()
-const percent = ref<number>(0)
+const percent = ref<string>('0%')
 let scrollHeight: number = 0
 let clientHeight: number = 0
 let scrollTop: number = 0
 const computeScrollHeight = () => {
+  // console.log('监听滚动')
   scrollHeight = document.documentElement.scrollHeight
   clientHeight = document.documentElement.clientHeight
   scrollTop = document.documentElement.scrollTop || document.body.scrollTop
@@ -18,13 +19,11 @@ const computeScrollHeight = () => {
 }
 onMounted(() => {
   // 添加滚动监听器
-  document.addEventListener('scroll', function (e) {
-    computeScrollHeight()
-  })
+  window.addEventListener('scroll', computeScrollHeight)
 })
 onUnmounted(() => {
   // 去除滚动监听器
-  document.removeEventListener('scroll', () => {})
+  window.removeEventListener('scroll', computeScrollHeight)
 })
 </script>
 

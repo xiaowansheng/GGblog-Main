@@ -2,6 +2,7 @@
   <div id="forget-password">
     <el-dialog
       v-model="dialog.resetPassword"
+      :lock-scroll="true"
       :close-on-click-modal="false"
       :title="$t('forget.title')"
     >
@@ -27,7 +28,7 @@
             <!-- <el-input v-model="user.username" /> -->
             <el-input v-model="user.verificationCode" placeholder="">
               <template #append>
-                <el-button :disabled="time > 0" @click="sendVerificationCode"
+                <el-button :disabled="disable || time > 0" @click="sendVerificationCode"
                   ><span
                     ><span v-show="time <= 0">{{ $t('forget.send') }}</span>
                     <span v-show="time > 0">{{ time }}</span></span
@@ -50,7 +51,7 @@
           </el-form-item>
         </el-form>
         <div class="btn">
-          <el-button v-loading="disable" :disabled="disable" type="primary" @click="resetPassword">
+          <el-button v-loading="disable" :disabled="loading" type="primary" @click="resetPassword">
             <span>{{ $t('forget.reset') }}</span>
           </el-button>
         </div>
@@ -65,8 +66,8 @@ import type { FormRules } from 'element-plus'
 
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
-import { t } from "@/plugins/i18s"
-import { resetPassword as resetUserPassword, getVerificationCode } from "@/api/user"
+import { t } from '@/plugins/i18s'
+import { resetPassword as resetUserPassword, getVerificationCode } from '@/api/user'
 defineOptions({
   name: 'Comment'
 })
@@ -147,18 +148,19 @@ const rules = reactive<FormRules>({
   ]
 })
 const disable = ref(false)
+const loading = ref(false)
 const submit = () => {
-  disable.value = true
+  loading.value = true
   const { rePassword, ...other } = user
   resetUserPassword(other)
     .then(() => {
       ElMessage.success(t('form.reset'))
       userFormRef.value.resetFields()
       dialog.resetPassword = false
-      disable.value = false
+      loading.value = false
     })
     .catch(() => {
-      disable.value = false
+      loading.value = false
     })
 }
 let interval: any
@@ -170,31 +172,31 @@ const resetPassword = () => {
       submit()
     })
     .catch(() => {
-      console.log('表单验证失败')
+      console.warn('表单验证失败')
     })
 }
 const sendVerificationCode = () => {
+  disable.value = true
   userFormRef.value
     .validateField(['email'])
     .then(() => {
-      getVerificationCode(
-          {
-            email: user.email
+      getVerificationCode({
+        email: user.email
+      }).then(() => {
+        ElMessage.success('验证码发送成功！')
+        time.value = 60
+        interval = setInterval(() => {
+          if (time.value <= 0) {
+            clearInterval(interval)
           }
-        )
-        .then(() => {
-          ElMessage.success('验证码发送成功！')
-          time.value = 60
-          interval = setInterval(() => {
-            if (time.value <= 0) {
-              clearInterval(interval)
-            }
-            time.value = time.value - 1
-          }, 1000)
-        })
+          time.value = time.value - 1
+        }, 1000)
+        disable.value = false
+      })
     })
     .catch(() => {
-      console.log('表单校验错误')
+      console.warn('表单校验错误')
+      disable.value = false
     })
 }
 </script>

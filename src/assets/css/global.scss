@@ -1,0 +1,73 @@
+// 光标设置
+// body {
+//   cursor: url("/cursor/purple/link.cur"), pointer !important;
+// }
+
+// body.waiting {
+//   cursor: url("/cursor/purple/busy.cur"), wait !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/move.cur"), move !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/text.cur"), text !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/help.cur"), help !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/precision.cur"), crosshair !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/unavailable.cur"), not-allowed !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/horizontal.cur"), e-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/diagonal2.cur"), ne-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/diagonal1.cur"), nw-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/vertical.cur"), n-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/diagonal1.cur"), se-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/diagonal2.cur"), sw-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/vertical.cur"), s-resize !important;
+// }
+
+// body {
+//   cursor: url("/cursor/purple/horizontal.cur"), w-resize !important;
+// }
+
+* {
+  cursor: url("/cursor/purple/normal.cur"), auto !important;
+}
+
+a,button,.is-link{
+  cursor: url("/cursor/purple/link.cur"), pointer !important;
+}
+input,
+textarea,
+code {
+  cursor: url("/cursor/purple/text.cur"), text !important;
+}

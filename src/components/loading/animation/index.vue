@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, computed } from 'vue'
+import { watch } from 'vue'
 import { useModuleStoreHook } from '@/store/modules/module'
 defineOptions({
   name: 'FullScreenLoading'
@@ -7,7 +7,7 @@ defineOptions({
 const dialog = useModuleStoreHook()
 watch(
   () => dialog.loading,
-  (value, preValue) => {
+  (value) => {
     console.log('全屏加载动画~ ：',value?"开启":"关闭")
     // console.log('value:', value)
     if (value>0) {

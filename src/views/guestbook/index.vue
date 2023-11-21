@@ -35,7 +35,8 @@
     </div>
     <div class="form">
       <div class="menu">
-        <el-button @click="leaveWordListVisible = true" type="info">{{ '查看留言' }}</el-button>
+        <!-- TODO 暂不显示列表 -->
+        <!-- <el-button @click="leaveWordListVisible = true" type="info">{{ '查看留言' }}</el-button> -->
         <el-dialog v-model="leaveWordListVisible" :title="'留言列表'" id="leave-word-list">
           <div class="list">
             <div class="item" v-for="item in leaveWords" :key="item.id">
@@ -81,7 +82,7 @@
       <el-input
         v-model="leaveWordForm.content"
         @keyup.enter="submit"
-        placeholder="Please input"
+        placeholder=""
         clearable
       />
       <el-button @click="submit" type="primary">{{ '发送' }}</el-button>
@@ -344,6 +345,7 @@ onUnmounted(() => {
     // }
   }
 }
+
 @media screen and (min-width: 1100px) {
   #leave-word-list {
     --el-dialog-width: 35%;

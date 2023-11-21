@@ -38,7 +38,6 @@
         </div>
       </template>
     </Header>
-    <!-- <a href="#copyright">哈哈哈哈哈哈哈</a> -->
     <el-container class="main" v-loading="loading">
       <div class="catalog-mobile">
         <div class="btn">
