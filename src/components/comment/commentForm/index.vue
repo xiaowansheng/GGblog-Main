@@ -4,10 +4,10 @@
       <div class="head">
         <div class="title">
           <span class="text-title">{{ $t('comment.comment') }}</span>
-          <!-- 暂时不开放登录 -->
+          <!-- 暂时不开放匿名 -->
           <div
             class="select-user"
-            v-show="!user.username && userInfo.type != userType.loginUser"
+            v-show="!user.username"
             v-if="modules.Login || privacy.Visitor || privacy.Anonymous"
           >
             <el-select v-model="userInfo.type" :placeholder="$t('comment.select')">
@@ -323,7 +323,7 @@ const submit = () => {
           commentForm.content = ''
           // console.log("commendto：",data)
           ElMessage({
-            message: `${t('form.post')}${data.review == 1 ? t('form.visiable') : ''}`,
+            message: `${t('form.post')}${data.review == 1 ? '':t('form.visiable')}`,
             type: 'success'
           })
           emits('add', data)
