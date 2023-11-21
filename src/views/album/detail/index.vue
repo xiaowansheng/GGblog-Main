@@ -45,14 +45,20 @@
           class="waterfall-item"
           style="display: none"
         >
-          <img :src="item.url" @click="previewImg(index)" alt="Image" />
+          <img :src="item.url" @click="previewImg(index,item)" alt="Image" />
         </div>
-        <el-image-viewer
+        <!-- <el-image-viewer
           v-if="preview"
           :url-list="pictureList"
           teleported
           @close="closePreview()"
           :initial-index="previewIndex"
+        /> -->
+        <ImgPreview
+          v-model:show="preview"
+          :list="pictureList"
+          :index="previewIndex"
+          :teleported="true"
         />
         <!-- 随机图片测试 -->
         <!-- <div v-for="(item, index) in 100" :key="index" class="waterfall-item" style="display: none;">
@@ -74,27 +80,33 @@
 
 <script lang="ts" setup>
 import Header from '@/layout/header/index.vue'
-import { onMounted, onBeforeMount, onUnmounted, reactive, ref, nextTick } from 'vue'
+import { onMounted, onBeforeMount, onUnmounted, reactive, ref, nextTick, unref } from 'vue'
 import { getQueryString } from '@/utils/stringUtils'
 import { getPicturePage } from '@/api/picture'
 import { getAlbum } from '@/api/album'
 import { debouncedFunction } from '@/utils/tool'
-import { handleScrollbars } from '@/utils/pageUtils'
+// import { handleScrollbars } from '@/utils/pageUtils'
+import ImgPreview from '@/components/imgPreview/index.vue'
 defineOptions({
   name: 'AlbumDetail'
 })
 const pictures = reactive<any>([])
+// BUG 由于图片加载顺序和获取的图片地址顺序不一致，所有切换预览图片时会导致和页面显示的顺序不一致，
 const pictureList: any = reactive([])
 const preview = ref(false)
 const previewIndex = ref(0)
-const previewImg = (index: number) => {
-  handleScrollbars(true)
+const previewImg = (index: number,item:any) => {
+  // 根据原图片数据地址,找到图片在预览列表中的索引
+  let newIndex=index
+  for (let i = 0; i < pictureList.length; i++){
+    if (pictureList[i]== item.url) {
+      newIndex = i
+      // console.log("找到索引了");
+      break;
+    } 
+  }
   preview.value = true
-  previewIndex.value = index
-}
-const closePreview = () => {
-  handleScrollbars(false)
-  preview.value = false
+  previewIndex.value = newIndex
 }
 const album = ref<any>({})
 const params = reactive<any>({
@@ -119,7 +131,7 @@ const getData = () => {
       total.value = data.total
       data.list.forEach((e: any) => {
         pictures.push(e)
-        pictureList.push(e.url)
+        // pictureList.push(e.url)
       })
       params.page++
       loading.value = false
@@ -170,13 +182,11 @@ const getMaxHeight = (columnHeights: number[]) => {
  * 执行瀑布流计算
  */
 const setupWaterfallLayout = () => {
-  console.error(11)
-
   let newGap = gap
   let newColumnWidth = columnWidth
   const container = containerRef.value
   const items = Array.from(container.querySelectorAll('.waterfall-item'))
-  console.log(container, items)
+  // console.log(container, items)
 
   // 获取容器宽度
   const containerWidth = container.clientWidth
@@ -262,6 +272,8 @@ const imgLoaded = (
   // console.log('columnHeights', heights)
   // console.log(' heights[getMaxHeight(heights)]', heights[getMaxHeight(heights)])
   containerRef.value.style.height = heights[getMaxHeight(heights)] + 'px'
+  // 展示图片，
+  pictureList.push(img.src) //并把当前图片加入预览图片列表
   containerRef.value.style.display = 'block'
 }
 

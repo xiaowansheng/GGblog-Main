@@ -26,14 +26,14 @@
                 <div class="image-slot" style="font-size: 1.6rem">Loading Error</div>
               </template>
             </el-image>
-            <el-image-viewer
+            <ImgPreview v-model:show="preview" :list="talk.images" :index="previewIndex" />
+            <!-- <el-image-viewer
               v-if="preview"
               :url-list="talk.images"
               teleported
               @close="closePreview()"
               :initial-index="previewIndex"
-            />
-            <!-- <el-image-viewer @close="closeImgViewer" :url-list="imageList" v-if="showImageViewer"/> -->
+            /> -->
           </div>
         </div>
 
@@ -67,7 +67,7 @@ import { getQueryString } from '@/utils/stringUtils'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalk } from '@/api/talk'
 import { useModuleStoreHook } from '@/store/modules/module'
-import {handleScrollbars} from "@/utils/pageUtils"
+import ImgPreview from '@/components/imgPreview/index.vue'
 const dialog = useModuleStoreHook()
 defineOptions({
   name: 'TalkDetail'
@@ -83,18 +83,12 @@ const authorInfo = computed(() => {
   return useConfigStoreHook().author
 })
 const topicId: any = ref(null)
-// const { t } = useI18n();
 const talk: any = ref({})
 const preview = ref(false)
 const previewIndex = ref(0)
 const previewImg = (index: number) => {
-  handleScrollbars(true)
   previewIndex.value = index
   preview.value = true
-}
-const closePreview = () => {
-  handleScrollbars(false)
-  preview.value = false
 }
 const getClassName = (images: any) => {
   if (!images || images.length == 0) {

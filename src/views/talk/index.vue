@@ -97,7 +97,7 @@
                 :key="index"
               >
                 <!-- TODO 还差左滑下一张，右滑上一张 -->
-                <el-image :src="img" fit="cover" lazy @click="previewImg(talk, index)">
+                <el-image :src="img" fit="cover" lazy @click.stop="previewImg(talk, index)">
                   <!-- :preview-src-list="talk.images ?? []"
                   :initial-index="index" -->
                   <template #error>
@@ -115,13 +115,14 @@
                 </router-link>
               </div>
             </div>
-            <el-image-viewer
-              v-if="talk.preview"
-              :url-list="talk.images"
-              teleported
-              @close="closePreview(talk)"
-              :initial-index="talk.previewIndex"
+            <ImgPreview
+              v-model:show="talk.preview"
+              :list="talk.images"
+              :index="talk.previewIndex"
+              :teleported="true"
             />
+            <!-- <el-image-viewer
+            /> -->
 
             <div v-if="privacy.Browser || privacy.Device || privacy.Address" class="bottom">
               <div v-if="privacy.Address" class="address">
@@ -157,7 +158,8 @@ import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from '
 import { useRouter } from 'vue-router'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { getTalkPage } from '@/api/talk'
-import {handleScrollbars} from "@/utils/pageUtils"
+import ImgPreview from '@/components/imgPreview/index.vue'
+// import {handleScrollbars} from "@/utils/pageUtils"
 defineOptions({
   name: 'Talk'
 })
@@ -182,14 +184,14 @@ const params = reactive({
 })
 const total = ref(0)
 const previewImg = (talk: any, index: number) => {
-  handleScrollbars(true)
+  // handleScrollbars(true)
   talk.previewIndex = index
   talk.preview = true
 }
-const closePreview = (talk:any) => {
-  handleScrollbars(false)
-  talk.preview = false
-}
+// const closePreview = (talk:any) => {
+//   handleScrollbars(false)
+//   talk.preview = false
+// }
 const getClassName = (images: any) => {
   if (!images || images.length == 0) {
     return ''
