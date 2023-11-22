@@ -20,3 +20,22 @@ export function debouncedFunction<F extends AnyFunction>(func: F, delay: number=
     }, delay)
   }
 }
+
+/**
+ * 在间隔时间内，目标函数只会运行一次
+ * @param func 需要节流的函数
+ * @param delay 时间间隔
+ * @returns 
+ */
+export function throttleFunction<T extends (...args: any[]) => void>(func: T, delay: number): T {
+  let timerId: ReturnType<typeof setTimeout> | undefined
+
+  return function (this: any, ...args: any[]) {
+    if (!timerId) {
+      timerId = setTimeout(() => {
+        func.apply(this, args)
+        timerId = undefined
+      }, delay)
+    }
+  } as T
+}

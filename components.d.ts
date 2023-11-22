@@ -56,6 +56,7 @@ declare module 'vue' {
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
     Loading: typeof import('./src/components/loading/index.vue')['default']
     Login: typeof import('./src/components/login/index.vue')['default']
+    Petal: typeof import('./src/components/background/petal/index.vue')['default']
     Preview: typeof import('./src/components/preview/index.vue')['default']
     Progress: typeof import('./src/components/progress/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
