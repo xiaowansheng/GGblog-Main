@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { onMounted,onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 defineOptions({
   name: 'Snowflake'
 })
 // 获取Canvas元素
 const canvasRef = ref()
-let ctx = null
+let ctx: CanvasRenderingContext2D
 
 /* 定义x为窗口宽度，y为窗口高度 */
 let x = 0,
   y = 0
 /* 定义数组，是为了存储每一片雪的信息 */
-let arr = []
+let arr: any[] = []
 /* 假设有600片雪 */
 let num = 600
 /* 创建image元素 */
@@ -58,19 +58,19 @@ const updated = () => {
     }
   }
 }
-  // 设置Canvas的宽度和高度
+// 设置Canvas的宽度和高度
 const resizeCanvas = () => {
   x = canvasRef.value.width = window.innerWidth
   y = canvasRef.value.height = window.innerHeight
 }
 const render = () => {
-      /* 清屏 */
-    ctx.clearRect(0, 0, x, y)
-    /* 绘制 */
-    draw()
-    /* 更新 */
+  /* 清屏 */
+  ctx.clearRect(0, 0, x, y)
+  /* 绘制 */
+  draw()
+  /* 更新 */
   updated()
-    
+
   // 使用requestAnimationFrame方法进行高效的动画渲染，保证在浏览器的刷新频率下去更新动画
   window.requestAnimationFrame(render)
 }
@@ -98,10 +98,10 @@ onMounted(() => {
   //   updated()
   // }, 15)
   /* 绑定窗口大小发生改变事件，让canvas随时铺满浏览器可视区 */
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('resize', resizeCanvas)
 })
 onUnmounted(() => {
-  window.removeEventListener('resize', resizeCanvas);
+  window.removeEventListener('resize', resizeCanvas)
 })
 </script>
 
@@ -109,6 +109,4 @@ onUnmounted(() => {
   <canvas ref="canvasRef"></canvas>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

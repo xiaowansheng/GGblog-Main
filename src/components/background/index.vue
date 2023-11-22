@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Snowflake from './snowflake/index.vue'
 import Petal from './petal/index.vue'
+import Rain from './rain/index.vue'
+import Rain2 from './rain2/index.vue'
 defineOptions({
   name: 'BackgroundEffect'
 })
@@ -10,6 +12,8 @@ const backgroundEffect= import.meta.env.VITE_BG_EFFECT
 <template>
   <div class="background-effect">
     <Petal v-if="backgroundEffect==1"/>
+    <Rain v-if="backgroundEffect==2"/>
+    <Rain2 v-if="backgroundEffect==2.1"/>
     <Snowflake v-if="backgroundEffect==4"/>
   </div>
 </template>
