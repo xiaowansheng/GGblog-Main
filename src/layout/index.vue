@@ -18,6 +18,8 @@
 
     <!-- 背景效果 -->
     <BackgroundEffect/>
+    <!-- 鼠标特效 -->
+    <MouseEffect/>
   </div>
 </template>
 <script lang="ts" setup>
@@ -32,6 +34,7 @@ import Signup from '@/components/signup/index.vue'
 import ChangePassword from '@/components/changePassword/index.vue'
 import ForgetPassword from '@/components/forgetPassword/index.vue'
 import BackgroundEffect from "@/components/background/index.vue"
+import MouseEffect from "@/components/mouseEffect/index.vue"
 import { useConfigStoreHook } from '@/store/modules/config'
 defineOptions({
   name: 'Layout'
