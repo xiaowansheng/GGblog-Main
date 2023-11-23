@@ -180,7 +180,7 @@ onUnmounted(() => {})
 </script>
 
 <template>
-  <div>test</div>
+  <div></div>
 </template>
 
 <style lang="scss" scoped></style>

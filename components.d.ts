@@ -71,6 +71,7 @@ declare module 'vue' {
     Signup: typeof import('./src/components/signup/index.vue')['default']
     SinglePicture: typeof import('./src/components/upload/singlePicture/index.vue')['default']
     Snowflake: typeof import('./src/components/background/snowflake/index.vue')['default']
+    Star: typeof import('./src/components/mouseEffect/star/index.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
