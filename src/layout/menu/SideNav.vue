@@ -23,6 +23,8 @@
       :with-header="false"
       :lock-scroll="true"
       id="sideNav"
+      @open="handleScrollbars(true)"
+      @close="handleScrollbars(false)"
     >
       <div class="info">
         <div class="avatar">
@@ -156,6 +158,7 @@ import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
 import { throttleFunction } from '@/utils/tool';
+import { handleScrollbars } from '@/utils/pageUtils'
 defineOptions({
   name: 'SideNav'
 })
