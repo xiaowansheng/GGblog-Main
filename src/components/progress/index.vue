@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-
+import { throttleFunction } from '@/utils/tool';
 defineOptions({
   name: 'ReadProgress'
 })
@@ -17,13 +17,15 @@ const computeScrollHeight = () => {
   readRef.value.style.width = +(scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100 + '%'
   percent.value = readRef.value.style.width
 }
+// 使用节流函数，避免触发过于频繁
+const throttleFunctionImpl=throttleFunction(computeScrollHeight,50)
 onMounted(() => {
   // 添加滚动监听器
-  window.addEventListener('scroll', computeScrollHeight)
+  window.addEventListener('scroll', throttleFunctionImpl)
 })
 onUnmounted(() => {
   // 去除滚动监听器
-  window.removeEventListener('scroll', computeScrollHeight)
+  window.removeEventListener('scroll', throttleFunctionImpl)
 })
 </script>
 

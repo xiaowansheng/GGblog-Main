@@ -1,6 +1,13 @@
 <template>
   <div id="login">
-    <el-dialog v-model="dialog.login" :close-on-click-modal="false" :title="$t('login.title')">
+    <el-dialog
+      v-model="dialog.login"
+      :close-on-click-modal="false"
+      :title="$t('login.title')"
+      :lock-scroll="true"
+      @open="handleScrollbars(true)"
+      @close="handleScrollbars(false)"
+    >
       <div class="form">
         <el-form
           label-position="left"
@@ -115,6 +122,7 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { useUserStoreHook } from '@/store/modules/user'
 import { ElMessage } from 'element-plus'
+import { handleScrollbars } from '@/utils/pageUtils'
 defineOptions({
   name: 'Login'
 })

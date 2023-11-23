@@ -4,6 +4,9 @@
       v-model="dialog.changePassword"
       :close-on-click-modal="false"
       :title="$t('change.title')"
+      :lock-scroll="true"
+      @open="handleScrollbars(true)"
+      @close="handleScrollbars(false)"
     >
       <div class="form">
         <el-form
@@ -50,6 +53,7 @@ import { t } from '@/plugins/i18s'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { changePassword } from '@/api/user'
+import { handleScrollbars} from "@/utils/pageUtils"
 // import { ElMessage } from "element-plus";
 defineOptions({
   name: 'ChangePassword'

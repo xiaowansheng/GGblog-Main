@@ -1,6 +1,13 @@
 <template>
   <div id="signup">
-    <el-dialog v-model="dialog.signup" :close-on-click-modal="false" :title="$t('signup.title')">
+    <el-dialog
+      v-model="dialog.signup"
+      :close-on-click-modal="false"
+      :title="$t('signup.title')"
+      :lock-scroll="true"
+      @open="handleScrollbars(true)"
+      @close="handleScrollbars(false)"
+    >
       <div class="form">
         <el-form
           label-position="left"
@@ -76,10 +83,11 @@
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
-import { ElMessage, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import { t } from '@/plugins/i18s'
 import { getVerificationCode, signup as signupUser } from '@/api/user'
-// import { useI18n } from "vue-i18n";
+import { handleScrollbars } from '@/utils/pageUtils'
 import { useModuleStoreHook } from '@/store/modules/module'
 defineOptions({
   name: 'Signup'

@@ -25,21 +25,22 @@
 
 <script lang="ts" setup>
 import { useDark, useToggle } from '@vueuse/core'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useConfigStoreHook } from '@/store/modules/config'
 
 import { getDefaultLang } from '@/utils/languageUtils'
 import { toggleLanguage, setLanguage } from '@/plugins/i18s'
+import { throttleFunction } from '@/utils/tool';
 // 设置启动时默认语言(会自动检查，不用主动写)
 // setLanguage(getDefaultLang())
 const isChinese = ref(true)
 const onClickToggleLanguage = () => {
   console.log('切换语言~')
   if (toggleLanguage() == 'zh') {
-  console.log('中文~')
+    console.log('中文~')
     isChinese.value = true
   } else {
-  console.log('英文~')
+    console.log('英文~')
     isChinese.value = false
   }
 }
@@ -70,20 +71,21 @@ const handleScroll = () => {
   }
 }
 const toUp = ref(false)
+const toTopShow = () => {
+  // console.log("top",document.documentElement.scrollTop)
+  if (document.documentElement.scrollTop > 500) {
+    toUp.value = true
+  } else {
+    toUp.value = false
+  }
+}
+const toTopThrottle=throttleFunction(toTopShow,50)
 onMounted(() => {
   //监听滚动事件
-  window.addEventListener(
-    'scroll',
-    () => {
-      // console.log("top",document.documentElement.scrollTop)
-      if (document.documentElement.scrollTop > 500) {
-        toUp.value = true
-      } else {
-        toUp.value = false
-      }
-    },
-    { once: false }
-  )
+  window.addEventListener('scroll', toTopThrottle)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', toTopThrottle)
 })
 </script>
 

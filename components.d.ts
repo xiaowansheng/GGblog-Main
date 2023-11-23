@@ -54,6 +54,7 @@ declare module 'vue' {
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
+    Leaf: typeof import('./src/components/background/leaf/index.vue')['default']
     Loading: typeof import('./src/components/loading/index.vue')['default']
     Login: typeof import('./src/components/login/index.vue')['default']
     Petal: typeof import('./src/components/background/petal/index.vue')['default']

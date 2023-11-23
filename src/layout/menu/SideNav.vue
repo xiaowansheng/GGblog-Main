@@ -138,9 +138,7 @@
             <span>{{ createTime }}</span>
           </div>
           <div id="pageView">
-            <label>
-              {{ $t('record.pageView') }}： </label
-            ><span>{{ website.pageView }}</span>
+            <label> {{ $t('record.pageView') }}： </label><span>{{ website.pageView }}</span>
           </div>
         </div>
       </template>
@@ -149,7 +147,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, onMounted, watch, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, watch, ref, onUnmounted } from 'vue'
 
 import { convertIntervalTime } from '@/utils/timeUtils'
 import { useRouter } from 'vue-router'
@@ -157,6 +155,7 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
+import { throttleFunction } from '@/utils/tool';
 defineOptions({
   name: 'SideNav'
 })
@@ -208,7 +207,6 @@ const formatTime = (value: any) => {
   }
 }
 
-
 const backColor = ref('')
 // 声明一个数组存放比对数据
 let scrollData: any = []
@@ -232,51 +230,56 @@ const toPage = (path: string) => {
   router.push(path)
   leftDrawer.value = false
 }
+const bgColorChange = () => {
+  if (document.documentElement.scrollTop == 0) {
+    colorStyle.value = 'white transparent'
+  } else {
+    colorStyle.value = 'black'
+  }
+}
+const colorChangeThrottle=throttleFunction(bgColorChange,50)
+const showMenu = () => {
+  let scrollTop: any =
+    document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+
+  // 只有不在最顶部时才会生效
+  if (scrollTop > 100) {
+    // console.log(_this.scrollData);
+    if (scrollData.length == responseSpeed) {
+      if (scrollData[0] < scrollData[responseSpeed - 1]) {
+        // 下划，屏幕往上走，隐藏
+        topNavShow.value = false
+      }
+      if (scrollData[0] > scrollData[responseSpeed - 1]) {
+        // 上划，屏幕往下走，显示
+        topNavShow.value = true
+      }
+    }
+    if (scrollData.length >= responseSpeed) {
+      scrollData = []
+    } else {
+      scrollData.push(scrollTop)
+    }
+  } else {
+    topNavShow.value = true
+  }
+}
+const showMenuThrottle=throttleFunction(showMenu,50)
 onBeforeMount(() => {
   formatTime(website.value)
   // this.setLanguage(getDefaultLang());
-  // this.getCount();
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (document.documentElement.scrollTop == 0) {
-        colorStyle.value = 'white transparent'
-      } else {
-        colorStyle.value = 'black'
-      }
-    },
-    { once: false }
-  )
-  // 监听页面滚动
-  window.addEventListener('scroll', function () {
-    let scrollTop: any =
-      document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-
-    // 只有不在最顶部时才会生效
-    if (scrollTop > 100) {
-      // console.log(_this.scrollData);
-      if (scrollData.length == responseSpeed) {
-        if (scrollData[0] < scrollData[responseSpeed - 1]) {
-          // 下划，屏幕往上走，隐藏
-          topNavShow.value = false
-        }
-        if (scrollData[0] > scrollData[responseSpeed - 1]) {
-          // 上划，屏幕往下走，显示
-          topNavShow.value = true
-        }
-      }
-      if (scrollData.length >= responseSpeed) {
-        scrollData = []
-      } else {
-        scrollData.push(scrollTop)
-      }
-    } else {
-      topNavShow.value = true
-    }
-  })
 })
 onMounted(() => {
   // setLanguage(getDefaultLang());
+  window.addEventListener('scroll', colorChangeThrottle)
+  // 监听页面滚动
+  window.addEventListener('scroll', showMenuThrottle)
+  
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', colorChangeThrottle)
+  window.removeEventListener('scroll', showMenuThrottle)
+  
 })
 </script>
 

@@ -12,11 +12,7 @@
       :router="true"
     >
       <el-menu-item index="/">
-        <el-image
-          style="height: 50px"
-          src="/images/wbxnl.png"
-          fit="scale-down"
-        />
+        <el-image style="height: 50px" src="/images/wbxnl.png" fit="scale-down" />
       </el-menu-item>
       <div class="flex-grow" />
       <el-menu-item index="/">
@@ -104,12 +100,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref, toRefs, type ComputedRef } from 'vue'
+import { computed, onBeforeMount, ref, toRefs, type ComputedRef, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 // import { getDefaultLang } from "@/locales/langUtils";
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useUserStoreHook } from '@/store/modules/user'
 import { useModuleStoreHook } from '@/store/modules/module'
+import { throttleFunction } from '@/utils/tool';
 // const menuConfig = useConfigStoreHook().menus
 defineOptions({
   name: 'TopNav'
@@ -160,48 +157,51 @@ const logout = () => {
   user.logOut()
   // console.log("token", store.state.user.token);
 }
-onBeforeMount(() => {
-  //TODO 待做
-  //  setLanguage(getDefaultLang());
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (document.documentElement.scrollTop === 0) {
-        colorStyle.value = 'white transparent'
-        //  backColor = "rgba(0, 0, 0,0)";
-      } else {
-        colorStyle.value = 'black'
-      }
-    },
-    { once: false }
-  )
-  // 监听页面滚动
-  window.addEventListener('scroll', function () {
-    var scrollTop =
-      document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+const setColor = () => {
+  if (document.documentElement.scrollTop === 0) {
+    colorStyle.value = 'white transparent'
+    //  backColor = "rgba(0, 0, 0,0)";
+  } else {
+    colorStyle.value = 'black'
+  }
+}
+const setColorThrottle=throttleFunction(setColor,50)
+const showMenu = () => {
+  var scrollTop =
+    document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
 
-    // 只有不在最顶部时才会生效
-    if (scrollTop > 100) {
-      // console.log( scrollData);
-      if (scrollData.length == responseSpeed) {
-        if (scrollData[0] < scrollData[responseSpeed - 1]) {
-          // 下划，屏幕往上走，隐藏
-          topNavShow.value = false
-        }
-        if (scrollData[0] > scrollData[responseSpeed - 1]) {
-          // 上划，屏幕往下走，显示
-          topNavShow.value = true
-        }
+  // 只有不在最顶部时才会生效
+  if (scrollTop > 100) {
+    // console.log( scrollData);
+    if (scrollData.length == responseSpeed) {
+      if (scrollData[0] < scrollData[responseSpeed - 1]) {
+        // 下划，屏幕往上走，隐藏
+        topNavShow.value = false
       }
-      if (scrollData.length >= responseSpeed) {
-        scrollData = []
-      } else {
-        scrollData.push(scrollTop)
+      if (scrollData[0] > scrollData[responseSpeed - 1]) {
+        // 上划，屏幕往下走，显示
+        topNavShow.value = true
       }
-    } else {
-      topNavShow.value = true
     }
-  })
+    if (scrollData.length >= responseSpeed) {
+      scrollData = []
+    } else {
+      scrollData.push(scrollTop)
+    }
+  } else {
+    topNavShow.value = true
+  }
+}
+const showMenuThrottle=throttleFunction(showMenu,50)
+onBeforeMount(() => {})
+onMounted(() => {
+  window.addEventListener('scroll', setColorThrottle)
+  // 监听页面滚动
+  window.addEventListener('scroll', showMenuThrottle)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', setColorThrottle)
+  window.removeEventListener('scroll', showMenuThrottle)
 })
 </script>
 

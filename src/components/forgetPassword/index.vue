@@ -5,6 +5,8 @@
       :lock-scroll="true"
       :close-on-click-modal="false"
       :title="$t('forget.title')"
+      @open="handleScrollbars(true)"
+      @close="handleScrollbars(false)"
     >
       <div class="form">
         <el-form
@@ -68,6 +70,7 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
 import { resetPassword as resetUserPassword, getVerificationCode } from '@/api/user'
+import { handleScrollbars} from "@/utils/pageUtils"
 defineOptions({
   name: 'Comment'
 })
