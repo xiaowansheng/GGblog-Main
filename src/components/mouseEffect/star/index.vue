@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-
+import { throttleFunction } from '@/utils/tool'
 /**
  * Particle
  */
@@ -97,10 +97,11 @@ function init() {
   bindEvents()
   loop()
 }
-
+const mouseMoveThrottle = throttleFunction(onMouseMove, 30)
+const resizeThrottle = throttleFunction(onWindowResize, 100)
 function bindEvents() {
-  document.addEventListener('mousemove', onMouseMove)
-  window.addEventListener('resize', onWindowResize)
+  document.addEventListener('mousemove', mouseMoveThrottle)
+  window.addEventListener('resize', resizeThrottle)
 }
 
 function onWindowResize(e: Event) {
