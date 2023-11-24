@@ -166,7 +166,7 @@ const resizeCanvas = () => {
   x = canvasRef.value.width = window.innerWidth
   y = canvasRef.value.height = window.innerHeight
 }
-const resizeThrottle = throttleFunction(onWindowResize, 100)
+const resizeThrottle = throttleFunction(resizeCanvas, 100)
 
 function stopp(): void {
   if (staticx.value) {
