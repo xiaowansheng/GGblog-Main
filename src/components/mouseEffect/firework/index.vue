@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount,onUnmounted, onMounted, ref } from 'vue'
+import { onBeforeMount, onUnmounted, onMounted, ref } from 'vue'
+import { throttleFunction } from '@/utils/tool'
 interface Point {
   x: number
   y: number
@@ -123,51 +124,45 @@ function removeBall() {
     }
   }
 }
+const mouseDownHandle = (e) => {
+  pushBalls(randBetween(10, 20), e.clientX, e.clientY)
+  document.body.classList.add('is-pressed')
+  longPress = setTimeout(function () {
+    document.body.classList.add('is-longpress')
+    longPressed.value = true
+  }, 500)
+}
+const mouseUpHandle = (e) => {
+  clearInterval(longPress!)
+  if (longPressed.value) {
+    document.body.classList.remove('is-longpress')
+    pushBalls(
+      randBetween(50 + Math.ceil(multiplier.value), 100 + Math.ceil(multiplier.value)),
+      e.clientX,
+      e.clientY
+    )
+    longPressed.value = false
+  }
+  document.body.classList.remove('is-pressed')
+}
+const mouseMoveHandle = (e) => {
+  let x = e.clientX
+  let y = e.clientY
+  pointer.style.top = y + 'px'
+  pointer.style.left = x + 'px'
+}
+const downThrottle = throttleFunction(mouseDownHandle, 50)
+const upThrottle = throttleFunction(mouseUpHandle, 50)
+const moveThrottle = throttleFunction(mouseMoveHandle, 80)
 onMounted(() => {
   if (canvas.getContext && window.addEventListener) {
     ctx = canvas.getContext('2d')!
     updateSize()
     window.addEventListener('resize', updateSize, false)
     loop()
-    window.addEventListener(
-      'mousedown',
-      function (e) {
-        pushBalls(randBetween(10, 20), e.clientX, e.clientY)
-        document.body.classList.add('is-pressed')
-        longPress = setTimeout(function () {
-          document.body.classList.add('is-longpress')
-          longPressed.value = true
-        }, 500)
-      },
-      false
-    )
-    window.addEventListener(
-      'mouseup',
-      function (e) {
-        clearInterval(longPress!)
-        if (longPressed.value) {
-          document.body.classList.remove('is-longpress')
-          pushBalls(
-            randBetween(50 + Math.ceil(multiplier.value), 100 + Math.ceil(multiplier.value)),
-            e.clientX,
-            e.clientY
-          )
-          longPressed.value = false
-        }
-        document.body.classList.remove('is-pressed')
-      },
-      false
-    )
-    window.addEventListener(
-      'mousemove',
-      function (e) {
-        let x = e.clientX
-        let y = e.clientY
-        pointer.style.top = y + 'px'
-        pointer.style.left = x + 'px'
-      },
-      false
-    )
+    window.addEventListener('mousedown', downThrottle, false)
+    window.addEventListener('mouseup', upThrottle, false)
+    window.addEventListener('mousemove', moveThrottle, false)
   } else {
     console.log('canvas or addEventListener is unsupported!')
   }
@@ -176,7 +171,11 @@ onMounted(() => {
 onBeforeMount(() => {
   // Cleanup code if needed
 })
-onUnmounted(() => {})
+onUnmounted(() => {
+  window.removeEventListener('mousedown', downThrottle, false)
+  window.removeEventListener('mouseup', upThrottle, false)
+  window.removeEventListener('mousemove', moveThrottle, false)
+})
 </script>
 
 <template>

@@ -114,7 +114,7 @@ const params = reactive({
   limit: 30
 })
 const total = ref(0)
-const leaveWords: any = reactive<Array<Object>>([])
+const leaveWords = reactive<Array<Object>>([])
 const danmus = ref<any>([])
 
 const leaveWordListVisible = ref(false)
