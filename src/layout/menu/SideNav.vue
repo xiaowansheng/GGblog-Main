@@ -21,7 +21,7 @@
       v-model="leftDrawer"
       direction="ltr"
       :with-header="false"
-      :lock-scroll="true"
+      :lock-scroll="false"
       id="sideNav"
       @open="handleScrollbars(true)"
       @close="handleScrollbars(false)"

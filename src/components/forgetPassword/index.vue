@@ -2,7 +2,7 @@
   <div id="forget-password">
     <el-dialog
       v-model="dialog.resetPassword"
-      :lock-scroll="true"
+      :lock-scroll="false"
       :close-on-click-modal="false"
       :title="$t('forget.title')"
       @open="handleScrollbars(true)"
@@ -70,7 +70,7 @@ import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
 import { t } from '@/plugins/i18s'
 import { resetPassword as resetUserPassword, getVerificationCode } from '@/api/user'
-import { handleScrollbars} from "@/utils/pageUtils"
+import { handleScrollbars } from '@/utils/pageUtils'
 defineOptions({
   name: 'Comment'
 })

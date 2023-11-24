@@ -4,7 +4,7 @@
       v-model="dialog.signup"
       :close-on-click-modal="false"
       :title="$t('signup.title')"
-      :lock-scroll="true"
+      :lock-scroll="false"
       @open="handleScrollbars(true)"
       @close="handleScrollbars(false)"
     >

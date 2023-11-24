@@ -4,7 +4,7 @@
       v-model="dialog.login"
       :close-on-click-modal="false"
       :title="$t('login.title')"
-      :lock-scroll="true"
+      :lock-scroll="false"
       @open="handleScrollbars(true)"
       @close="handleScrollbars(false)"
     >
