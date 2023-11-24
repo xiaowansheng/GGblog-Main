@@ -416,9 +416,6 @@ onUnmounted(() => {
           .el-image {
             max-height: 35rem;
           }
-          // max-width: 45rem;
-          // width: 33%;
-          // padding-bottom: 33%;
         }
       }
       .images-two {

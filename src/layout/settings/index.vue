@@ -4,16 +4,11 @@
       <span v-show="isChinese"><span class="iconfont icon-zhongyingwen2zhongwen"></span> </span
       ><span v-show="!isChinese"><span class="iconfont icon-zhongyingwen"></span></span>
     </div>
-    <div class="set skin" @click="toggleDark">
+    <!-- <div class="set skin" @click="toggleDark">
       <span v-show="isDaylight">
-        <!-- <span v-show="isDaylight">
-          <svg-icon name="sun" iconStyle="width:50px;height:50px"></svg-icon> </span
-        ><span v-show="!isDaylight">
-          <svg-icon name="night" iconStyle="width:50px;height:50px"></svg-icon>
-        </span> -->
         <span class="iconfont icon-tianqitaiyangqichuang daylight"></span> </span
       ><span v-show="!isDaylight"><span class="iconfont icon-Star-Night night"></span></span>
-    </div>
+    </div> -->
 
     <div class="set" v-show="toUp">
       <div @click="handleScroll">
@@ -47,15 +42,15 @@ const onClickToggleLanguage = () => {
 const modules = computed(() => {
   return useConfigStoreHook().module
 })
-const isDaylight = ref(false)
-const isDark = useDark()
-isDaylight.value = isDark.value
-const toggleDarkFunc = useToggle(isDark)
-const toggleDark = () => {
-  // console.log("dark:", isDark);
-  toggleDarkFunc()
-  isDaylight.value = isDark.value
-}
+// const isDaylight = ref(false)
+// const isDark = useDark()
+// isDaylight.value = isDark.value
+// const toggleDarkFunc = useToggle(isDark)
+// const toggleDark = () => {
+//   // console.log("dark:", isDark);
+//   toggleDarkFunc()
+//   isDaylight.value = isDark.value
+// }
 
 const handleScroll = () => {
   let scrollTop =
