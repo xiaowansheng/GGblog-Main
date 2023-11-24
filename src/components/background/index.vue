@@ -4,6 +4,7 @@ import Petal from './petal/index.vue'
 import Rain from './rain/index.vue'
 import Rain2 from './rain2/index.vue'
 import Leaf from './leaf/index.vue'
+import Sakura from './sakura/index.vue'
 defineOptions({
   name: 'BackgroundEffect'
 })
@@ -16,6 +17,7 @@ const backgroundEffect= import.meta.env.VITE_BG_EFFECT
     <Rain v-if="backgroundEffect==2"/>
     <Rain2 v-if="backgroundEffect==2.1"/>
     <Leaf v-if="backgroundEffect==3"/>
+    <Sakura v-if="backgroundEffect==3.1"/>
     <Snowflake v-if="backgroundEffect==4"/>
   </div>
 </template>

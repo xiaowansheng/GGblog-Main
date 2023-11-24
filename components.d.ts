@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Animation: typeof import('./src/components/loading/animation/index.vue')['default']
     Background: typeof import('./src/components/background/index.vue')['default']
+    Bubble: typeof import('./src/components/mouseEffect/bubble/index.vue')['default']
     ChangePassword: typeof import('./src/components/changePassword/index.vue')['default']
     Comment: typeof import('./src/components/comment/index.vue')['default']
     CommentForm: typeof import('./src/components/comment/commentForm/index.vue')['default']
@@ -68,6 +69,7 @@ declare module 'vue' {
     Rain3: typeof import('./src/components/rain3/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Sakura: typeof import('./src/components/background/sakura/index.vue')['default']
     Signup: typeof import('./src/components/signup/index.vue')['default']
     SinglePicture: typeof import('./src/components/upload/singlePicture/index.vue')['default']
     Snowflake: typeof import('./src/components/background/snowflake/index.vue')['default']
