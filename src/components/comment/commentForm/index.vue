@@ -38,7 +38,7 @@
         label-width="5rem"
         :model="commentForm"
       >
-        <div v-show="userInfo.type == 2" class="user-info">
+        <div v-show="userInfo.type == userType.visitor" class="user-info">
           <el-form-item :label="$t('comment.nickname')" prop="nickname">
             <el-input name="nickname" v-model="userInfo.nickname" />
           </el-form-item>
