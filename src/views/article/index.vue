@@ -45,7 +45,14 @@
             <span class="iconfont icon-fenlei"></span
           ></el-button>
         </div>
-        <el-drawer id="catalogDialog" v-model="showCatalog" direction="ltr">
+        <el-drawer
+          id="catalogDialog"
+          v-model="showCatalog"
+          direction="ltr"
+          :lock-scroll="false"
+          @open="handleScrollbars(true)"
+          @close="handleScrollbars(false)"
+        >
           <template #header>
             <h4 class="title">
               {{ $t('article.directory') }}
@@ -177,6 +184,7 @@ import { ElMessage } from 'element-plus'
 import { mdConvertToHtml } from '@/utils/markdown'
 import { useConfigStoreHook } from '@/store/modules/config'
 import { useModuleStoreHook } from '@/store/modules/module'
+import { handleScrollbars } from '@/utils/pageUtils'
 defineOptions({
   name: 'Article'
 })
@@ -202,7 +210,7 @@ const onCatalogClick = (data: Title) => {
 
   if (node) {
     // console.log("node:", node);
-    node.scrollIntoView()
+    node.scrollIntoView({ behavior: 'auto' })
     console.log('跳转到ID：', id)
   }
   showCatalog.value = false
