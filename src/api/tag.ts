@@ -8,5 +8,5 @@ export function getAllTag() {
 
 // 查询标签信息
 export function getTag(id:string|number) {
-  return http.get('/tag/'+id)
+  return http.get('/tag/detail/'+id)
 }

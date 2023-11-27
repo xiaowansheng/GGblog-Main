@@ -7,5 +7,5 @@ export function getAllCategory() {
 
 // 查询分类信息
 export function getCategory(id:string|number) {
-  return http.get('/category/'+id)
+  return http.get('/category/detail/'+id)
 }
