@@ -1,52 +1,33 @@
-# ggblog-ui
+# 关于GGBlog-Main
 
-This template should help get you started developing with Vue 3 in Vite.
+## 介绍
 
-## Recommended IDE Setup
+此项目是 `GGBlog`博客项目的客户端，项目具体介绍信息可前往[GGBlog仓库](https://github.com/xiaowansheng/GGBlog )查看。
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+预览：[WBXNL.COM](https://wbxnl.com)
 
-## Type Support for `.vue` Imports in TS
+## 相关项目仓库
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+**后端服务器仓库：**
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+[GGBlog-Server](https://github.com/xiaowansheng/GGBlog )
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+**后台管理仓库：**
 
-## Customize configuration
+[GGBlog-Admin](https://github.com/xiaowansheng/GGBlog-Admin)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+**前台系统仓库：**
 
-## Project Setup
+[GGBlog-Main](https://github.com/xiaowansheng/GGBlog-Main)
 
-```sh
-npm install
-```
+## 主要依赖信息
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+| 依赖            | 版本   |
+| --------------- | ------ |
+| Vue             | 3.3.4  |
+| Pinia           | 2.1.4  |
+| Vue-Router      | 4.2.2  |
+| Axios           | 1.4.0  |
+| Element-plus    | 2.3.12 |
+| Cherry-Markdown | 0.8.25 |
+| Echarts         | 4.6.0  |
