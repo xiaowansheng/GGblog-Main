@@ -49,6 +49,7 @@ declare module 'vue' {
     Heat: typeof import('./src/components/mouseEffect/heat/index.vue')['default']
     Icons: typeof import('./src/components/icons/index.vue')['default']
     ImgPreview: typeof import('./src/components/imgPreview/index.vue')['default']
+    'Index copy': typeof import('./src/components/upload/singlePicture/index copy.vue')['default']
     Leaf: typeof import('./src/components/background/leaf/index.vue')['default']
     Login: typeof import('./src/components/login/index.vue')['default']
     MouseEffect: typeof import('./src/components/mouseEffect/index.vue')['default']

@@ -1,12 +1,10 @@
 <script setup lang="ts">
 // import { UploadFilled } from "@element-plus/icons-vue";
-import { getOss } from '@/api/upload'
-import { shortUuid } from '@/utils/stringUtils'
+import { uploadFile as upload } from '@/api/upload'
+import type { FileDto } from '@/api/upload'
 import { ElMessage } from 'element-plus'
 import type { UploadFile, UploadFiles, UploadInstance } from 'element-plus'
 import { reactive, ref, toRefs, watch } from 'vue'
-// 获取环境变量
-const ossUrl = import.meta.env.VITE_OSS_URL
 
 defineOptions({
   name: 'SinglePictureUpload'
@@ -19,6 +17,10 @@ const props = defineProps({
   disable: {
     type: Boolean,
     default: false
+  },
+  auto: {
+    type: Boolean,
+    default: true
   },
   dir: {
     type: String,
@@ -35,8 +37,9 @@ const props = defineProps({
 })
 const emits = defineEmits(['update:value'])
 
-const { value, dir, disable }: any = toRefs(props)
+const { value, dir, disable, auto }: any = toRefs(props)
 const url = ref<string>(value.value)
+const uploaded = ref<boolean>(true)
 const valueOneChange = watch(value, () => {
   // 解决照片回显问题
   console.log('image-value更新')
@@ -46,127 +49,63 @@ const valueOneChange = watch(value, () => {
   }
   // valueOneChange()
 })
+const uploadFile = (): Promise<FileDto> => {
+  return new Promise((resolve, reject) => {
+    if (uploaded.value) {
+      resolve({ link: url.value } as FileDto)
+    } else {
+      const formData = new FormData()
+      formData.append('filePath', dir.value)
+      const file: UploadFile = fileList.value[0]
+      formData.append('file', file.raw!)
+      upload(formData)
+        .then((data: any) => {
+          url.value = data.link
+          emits('update:value', url.value)
+          uploaded.value = true
+          resolve(data)
+        })
+        .catch(() => {
+          ElMessage.error('头像上传失败！')
+          reject(false)
+        })
+    }
+  })
+}
 
-// const setUrl=(val:string)=>{
-// url.value=val
-// }
-// watch(url, () => {
-//   emits("update:value", url.value);
-// });
-const uploadForm: any = reactive({
-  policy: '',
-  signature: '',
-  ossaccessKeyId: ''
-})
-const info: any = reactive({
-  dir: '',
-  host: '',
-  expire: 0,
-  url: ''
-})
 const fileList: any = ref([])
 watch(fileList, () => {
   // console.log("文件列表改变：");
   if (fileList.value.length) {
-    const file = fileList.value[0]
-    getOss(dir.value).then((data: any) => {
-      // 去除默认开头斜杠/
-      // data.dir = data.dir.replace(/^\//, "");
-      // console.log("oss:", data);
-
-      // uploadForm.value = data;
-      uploadForm.policy = data.policy
-      uploadForm.signature = data.signature
-      uploadForm.ossaccessKeyId = data.accessid
-      uploadForm.key = data.dir + '/' + shortUuid() + `_${file.name}`
-      //
-      info.dir = data.dir
-      info.host = data.host
-      info.expire = data.expire
-
-      // console.log("uploadForm", uploadForm);
-      // console.log("info", info);
-      info.url = data.host + '/' + uploadForm.key
-      uploadRef.value?.submit()
-    })
+    uploaded.value = false
+    if (auto.value) {
+      uploadFile()
+    } else {
+      url.value = fileList.value[fileList.value.length - 1].url
+      console.log('等待上传的文件：', fileList.value[fileList.value.length - 1])
+    }
   }
 })
-const success = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles): void => {
-  // console.log("图片上传成功", response);
-  ElMessage.success('图片上传成功！')
-  url.value = info.url
-  emits('update:value', url.value)
-  console.log('图片链接：', info.url)
-}
-const error = (error: Error, uploadFile: UploadFile, uploadFiles: UploadFiles): void => {
-  // console.error("图片上传失败",error);
-  ElMessage.error('图片上传失败！')
-}
-// const handleFileChange = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
-//   console.log("UploadChangeParam123", uploadFile, uploadFiles);
-//   // const status = info.status;
-//   // if (status !== "uploading") {
-//   //   console.log("info:",info, ",fileList:", uploadFiles);
-//   // }
-//   // if (status === "done") {
-//   //   info.file.thumbUrl =
-//   //     uploadForm.host +
-//   //     "/" +
-//   //     uploadForm.key.replace("${filename}", info.file.name);
-//   //   // value.value = info.file.thumbUrl;
-//   //   // value.value=info.file.thumbUrl;
-//   //   emits("update:value", info.file.thumbUrl);
-//   //   ElMessage.success(`${info.file.name} 文件上传成功！`);
-//   // } else if (status === "error") {
-//   //   ElMessage.error(`${info.file.name} 文件上传失败！！`);
-//   // }
-// };
 const remove = () => {
   url.value = ''
   console.log('移除图片~~')
 }
-//  function beforeUpload(rawFile: UploadRawFile) {
-//   // TODO 上传时form为空，element-lpus bug
-//   // return new Promise((resolve, reject) => {
-//   //   getOss(dir.value)
-//   //     .then((data: any) => {
-//   //       console.log("oss:", data);
-//   //       // uploadForm.value = data;
-//   //       uploadForm.policy = data.policy;
-//   //       uploadForm.signature = data.signature;
-//   //       uploadForm.ossaccessKeyId = data.accessid;
-//   //       //
-//   //       uploadForm.key = data.dir + "/" + buildUUID() + `_${rawFile.name}`;
-//   //       uploadForm.dir = data.dir;
-//   //       uploadForm.host = data.host;
-//   //       uploadForm.expire = data.expire;
-//   //       console.log("uploadForm", uploadForm);
-//   //       resolve(true);
-//   //     })
-//   //     .catch(() => {
-//   //       console.error("获取oss上传凭证失败。");
-//   //       reject(false);
-//   //     });
-//   // });
-// }
 const uploadRef = ref<UploadInstance>()
+
+defineExpose({
+  uploadFile
+})
 </script>
 
 <template>
-  <!-- :before-upload="beforeUpload" -->
-  <!-- :on-change="handleFileChange" -->
   <el-upload
     ref="uploadRef"
     class="single-upload"
     name="file"
     method="post"
     v-model:file-list="fileList"
-    :action="ossUrl"
-    :data="uploadForm"
     :drag="true"
     :on-remove="remove"
-    :on-error="error"
-    :on-success="success"
     :multiple="false"
     :disabled="disable"
     :limit="1"
