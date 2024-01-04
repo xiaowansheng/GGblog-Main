@@ -15,6 +15,7 @@ declare module 'vue' {
     CommentForm: typeof import('./src/components/comment/commentForm/index.vue')['default']
     CommentItem: typeof import('./src/components/comment/commentSection/commentItem.vue')['default']
     CommentSection: typeof import('./src/components/comment/commentSection/index.vue')['default']
+    copy: typeof import('./src/components/upload/singlePicture/index copy.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']

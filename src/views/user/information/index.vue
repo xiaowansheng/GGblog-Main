@@ -21,7 +21,7 @@
           <el-form-item :label="$t('information.avatar')" class="avatar" prop="avatar">
             <div :class="disable ? 'disabled' : ''"></div>
             <!-- <el-input v-model="form.avatar" /> -->
-            <AvatarUpload width="150" height="150" :disable="disable" v-model:value="form.avatar" />
+            <AvatarUpload :dir="'avatar'" width="150" height="150" :disable="disable" v-model:value="form.avatar" />
           </el-form-item>
           <el-form-item :label="$t('information.nickname')" prop="name">
             <el-input :disabled="disable" v-model="form.nickname" />
